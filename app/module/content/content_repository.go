@@ -11,25 +11,17 @@ import (
 type ContentRepository struct {
 }
 
-func (r *ContentRepository) Create(
-	e *entity.Content,
-) (string, error) {
-	var lastId string = ""
-	result, err := data.DB.Exec(
+func (r *ContentRepository) Create(e *entity.Content) error {
+	_, err := data.DB.Exec(
 		"INSERT INTO contents (name)"+
-			"VALUES ($1) RETURNING id",
+			"VALUES ($1)",
 		e.Name,
 	)
 	if err != nil {
 		log.Println(err)
-		return lastId, err
+		return err
 	}
-	if err != nil {
-		log.Println(err)
-	}
-	temp, _ := result.LastInsertId()
-	lastId = fmt.Sprintf("%d", temp)
-	return lastId, nil
+	return nil
 }
 
 func (r *ContentRepository) ReadMany() (*sql.Rows, error) {
@@ -50,10 +42,7 @@ func (r *ContentRepository) ReadOne(id string) *sql.Row {
 	return row
 }
 
-func (r *ContentRepository) Update(
-	id string,
-	e *entity.Content,
-) (int64, error) {
+func (r *ContentRepository) Update(id string, e *entity.Content) (int64, error) {
 	q := "UPDATE contents SET name = $2 WHERE id = $1"
 	res, err := data.DB.Exec(
 		q,

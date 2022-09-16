@@ -3,7 +3,6 @@ package user
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 	"txp/restapistarter/app/module/user/dto"
 	"txp/restapistarter/app/module/user/entity"
@@ -30,12 +29,12 @@ func (s *UserService) Create(w http.ResponseWriter, r *http.Request) {
 		util.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	lastId, err := s.repository.Create(
+	err = s.repository.Create(
 		&entity.User{
 			Name: b.Name,
 		},
 	)
-	if err != nil || lastId != "" {
+	if err != nil {
 		util.RespondError(
 			http.StatusInternalServerError,
 			errors.New(util.InternalServerError),
@@ -43,7 +42,6 @@ func (s *UserService) Create(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-	log.Print(lastId)
 	util.Respond(http.StatusCreated, b, w)
 }
 

@@ -11,25 +11,17 @@ import (
 type UserRepository struct {
 }
 
-func (r *UserRepository) Create(
-	e *entity.User,
-) (string, error) {
-	var lastId string = ""
-	result, err := data.DB.Exec(
+func (r *UserRepository) Create(e *entity.User) error {
+	_, err := data.DB.Exec(
 		"INSERT INTO users (name)"+
-			"VALUES ($1) RETURNING id",
+			"VALUES ($1)",
 		e.Name,
 	)
 	if err != nil {
 		log.Println(err)
-		return lastId, err
+		return err
 	}
-	if err != nil {
-		log.Println(err)
-	}
-	temp, _ := result.LastInsertId()
-	lastId = fmt.Sprintf("%d", temp)
-	return lastId, nil
+	return nil
 }
 
 func (r *UserRepository) ReadMany() (*sql.Rows, error) {
@@ -50,10 +42,7 @@ func (r *UserRepository) ReadOne(id string) *sql.Row {
 	return row
 }
 
-func (r *UserRepository) Update(
-	id string,
-	e *entity.User,
-) (int64, error) {
+func (r *UserRepository) Update(id string, e *entity.User) (int64, error) {
 	q := "UPDATE users SET name = $2 WHERE id = $1"
 	res, err := data.DB.Exec(
 		q,

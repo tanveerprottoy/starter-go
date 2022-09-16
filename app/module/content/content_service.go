@@ -3,7 +3,6 @@ package content
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 	"txp/restapistarter/app/module/content/dto"
 	"txp/restapistarter/app/module/content/entity"
@@ -32,12 +31,12 @@ func (s *ContentService) Create(w http.ResponseWriter, r *http.Request) {
 		util.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	lastId, err := s.repository.Create(
+	err = s.repository.Create(
 		&entity.Content{
 			Name: b.Name,
 		},
 	)
-	if err != nil || lastId != "" {
+	if err != nil {
 		util.RespondError(
 			http.StatusInternalServerError,
 			errors.New(util.InternalServerError),
@@ -45,7 +44,6 @@ func (s *ContentService) Create(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-	log.Print(lastId)
 	util.Respond(http.StatusCreated, b, w)
 }
 
