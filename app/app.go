@@ -34,7 +34,7 @@ func (a *App) InitComponents() {
 // Run app
 func (a *App) Run() {
 	err := http.ListenAndServe(
-		"0.0.0.0:3000",
+		"127.0.0.1:8080",
 		a.router.Mux,
 	)
 	if err != nil {
