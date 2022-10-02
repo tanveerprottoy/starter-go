@@ -5,14 +5,15 @@ import (
 	"fmt"
 	"log"
 	"txp/restapistarter/app/module/user/entity"
-	"txp/restapistarter/pkg/data"
+	sqlUtil "txp/restapistarter/pkg/data/sql"
+	"txp/restapistarter/pkg/data/sql/postgres"
 )
 
 type UserRepository struct {
 }
 
 func (r *UserRepository) Create(e *entity.User) error {
-	_, err := data.DB.Exec(
+	_, err := postgres.DB.Exec(
 		"INSERT INTO users (name)"+
 			"VALUES ($1)",
 		e.Name,
@@ -25,7 +26,7 @@ func (r *UserRepository) Create(e *entity.User) error {
 }
 
 func (r *UserRepository) ReadMany() (*sql.Rows, error) {
-	rows, err := data.DB.Query(
+	rows, err := postgres.DB.Query(
 		"SELECT * FROM users", // WHERE id IS NOT NULL
 	)
 	if err != nil {
@@ -35,7 +36,7 @@ func (r *UserRepository) ReadMany() (*sql.Rows, error) {
 }
 
 func (r *UserRepository) ReadOne(id string) *sql.Row {
-	row := data.DB.QueryRow(
+	row := postgres.DB.QueryRow(
 		"SELECT * FROM users WHERE id = $1 LIMIT 1",
 		id,
 	)
@@ -44,7 +45,7 @@ func (r *UserRepository) ReadOne(id string) *sql.Row {
 
 func (r *UserRepository) Update(id string, e *entity.User) (int64, error) {
 	q := "UPDATE users SET name = $2 WHERE id = $1"
-	res, err := data.DB.Exec(
+	res, err := postgres.DB.Exec(
 		q,
 		id,
 		e.Name,
@@ -53,12 +54,12 @@ func (r *UserRepository) Update(id string, e *entity.User) (int64, error) {
 		log.Println(err)
 		return -1, err
 	}
-	return data.GetRowsAffected(res), nil
+	return sqlUtil.GetRowsAffected(res), nil
 }
 
 func (r *UserRepository) Delete(id string) (int64, error) {
 	q := "DELETE FROM users WHERE id = $1"
-	res, err := data.DB.Exec(
+	res, err := postgres.DB.Exec(
 		q,
 		id,
 	)
@@ -66,5 +67,5 @@ func (r *UserRepository) Delete(id string) (int64, error) {
 		log.Println(err)
 		return -1, err
 	}
-	return data.GetRowsAffected(res), nil
+	return sqlUtil.GetRowsAffected(res), nil
 }

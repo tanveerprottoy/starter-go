@@ -1,7 +1,7 @@
-package mysql
+package sqlx
 
 import (
-	"database/sql"
+	"github.com/jmoiron/sqlx"
 	"log"
 	"os"
 
@@ -13,7 +13,7 @@ const (
 )
 
 var (
-	DB  *sql.DB
+	DB  *sqlx.DB
 	err error
 )
 
@@ -26,7 +26,7 @@ func init() {
 		Addr:   os.Getenv("DB_HOST") + ":" + os.Getenv("DB_PORT"),
 		DBName: os.Getenv("DB_NAME"),
 	}
-	DB, err = sql.Open("mysql", cfg.FormatDSN())
+	DB, err = sqlx.Open("mysql", cfg.FormatDSN())
 	if err != nil {
 		panic(err)
 	}

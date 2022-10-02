@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"txp/restapistarter/app/module/user/dto"
 	"txp/restapistarter/app/module/user/entity"
-	"txp/restapistarter/pkg/data"
+	sqlUtil "txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/util"
 
 	"github.com/go-chi/chi"
@@ -56,7 +56,7 @@ func (s *UserService) ReadMany(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var e entity.User
-	d, err := data.GetEntities(
+	d, err := sqlUtil.GetEntities(
 		rows,
 		&e,
 		&e.Id,
@@ -87,7 +87,7 @@ func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	e := new(entity.User)
-	d, err := data.GetEntity(
+	d, err := sqlUtil.GetEntity(
 		row,
 		&e,
 		&e.Id,
