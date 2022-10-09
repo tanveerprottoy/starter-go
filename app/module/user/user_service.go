@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"txp/restapistarter/app/module/user/dto"
 	"txp/restapistarter/app/module/user/entity"
+	"txp/restapistarter/app/util"
 	sqlUtil "txp/restapistarter/pkg/data/sql"
-	"txp/restapistarter/pkg/util"
 
 	"github.com/go-chi/chi"
 )

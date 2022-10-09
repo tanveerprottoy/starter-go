@@ -6,7 +6,7 @@ import (
 	"os"
 	"txp/restapistarter/app/module/content"
 	"txp/restapistarter/app/module/user"
-	"txp/restapistarter/pkg/util"
+	"txp/restapistarter/pkg/coreutil"
 )
 
 // global var
@@ -31,7 +31,7 @@ func (a *App) initModules() {
 
 func (a *App) initConfigs() {
 	fileBytes, _ := os.ReadFile("../config/dev.json")
-	_ = util.Unmarshal(fileBytes, &Configs)
+	_ = coreutil.Unmarshal(fileBytes, &Configs)
 	log.Print(Configs)
 }
 

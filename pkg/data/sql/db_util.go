@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"txp/restapistarter/pkg/util"
+	"txp/restapistarter/pkg/coreutil"
 )
 
 func GetRowsAffected(result sql.Result) int64 {
@@ -22,7 +22,7 @@ func GetEntities[T any](rows *sql.Rows, obj *T, params ...interface{}) ([]*T, er
 		if err := rows.Scan(params...); err != nil {
 			return nil, fmt.Errorf("GetEntities %v", err)
 		}
-		util.ValuesToStruct(params, obj)
+		coreutil.ValuesToStruct(params, obj)
 		entities = append(entities, obj)
 	}
 	return entities, nil
@@ -32,6 +32,6 @@ func GetEntity[T any](row *sql.Row, obj *T, params ...interface{}) (*T, error) {
 	if err := row.Scan(params...); err != nil {
 		return nil, fmt.Errorf("GetEntity %v", err)
 	}
-	util.ValuesToStruct(params, obj)
+	coreutil.ValuesToStruct(params, obj)
 	return obj, nil
 }

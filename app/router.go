@@ -1,8 +1,8 @@
 package app
 
 import (
+	"txp/restapistarter/app/util"
 	"txp/restapistarter/pkg/middleware"
-	"txp/restapistarter/pkg/util"
 
 	"github.com/go-chi/chi"
 )
