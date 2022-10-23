@@ -31,5 +31,7 @@ go.work
 # Local History for Visual Studio Code
 .history/
 
+.env
+
 # binaries
 bin
