@@ -10,7 +10,6 @@ import (
 
 // global var
 var (
-	// configs
 	Configs       map[string]interface{}
 	UserModule    *user.UserModule
 	ContentModule *content.ContentModule
@@ -22,7 +21,7 @@ type App struct {
 }
 
 func (a *App) initDB() {
-	postgres.InitDB()
+	postgres.InitDBClient()
 }
 
 func (a *App) initModules() {

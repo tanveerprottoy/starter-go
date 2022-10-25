@@ -3,9 +3,9 @@ package main
 import "txp/restapistarter/app"
 
 func main() {
-	app := new(app.App)
-	app.InitComponents()
-	app.Run()
+	a := new(app.App)
+	a.InitComponents()
+	a.Run()
 }
 
 // Multiply just to check unit test

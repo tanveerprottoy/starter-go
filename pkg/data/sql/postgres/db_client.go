@@ -14,7 +14,7 @@ var (
 	err error
 )
 
-func InitDB() {
+func InitDBClient() {
 	args := fmt.Sprintf(
 		"host=%s port=%s user=%s "+
 			"password=%s dbname=%s sslmode=disable",

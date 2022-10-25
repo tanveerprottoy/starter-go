@@ -17,7 +17,7 @@ var (
 	err error
 )
 
-func init() {
+func InitDBClient() {
 	// Capture connection properties.
 	cfg := mysql.Config{
 		User:   os.Getenv("DB_USER"),

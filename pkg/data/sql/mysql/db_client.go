@@ -17,8 +17,7 @@ var (
 	err error
 )
 
-func InitDB() {
-	// Capture connection properties.
+func InitDBClient() {
 	cfg := mysql.Config{
 		User:   configutil.GetEnvValue("DB_USER"),
 		Passwd: configutil.GetEnvValue("DB_PASS"),

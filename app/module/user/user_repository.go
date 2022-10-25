@@ -13,7 +13,7 @@ type UserRepository struct {
 }
 
 func (r *UserRepository) Create(e *entity.User) error {
-	_, err := postgres.DB.Exec(
+	_, err :=  postgres.DB.Exec(
 		"INSERT INTO users (name)"+
 			"VALUES ($1)",
 		e.Name,
