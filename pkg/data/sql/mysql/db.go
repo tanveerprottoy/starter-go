@@ -3,7 +3,7 @@ package mysql
 import (
 	"database/sql"
 	"log"
-	"os"
+	"txp/restapistarter/pkg/configutil"
 
 	"github.com/go-sql-driver/mysql"
 )
@@ -17,14 +17,14 @@ var (
 	err error
 )
 
-func init() {
+func InitDB() {
 	// Capture connection properties.
 	cfg := mysql.Config{
-		User:   os.Getenv("DB_USER"),
-		Passwd: os.Getenv("DB_PASS"),
+		User:   configutil.GetEnvValue("DB_USER"),
+		Passwd: configutil.GetEnvValue("DB_PASS"),
 		Net:    netType,
-		Addr:   os.Getenv("DB_HOST") + ":" + os.Getenv("DB_PORT"),
-		DBName: os.Getenv("DB_NAME"),
+		Addr:   configutil.GetEnvValue("DB_HOST") + ":" + configutil.GetEnvValue("DB_PORT"),
+		DBName: configutil.GetEnvValue("DB_NAME"),
 	}
 	DB, err = sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {

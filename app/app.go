@@ -3,16 +3,15 @@ package app
 import (
 	"log"
 	"net/http"
-	"os"
 	"txp/restapistarter/app/module/content"
 	"txp/restapistarter/app/module/user"
-	"txp/restapistarter/pkg/coreutil"
+	"txp/restapistarter/pkg/data/sql/postgres"
 )
 
 // global var
 var (
 	// configs
-	Configs map[string]interface{}
+	Configs       map[string]interface{}
 	UserModule    *user.UserModule
 	ContentModule *content.ContentModule
 )
@@ -22,6 +21,10 @@ type App struct {
 	router *Router
 }
 
+func (a *App) initDB() {
+	postgres.InitDB()
+}
+
 func (a *App) initModules() {
 	UserModule = new(user.UserModule)
 	UserModule.InitComponents()
@@ -29,15 +32,9 @@ func (a *App) initModules() {
 	ContentModule.InitComponents()
 }
 
-func (a *App) initConfigs() {
-	fileBytes, _ := os.ReadFile("../config/dev.json")
-	_ = coreutil.Unmarshal(fileBytes, &Configs)
-	log.Print(Configs)
-}
-
 // Init app
 func (a *App) InitComponents() {
-	a.initConfigs()
+	a.initDB()
 	a.initModules()
 	a.router = NewRouter()
 }

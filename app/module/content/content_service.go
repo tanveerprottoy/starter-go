@@ -7,7 +7,8 @@ import (
 	"txp/restapistarter/app/module/content/dto"
 	"txp/restapistarter/app/module/content/entity"
 	"txp/restapistarter/app/util"
-	sqlUtil "txp/restapistarter/pkg/data/sql"
+	"txp/restapistarter/pkg/coreutil"
+	sqlcoreutil "txp/restapistarter/pkg/data/sql"
 
 	"github.com/go-chi/chi"
 )
@@ -28,7 +29,7 @@ func (s *ContentService) Create(w http.ResponseWriter, r *http.Request) {
 	var b *dto.CreateUpdateContentDto
 	err := json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
-		util.RespondError(http.StatusBadRequest, err, w)
+		coreutil.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
 	err = s.repository.Create(
@@ -37,20 +38,23 @@ func (s *ContentService) Create(w http.ResponseWriter, r *http.Request) {
 		},
 	)
 	if err != nil {
-		util.RespondError(
+		coreutil.RespondError(
 			http.StatusInternalServerError,
 			errors.New(util.InternalServerError),
 			w,
 		)
 		return
 	}
-	util.Respond(http.StatusCreated, b, w)
+	coreutil.Respond(http.StatusCreated, b, w)
 }
 
-func (s *ContentService) ReadMany(w http.ResponseWriter, r *http.Request) {
+func (s *ContentService) ReadMany(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
 	rows, err := s.repository.ReadMany()
 	if err != nil {
-		util.RespondError(
+		coreutil.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
@@ -58,7 +62,7 @@ func (s *ContentService) ReadMany(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var e entity.Content
-	d, err := sqlUtil.GetEntities(
+	d, err := sqlcoreutil.GetEntities(
 		rows,
 		&e,
 		&e.Id,
@@ -67,21 +71,21 @@ func (s *ContentService) ReadMany(w http.ResponseWriter, r *http.Request) {
 		&e.UpdatedAt,
 	)
 	if err != nil {
-		util.RespondError(
+		coreutil.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
 		)
 		return
 	}
-	util.Respond(http.StatusOK, d, w)
+	coreutil.Respond(http.StatusOK, d, w)
 }
 
 func (s *ContentService) ReadOne(w http.ResponseWriter, r *http.Request) {
 	userId := chi.URLParam(r, util.UrlKeyId)
 	row := s.repository.ReadOne(userId)
 	if row == nil {
-		util.RespondError(
+		coreutil.RespondError(
 			http.StatusInternalServerError,
 			errors.New(util.InternalServerError),
 			w,
@@ -89,7 +93,7 @@ func (s *ContentService) ReadOne(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	e := new(entity.Content)
-	d, err := sqlUtil.GetEntity(
+	d, err := sqlcoreutil.GetEntity(
 		row,
 		&e,
 		&e.Id,
@@ -98,14 +102,14 @@ func (s *ContentService) ReadOne(w http.ResponseWriter, r *http.Request) {
 		&e.UpdatedAt,
 	)
 	if err != nil {
-		util.RespondError(
+		coreutil.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
 		)
 		return
 	}
-	util.Respond(http.StatusOK, d, w)
+	coreutil.Respond(http.StatusOK, d, w)
 }
 
 func (s *ContentService) Update(w http.ResponseWriter, r *http.Request) {
@@ -113,7 +117,7 @@ func (s *ContentService) Update(w http.ResponseWriter, r *http.Request) {
 	var b *dto.CreateUpdateContentDto
 	err := json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
-		util.RespondError(
+		coreutil.RespondError(
 			http.StatusBadRequest,
 			err,
 			w,
@@ -127,28 +131,28 @@ func (s *ContentService) Update(w http.ResponseWriter, r *http.Request) {
 		},
 	)
 	if err != nil || rowsAffected <= 0 {
-		util.RespondError(
+		coreutil.RespondError(
 			http.StatusInternalServerError,
 			errors.New(util.InternalServerError),
 			w,
 		)
 		return
 	}
-	util.Respond(http.StatusOK, b, w)
+	coreutil.Respond(http.StatusOK, b, w)
 }
 
 func (s *ContentService) Delete(w http.ResponseWriter, r *http.Request) {
 	userId := chi.URLParam(r, util.UrlKeyId)
 	rowsAffected, err := s.repository.Delete(userId)
 	if err != nil || rowsAffected <= 0 {
-		util.RespondError(
+		coreutil.RespondError(
 			http.StatusInternalServerError,
 			errors.New(util.InternalServerError),
 			w,
 		)
 		return
 	}
-	util.Respond(
+	coreutil.Respond(
 		http.StatusOK,
 		map[string]bool{"success": true},
 		w,

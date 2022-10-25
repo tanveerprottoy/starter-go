@@ -4,16 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"txp/restapistarter/pkg/configutil"
 
 	_ "github.com/lib/pq"
-)
-
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "root"
-	dbname   = "gateway_service"
 )
 
 var (
@@ -21,15 +14,15 @@ var (
 	err error
 )
 
-func init() {
+func InitDB() {
 	args := fmt.Sprintf(
-		"host=%s port=%d user=%s "+
+		"host=%s port=%s user=%s "+
 			"password=%s dbname=%s sslmode=disable",
-		host,
-		port,
-		user,
-		password,
-		dbname,
+		configutil.GetEnvValue("DB_HOST"),
+		configutil.GetEnvValue("DB_PORT"),
+		configutil.GetEnvValue("DB_USER"),
+		configutil.GetEnvValue("DB_PASS"),
+		configutil.GetEnvValue("DB_NAME"),
 	)
 	DB, err = sql.Open("postgres", args)
 	if err != nil {
