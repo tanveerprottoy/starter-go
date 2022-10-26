@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"txp/restapistarter/app/module/user/dto"
 	"txp/restapistarter/app/module/user/entity"
+	"txp/restapistarter/app/module/user/repository"
 	"txp/restapistarter/app/util"
 	"txp/restapistarter/pkg/coreutil"
 	sqlUtil "txp/restapistarter/pkg/data/sql"
@@ -14,10 +15,10 @@ import (
 )
 
 type UserService struct {
-	repository *UserRepository
+	repository *repository.UserRepository
 }
 
-func NewUserService(repository *UserRepository) *UserService {
+func NewUserService(repository *repository.UserRepository) *UserService {
 	s := new(UserService)
 	s.repository = repository
 	return s
