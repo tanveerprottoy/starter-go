@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"txp/restapistarter/pkg/data/nosql/mongodb"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -25,7 +26,12 @@ func (r *UserMongoRepository[T]) ReadMany(
 	filter any,
 	opts ...*options.FindOptions,
 ) (*mongo.Cursor, error) {
-	return nil, nil
+	return mongodb.Find(
+		collectionName,
+		ctx,
+		filter,
+		opts...,
+	)
 }
 
 func (r *UserMongoRepository[T]) ReadOne(

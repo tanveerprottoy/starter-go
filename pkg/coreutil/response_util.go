@@ -9,7 +9,7 @@ func writeResponse(w http.ResponseWriter, b []byte) {
 	_, _ = w.Write(b)
 }
 
-func Respond(c int, p interface{}, w http.ResponseWriter) {
+func Respond(c int, p any, w http.ResponseWriter) {
 	response, err := json.Marshal(p)
 	if err != nil {
 		RespondError(http.StatusInternalServerError, err, w)
