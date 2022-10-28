@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"net/http"
+	"time"
 	"txp/restapistarter/app/module/user/entity"
 	"txp/restapistarter/app/module/user/repository"
 	"txp/restapistarter/app/util"
@@ -10,6 +11,7 @@ import (
 	"txp/restapistarter/pkg/data/nosql/mongodb"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type UserMongoService struct {
@@ -46,14 +48,22 @@ func (s *UserMongoService) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserMongoService) ReadMany(w http.ResponseWriter, r *http.Request) {
-	filter := bson.D{{"quantity", bson.D{{"$gt", 100}}}}
+	// context.TODO()
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	filter := bson.D{{"name", bson.D{{"$eq", "a"}}}}
 	c, err := s.repository.ReadMany(
 		util.UsersCollection,
-		context.TODO(),
+		ctx,
 		filter,
 		nil,
 	)
 	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			// This error means your query did not match any documents.
+		} else if err == mongo.ErrNilCursor {
+			// This error means your query did not match any documents.
+		}
 		coreutil.RespondError(
 			http.StatusInternalServerError,
 			err,
