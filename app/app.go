@@ -14,20 +14,23 @@ var (
 	Configs       map[string]interface{}
 	UserModule    *user.UserModule
 	ContentModule *content.ContentModule
+	DBClient      *mongodb.DBClient
 )
 
 // App struct
 type App struct {
-	router *Router
+	DBClient *mongodb.DBClient
+	router   *Router
 }
 
 func (a *App) initDB() {
 	postgres.InitDBClient()
+	a.DBClient = mongodb.NewDBClient()
 }
 
 func (a *App) initModules() {
 	UserModule = new(user.UserModule)
-	UserModule.InitComponents(mongodb.DB)
+	UserModule.InitComponents(a.DBClient.DB)
 	ContentModule = new(content.ContentModule)
 	ContentModule.InitComponents()
 }
