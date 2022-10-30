@@ -34,6 +34,7 @@ func (r *UserMongoRepository) ReadMany(
 	opts ...*options.FindOptions,
 ) (*mongo.Cursor, error) {
 	return mongodb.Find(
+		r.DB,
 		collectionName,
 		ctx,
 		filter,
@@ -48,6 +49,7 @@ func (r *UserMongoRepository) ReadOne(
 	opts ...*options.FindOneOptions,
 ) *mongo.SingleResult {
 	return mongodb.FindOne(
+		r.DB,
 		collectionName,
 		ctx,
 		filter,
@@ -63,6 +65,7 @@ func (r *UserMongoRepository) Update(
 	opts ...*options.UpdateOptions,
 ) (*mongo.UpdateResult, error) {
 	return mongodb.UpdateOne(
+		r.DB,
 		collectionName,
 		ctx,
 		filter,
@@ -78,6 +81,7 @@ func (r *UserMongoRepository) Delete(
 	opts ...*options.DeleteOptions,
 ) (*mongo.DeleteResult, error) {
 	return mongodb.DeleteOne(
+		r.DB,
 		collectionName,
 		ctx,
 		filter,

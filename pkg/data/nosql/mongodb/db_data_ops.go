@@ -22,12 +22,13 @@ func InsertOne(
 }
 
 func InsertMany(
+	db *mongo.Database,
 	collectionName string,
 	ctx context.Context,
 	docs []any,
 	opts ...*options.InsertManyOptions,
 ) (*mongo.InsertManyResult, error) {
-	return DB.Collection(collectionName).InsertMany(
+	return db.Collection(collectionName).InsertMany(
 		ctx,
 		docs,
 		opts...,
@@ -35,12 +36,13 @@ func InsertMany(
 }
 
 func Find(
+	db *mongo.Database,
 	collectionName string,
 	ctx context.Context,
 	filter any,
 	opts ...*options.FindOptions,
 ) (*mongo.Cursor, error) {
-	return DB.Collection(collectionName).Find(
+	return db.Collection(collectionName).Find(
 		ctx,
 		filter,
 		opts...,
@@ -48,12 +50,13 @@ func Find(
 }
 
 func FindOne(
+	db *mongo.Database,
 	collectionName string,
 	ctx context.Context,
 	filter any,
 	opts ...*options.FindOneOptions,
 ) *mongo.SingleResult {
-	return DB.Collection(collectionName).FindOne(
+	return db.Collection(collectionName).FindOne(
 		ctx,
 		filter,
 		opts...,
@@ -61,13 +64,14 @@ func FindOne(
 }
 
 func FindOneAndUpdate(
+	db *mongo.Database,
 	collectionName string,
 	ctx context.Context,
 	filter any,
 	doc any,
 	opts ...*options.FindOneAndUpdateOptions,
 ) *mongo.SingleResult {
-	return DB.Collection(collectionName).FindOneAndUpdate(
+	return db.Collection(collectionName).FindOneAndUpdate(
 		ctx,
 		filter,
 		doc,
@@ -76,13 +80,14 @@ func FindOneAndUpdate(
 }
 
 func FindOneAndReplace(
+	db *mongo.Database,
 	collectionName string,
 	ctx context.Context,
 	filter any,
 	doc any,
 	opts ...*options.FindOneAndReplaceOptions,
 ) *mongo.SingleResult {
-	return DB.Collection(collectionName).FindOneAndReplace(
+	return db.Collection(collectionName).FindOneAndReplace(
 		ctx,
 		filter,
 		doc,
@@ -91,12 +96,13 @@ func FindOneAndReplace(
 }
 
 func FindOneAndDelete(
+	db *mongo.Database,
 	collectionName string,
 	ctx context.Context,
 	filter any,
 	opts ...*options.FindOneAndDeleteOptions,
 ) *mongo.SingleResult {
-	return DB.Collection(collectionName).FindOneAndDelete(
+	return db.Collection(collectionName).FindOneAndDelete(
 		ctx,
 		filter,
 		opts...,
@@ -104,13 +110,14 @@ func FindOneAndDelete(
 }
 
 func UpdateMany(
+	db *mongo.Database,
 	collectionName string,
 	ctx context.Context,
 	filter any,
 	docs any,
 	opts ...*options.UpdateOptions,
 ) (*mongo.UpdateResult, error) {
-	return DB.Collection(collectionName).UpdateMany(
+	return db.Collection(collectionName).UpdateMany(
 		ctx,
 		filter,
 		docs,
@@ -119,13 +126,14 @@ func UpdateMany(
 }
 
 func UpdateOne(
+	db *mongo.Database,
 	collectionName string,
 	ctx context.Context,
 	filter any,
 	doc any,
 	opts ...*options.UpdateOptions,
 ) (*mongo.UpdateResult, error) {
-	return DB.Collection(collectionName).UpdateOne(
+	return db.Collection(collectionName).UpdateOne(
 		ctx,
 		filter,
 		doc,
@@ -134,13 +142,14 @@ func UpdateOne(
 }
 
 func UpdateByID(
+	db *mongo.Database,
 	collectionName string,
 	ctx context.Context,
 	filter any,
 	doc any,
 	opts ...*options.UpdateOptions,
 ) (*mongo.UpdateResult, error) {
-	return DB.Collection(collectionName).UpdateByID(
+	return db.Collection(collectionName).UpdateByID(
 		ctx,
 		filter,
 		doc,
@@ -149,12 +158,13 @@ func UpdateByID(
 }
 
 func DeleteMany(
+	db *mongo.Database,
 	collectionName string,
 	ctx context.Context,
 	filter any,
 	opts ...*options.DeleteOptions,
 ) (*mongo.DeleteResult, error) {
-	return DB.Collection(collectionName).DeleteMany(
+	return db.Collection(collectionName).DeleteMany(
 		ctx,
 		filter,
 		opts...,
@@ -162,12 +172,13 @@ func DeleteMany(
 }
 
 func DeleteOne(
+	db *mongo.Database,
 	collectionName string,
 	ctx context.Context,
 	filter any,
 	opts ...*options.DeleteOptions,
 ) (*mongo.DeleteResult, error) {
-	return DB.Collection(collectionName).DeleteOne(
+	return db.Collection(collectionName).DeleteOne(
 		ctx,
 		filter,
 		opts...,

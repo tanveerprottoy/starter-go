@@ -76,7 +76,7 @@ func (s *UserService) ReadMany(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
-	userId := coreutil.GetURLParam(util.UrlKeyId, r)
+	userId := coreutil.GetURLParam(r, util.UrlKeyId)
 	row := s.repository.ReadOne(userId)
 	if row == nil {
 		coreutil.RespondError(
@@ -107,7 +107,7 @@ func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserService) Update(w http.ResponseWriter, r *http.Request) {
-	userId := coreutil.GetURLParam(util.UrlKeyId, r)
+	userId := coreutil.GetURLParam(r, util.UrlKeyId)
 	var b *dto.CreateUpdateUserDto
 	err := json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
@@ -136,7 +136,7 @@ func (s *UserService) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserService) Delete(w http.ResponseWriter, r *http.Request) {
-	userId := coreutil.GetURLParam(util.UrlKeyId, r)
+	userId := coreutil.GetURLParam(r, util.UrlKeyId)
 	rowsAffected, err := s.repository.Delete(userId)
 	if err != nil || rowsAffected <= 0 {
 		coreutil.RespondError(

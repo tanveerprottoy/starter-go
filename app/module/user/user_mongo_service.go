@@ -28,7 +28,7 @@ func NewUserMongoService(repository *repository.UserMongoRepository) *UserMongoS
 
 func (s *UserMongoService) Create(w http.ResponseWriter, r *http.Request) {
 	var b *dto.CreateUpdateUserDto
-	err := coreutil.Decode(b, r)
+	err := coreutil.Decode(r, b)
 	if err != nil {
 		coreutil.RespondError(http.StatusBadRequest, err, w)
 		return
@@ -90,7 +90,7 @@ func (s *UserMongoService) ReadMany(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserMongoService) ReadOne(w http.ResponseWriter, r *http.Request) {
-	userId := coreutil.GetURLParam(util.UrlKeyId, r)
+	userId := coreutil.GetURLParam(r, util.UrlKeyId)
 	filter := bson.D{{"_id", bson.D{{"$eq", userId}}}}
 	res := s.repository.ReadOne(
 		util.UsersCollection,
@@ -102,10 +102,10 @@ func (s *UserMongoService) ReadOne(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserMongoService) Update(w http.ResponseWriter, r *http.Request) {
-	userId := coreutil.GetURLParam(util.UrlKeyId, r)
+	userId := coreutil.GetURLParam(r, util.UrlKeyId)
 	filter := bson.D{{"_id", bson.D{{"$eq", userId}}}}
 	var b *dto.CreateUpdateUserDto
-	err := coreutil.Decode(b, r)
+	err := coreutil.Decode(r, b)
 	if err != nil {
 		coreutil.RespondError(http.StatusBadRequest, err, w)
 		return
@@ -132,7 +132,7 @@ func (s *UserMongoService) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserMongoService) Delete(w http.ResponseWriter, r *http.Request) {
-	userId := coreutil.GetURLParam(util.UrlKeyId, r)
+	userId := coreutil.GetURLParam(r, util.UrlKeyId)
 	filter := bson.D{{"_id", bson.D{{"$eq", userId}}}}
 	res, err := s.repository.Delete(
 		util.UsersCollection,

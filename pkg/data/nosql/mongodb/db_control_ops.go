@@ -7,17 +7,18 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func ListDatabases() (mongo.ListDatabasesResult, error) {
-	return Client.ListDatabases(context.Background(), nil)
+func ListDatabases(c *mongo.Client) (mongo.ListDatabasesResult, error) {
+	return c.ListDatabases(context.Background(), nil)
 }
 
-func ListDatabaseNames() ([]string, error) {
-	return Client.ListDatabaseNames(context.Background(), nil)
+func ListDatabaseNames(c *mongo.Client) ([]string, error) {
+	return c.ListDatabaseNames(context.Background(), nil)
 }
 
 func GetCollection(
+	db *mongo.Database,
 	name string,
 	opts ...*options.CollectionOptions,
 ) *mongo.Collection {
-	return DB.Collection(name, opts...)
+	return db.Collection(name, opts...)
 }

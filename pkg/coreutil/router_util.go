@@ -6,6 +6,6 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func GetURLParam(k string, r *http.Request) string {
+func GetURLParam(r *http.Request, k string) string {
 	return chi.URLParam(r, k)
 }

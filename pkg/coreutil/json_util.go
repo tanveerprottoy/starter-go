@@ -13,6 +13,6 @@ func Unmarshal(data []byte, spec any) error {
 	return json.Unmarshal(data, spec)
 }
 
-func Decode(v any, r *http.Request) error {
+func Decode(r *http.Request, v any) error {
 	return json.NewDecoder(r.Body).Decode(&v)
 }
