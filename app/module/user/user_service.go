@@ -10,8 +10,6 @@ import (
 	"txp/restapistarter/app/util"
 	"txp/restapistarter/pkg/coreutil"
 	sqlUtil "txp/restapistarter/pkg/data/sql"
-
-	"github.com/go-chi/chi"
 )
 
 type UserService struct {
@@ -78,7 +76,7 @@ func (s *UserService) ReadMany(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
-	userId := chi.URLParam(r, util.UrlKeyId)
+	userId := coreutil.GetURLParam(util.UrlKeyId, r)
 	row := s.repository.ReadOne(userId)
 	if row == nil {
 		coreutil.RespondError(
@@ -109,7 +107,7 @@ func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserService) Update(w http.ResponseWriter, r *http.Request) {
-	userId := chi.URLParam(r, util.UrlKeyId)
+	userId := coreutil.GetURLParam(util.UrlKeyId, r)
 	var b *dto.CreateUpdateUserDto
 	err := json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
@@ -138,7 +136,7 @@ func (s *UserService) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserService) Delete(w http.ResponseWriter, r *http.Request) {
-	userId := chi.URLParam(r, util.UrlKeyId)
+	userId := coreutil.GetURLParam(util.UrlKeyId, r)
 	rowsAffected, err := s.repository.Delete(userId)
 	if err != nil || rowsAffected <= 0 {
 		coreutil.RespondError(

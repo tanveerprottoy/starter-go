@@ -7,11 +7,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type Repository[T any] interface {
+type Repository interface {
 	Create(
 		collectionName string,
 		ctx context.Context,
-		doc T,
+		doc any,
 		opts ...*options.InsertOneOptions,
 	) (*mongo.InsertOneResult, error)
 
@@ -33,7 +33,7 @@ type Repository[T any] interface {
 		collectionName string,
 		ctx context.Context,
 		filter any,
-		doc T,
+		doc any,
 		opts ...*options.UpdateOptions,
 	) (*mongo.UpdateResult, error)
 

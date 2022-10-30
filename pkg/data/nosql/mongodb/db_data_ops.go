@@ -8,12 +8,13 @@ import (
 )
 
 func InsertOne(
+	db *mongo.Database,
 	collectionName string,
 	ctx context.Context,
 	doc any,
 	opts ...*options.InsertOneOptions,
 ) (*mongo.InsertOneResult, error) {
-	return DB.Collection(collectionName).InsertOne(
+	return db.Collection(collectionName).InsertOne(
 		ctx,
 		doc,
 		opts...,

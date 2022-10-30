@@ -2,8 +2,10 @@ package user
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"time"
+	"txp/restapistarter/app/module/user/dto"
 	"txp/restapistarter/app/module/user/entity"
 	"txp/restapistarter/app/module/user/repository"
 	"txp/restapistarter/app/util"
@@ -15,36 +17,40 @@ import (
 )
 
 type UserMongoService struct {
-	repository *repository.UserMongoRepository[entity.UserSchema]
+	repository *repository.UserMongoRepository
 }
 
-func NewUserMongoService(repository *repository.UserMongoRepository[entity.UserSchema]) *UserMongoService {
+func NewUserMongoService(repository *repository.UserMongoRepository) *UserMongoService {
 	s := new(UserMongoService)
 	s.repository = repository
 	return s
 }
 
 func (s *UserMongoService) Create(w http.ResponseWriter, r *http.Request) {
-	/* var b *dto.CreateUpdateUserDto
-	err := json.NewDecoder(r.Body).Decode(&b)
+	var b *dto.CreateUpdateUserDto
+	err := coreutil.Decode(b, r)
 	if err != nil {
 		coreutil.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	err = s.repository.Create(
-		&entity.User{
+	res, err := s.repository.Create(
+		util.UsersCollection,
+		r.Context(),
+		&entity.UserSchema{
 			Name: b.Name,
 		},
+		nil,
 	)
 	if err != nil {
 		coreutil.RespondError(
 			http.StatusInternalServerError,
-			errors.New(util.InternalServerError),
+			err,
 			w,
 		)
 		return
 	}
-	coreutil.Respond(http.StatusCreated, b, w) */
+	log.Println(res)
+	coreutil.Respond(http.StatusOK, res, w)
 }
 
 func (s *UserMongoService) ReadMany(w http.ResponseWriter, r *http.Request) {
@@ -84,79 +90,64 @@ func (s *UserMongoService) ReadMany(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserMongoService) ReadOne(w http.ResponseWriter, r *http.Request) {
-	/* userId := chi.URLParam(r, util.UrlKeyId)
-	row := s.repository.ReadOne(userId)
-	if row == nil {
-		coreutil.RespondError(
-			http.StatusInternalServerError,
-			errors.New(util.InternalServerError),
-			w,
-		)
-		return
-	}
-	e := new(entity.User)
-	d, err := sqlUtil.GetEntity(
-		row,
-		&e,
-		&e.Id,
-		&e.Name,
-		&e.CreatedAt,
-		&e.UpdatedAt,
+	userId := coreutil.GetURLParam(util.UrlKeyId, r)
+	filter := bson.D{{"_id", bson.D{{"$eq", userId}}}}
+	res := s.repository.ReadOne(
+		util.UsersCollection,
+		r.Context(),
+		filter,
+		nil,
 	)
-	if err != nil {
-		coreutil.RespondError(
-			http.StatusInternalServerError,
-			err,
-			w,
-		)
-		return
-	}
-	coreutil.Respond(http.StatusOK, d, w) */
+	coreutil.Respond(http.StatusOK, res, w)
 }
 
 func (s *UserMongoService) Update(w http.ResponseWriter, r *http.Request) {
-	/* userId := chi.URLParam(r, util.UrlKeyId)
+	userId := coreutil.GetURLParam(util.UrlKeyId, r)
+	filter := bson.D{{"_id", bson.D{{"$eq", userId}}}}
 	var b *dto.CreateUpdateUserDto
-	err := json.NewDecoder(r.Body).Decode(&b)
+	err := coreutil.Decode(b, r)
+	if err != nil {
+		coreutil.RespondError(http.StatusBadRequest, err, w)
+		return
+	}
+	res, err := s.repository.Update(
+		util.UsersCollection,
+		r.Context(),
+		filter,
+		&entity.UserSchema{
+			Name: b.Name,
+		},
+		nil,
+	)
 	if err != nil {
 		coreutil.RespondError(
-			http.StatusBadRequest,
+			http.StatusInternalServerError,
 			err,
 			w,
 		)
 		return
 	}
-	rowsAffected, err := s.repository.Update(
-		userId,
-		&entity.User{
-			Name: b.Name,
-		},
-	)
-	if err != nil || rowsAffected <= 0 {
-		coreutil.RespondError(
-			http.StatusInternalServerError,
-			errors.New(util.InternalServerError),
-			w,
-		)
-		return
-	}
-	coreutil.Respond(http.StatusOK, b, w) */
+	log.Println(res)
+	coreutil.Respond(http.StatusOK, res, w)
 }
 
 func (s *UserMongoService) Delete(w http.ResponseWriter, r *http.Request) {
-	/* userId := chi.URLParam(r, util.UrlKeyId)
-	rowsAffected, err := s.repository.Delete(userId)
-	if err != nil || rowsAffected <= 0 {
+	userId := coreutil.GetURLParam(util.UrlKeyId, r)
+	filter := bson.D{{"_id", bson.D{{"$eq", userId}}}}
+	res, err := s.repository.Delete(
+		util.UsersCollection,
+		r.Context(),
+		filter,
+		nil,
+	)
+	if err != nil {
 		coreutil.RespondError(
 			http.StatusInternalServerError,
-			errors.New(util.InternalServerError),
+			err,
 			w,
 		)
 		return
 	}
-	coreutil.Respond(
-		http.StatusOK,
-		map[string]bool{"success": true},
-		w,
-	) */
+	log.Println(res)
+	coreutil.Respond(http.StatusOK, res, w)
 }

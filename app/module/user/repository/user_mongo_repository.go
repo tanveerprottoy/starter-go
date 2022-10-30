@@ -8,19 +8,26 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type UserMongoRepository[T any] struct {
+type UserMongoRepository struct {
+	DB *mongo.Database
 }
 
-func (r *UserMongoRepository[T]) Create(
+func (r *UserMongoRepository) Create(
 	collectionName string,
 	ctx context.Context,
-	doc T,
+	doc any,
 	opts ...*options.InsertOneOptions,
 ) (*mongo.InsertOneResult, error) {
-	return nil, nil
+	return mongodb.InsertOne(
+		r.DB,
+		collectionName,
+		ctx,
+		doc,
+		opts...,
+	)
 }
 
-func (r *UserMongoRepository[T]) ReadMany(
+func (r *UserMongoRepository) ReadMany(
 	collectionName string,
 	ctx context.Context,
 	filter any,
@@ -34,30 +41,46 @@ func (r *UserMongoRepository[T]) ReadMany(
 	)
 }
 
-func (r *UserMongoRepository[T]) ReadOne(
+func (r *UserMongoRepository) ReadOne(
 	collectionName string,
 	ctx context.Context,
 	filter any,
 	opts ...*options.FindOneOptions,
 ) *mongo.SingleResult {
-	return nil
+	return mongodb.FindOne(
+		collectionName,
+		ctx,
+		filter,
+		opts...,
+	)
 }
 
-func (r *UserMongoRepository[T]) Update(
+func (r *UserMongoRepository) Update(
 	collectionName string,
 	ctx context.Context,
 	filter any,
-	doc T,
+	doc any,
 	opts ...*options.UpdateOptions,
 ) (*mongo.UpdateResult, error) {
-	return nil, nil
+	return mongodb.UpdateOne(
+		collectionName,
+		ctx,
+		filter,
+		doc,
+		opts...,
+	)
 }
 
-func (r *UserMongoRepository[T]) Delete(
+func (r *UserMongoRepository) Delete(
 	collectionName string,
 	ctx context.Context,
 	filter any,
 	opts ...*options.DeleteOptions,
 ) (*mongo.DeleteResult, error) {
-	return nil, nil
+	return mongodb.DeleteOne(
+		collectionName,
+		ctx,
+		filter,
+		opts...,
+	)
 }

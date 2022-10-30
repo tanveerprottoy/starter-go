@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"txp/restapistarter/app/module/content"
 	"txp/restapistarter/app/module/user"
+	"txp/restapistarter/pkg/data/nosql/mongodb"
 	"txp/restapistarter/pkg/data/sql/postgres"
 )
 
@@ -26,7 +27,7 @@ func (a *App) initDB() {
 
 func (a *App) initModules() {
 	UserModule = new(user.UserModule)
-	UserModule.InitComponents()
+	UserModule.InitComponents(mongodb.DB)
 	ContentModule = new(content.ContentModule)
 	ContentModule.InitComponents()
 }
