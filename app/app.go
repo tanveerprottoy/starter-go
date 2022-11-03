@@ -29,8 +29,7 @@ func (a *App) initDB() {
 }
 
 func (a *App) initModules() {
-	UserModule = new(user.UserModule)
-	UserModule.InitComponents(a.DBClient.DB)
+	UserModule = user.NewUserModule(a.DBClient.DB)
 	ContentModule = new(content.ContentModule)
 	ContentModule.InitComponents()
 }

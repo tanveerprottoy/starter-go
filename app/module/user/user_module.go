@@ -13,7 +13,8 @@ type UserModule struct {
 	UserRepository *repository.UserRepository
 }
 
-func (m *UserModule) InitComponents(db *mongo.Database) {
+func NewUserModule(db *mongo.Database) *UserModule {
+	m := new(UserModule)
 	m.UserRepository = new(repository.UserRepository)
 	m.UserService = NewUserService(
 		m.UserRepository,
@@ -21,4 +22,5 @@ func (m *UserModule) InitComponents(db *mongo.Database) {
 	m.UserHandler = NewUserHandler(
 		m.UserService,
 	)
+	return m
 }
