@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 	"txp/restapistarter/app/module/user/dto"
-	"txp/restapistarter/app/module/user/entity"
 	"txp/restapistarter/app/module/user/repository"
+	"txp/restapistarter/app/module/user/schema"
 	"txp/restapistarter/app/util"
 	"txp/restapistarter/pkg/coreutil"
 	"txp/restapistarter/pkg/data/nosql/mongodb"
@@ -36,7 +36,7 @@ func (s *UserMongoService) Create(w http.ResponseWriter, r *http.Request) {
 	res, err := s.repository.Create(
 		util.UsersCollection,
 		r.Context(),
-		&entity.UserSchema{
+		&schema.UserSchema{
 			Name: b.Name,
 		},
 		nil,
@@ -114,7 +114,7 @@ func (s *UserMongoService) Update(w http.ResponseWriter, r *http.Request) {
 		util.UsersCollection,
 		r.Context(),
 		filter,
-		&entity.UserSchema{
+		&schema.UserSchema{
 			Name: b.Name,
 		},
 		nil,
