@@ -16,9 +16,9 @@ type UserModule struct {
 
 func NewUserModule(db *mongo.Database, router *router.Router) *UserModule {
 	m := new(UserModule)
-	m.UserRouter = NewUserRouter(router, m)
 	m.UserRepository = new(repository.UserRepository)
 	m.UserService = NewUserService(m.UserRepository)
 	m.UserHandler = NewUserHandler(m.UserService)
+	m.UserRouter = NewUserRouter(router, m)
 	return m
 }
