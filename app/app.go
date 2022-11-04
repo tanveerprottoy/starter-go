@@ -37,8 +37,8 @@ func (a *App) initModules() {
 // Init app
 func (a *App) InitComponents() {
 	a.initDB()
-	a.initModules()
 	a.router = router.NewRouter()
+	a.initModules()
 }
 
 // Run app
