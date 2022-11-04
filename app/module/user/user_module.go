@@ -16,6 +16,8 @@ type UserModule struct {
 
 func NewUserModule(db *mongo.Database, router *router.Router) *UserModule {
 	m := new(UserModule)
+	// init order is reversed of the field decleration
+	// as the dependency is served this way
 	m.UserRepository = new(repository.UserRepository)
 	m.UserService = NewUserService(m.UserRepository)
 	m.UserHandler = NewUserHandler(m.UserService)
