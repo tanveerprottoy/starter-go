@@ -12,6 +12,7 @@ type UserModule struct {
 	UserHandler    *UserHandler
 	UserService    *UserService
 	UserRepository *repository.UserRepository
+	UserMongoRepository *repository.UserMongoRepository
 }
 
 func NewUserModule(db *mongo.Database, router *router.Router) *UserModule {
@@ -19,6 +20,7 @@ func NewUserModule(db *mongo.Database, router *router.Router) *UserModule {
 	// init order is reversed of the field decleration
 	// as the dependency is served this way
 	m.UserRepository = new(repository.UserRepository)
+	m.UserMongoRepository = repository.NewUserMongoRepository(db)
 	m.UserService = NewUserService(m.UserRepository)
 	m.UserHandler = NewUserHandler(m.UserService)
 	m.UserRouter = NewUserRouter(router, m)

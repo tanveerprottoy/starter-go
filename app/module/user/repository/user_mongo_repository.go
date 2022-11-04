@@ -12,6 +12,12 @@ type UserMongoRepository struct {
 	DB *mongo.Database
 }
 
+func NewUserMongoRepository(db *mongo.Database) *UserMongoRepository {
+	r := new(UserMongoRepository)
+	r.DB = db
+	return r
+}
+
 func (r *UserMongoRepository) Create(
 	collectionName string,
 	ctx context.Context,
