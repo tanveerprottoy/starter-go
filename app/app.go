@@ -7,6 +7,7 @@ import (
 	"txp/restapistarter/app/module/user"
 	"txp/restapistarter/pkg/data/nosql/mongodb"
 	"txp/restapistarter/pkg/data/sql/postgres"
+	"txp/restapistarter/pkg/router"
 )
 
 // global var
@@ -20,7 +21,7 @@ var (
 // App struct
 type App struct {
 	DBClient *mongodb.DBClient
-	router   *Router
+	router   *router.Router
 }
 
 func (a *App) initDB() {
@@ -29,16 +30,15 @@ func (a *App) initDB() {
 }
 
 func (a *App) initModules() {
-	UserModule = user.NewUserModule(a.DBClient.DB)
-	ContentModule = new(content.ContentModule)
-	ContentModule.InitComponents()
+	UserModule = user.NewUserModule(a.DBClient.DB, a.router)
+	ContentModule = content.NewContentModule(a.DBClient.DB, a.router)
 }
 
 // Init app
 func (a *App) InitComponents() {
 	a.initDB()
 	a.initModules()
-	a.router = NewRouter()
+	a.router = router.NewRouter()
 }
 
 // Run app
