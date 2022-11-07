@@ -24,23 +24,23 @@ func (r *UserRouter) registerRoutes(version string, module *UserModule) {
 		func(r chi.Router) {
 			r.Get(
 				util.RootPattern,
-				module.UserHandler.ReadMany,
+				module.Handler.ReadMany,
 			)
 			r.Get(
 				util.RootPattern+"{id}",
-				module.UserHandler.ReadOne,
+				module.Handler.ReadOne,
 			)
 			r.Post(
 				util.RootPattern,
-				module.UserHandler.Create,
+				module.Handler.Create,
 			)
 			r.Patch(
 				util.RootPattern+"{id}",
-				module.UserHandler.Update,
+				module.Handler.Update,
 			)
 			r.Delete(
 				util.RootPattern+"{id}",
-				module.UserHandler.Delete,
+				module.Handler.Delete,
 			)
 		},
 	)

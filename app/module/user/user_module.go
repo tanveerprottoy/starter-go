@@ -8,21 +8,21 @@ import (
 )
 
 type UserModule struct {
-	UserRouter     *UserRouter
-	UserHandler    *UserHandler
-	UserService    *UserService
-	UserRepository *repository.UserRepository
-	UserMongoRepository *repository.UserMongoRepository
+	Router          *UserRouter
+	Handler         *UserHandler
+	Service         *UserService
+	Repository      *repository.UserRepository
+	MongoRepository *repository.UserMongoRepository
 }
 
 func NewUserModule(db *mongo.Database, router *router.Router) *UserModule {
 	m := new(UserModule)
 	// init order is reversed of the field decleration
 	// as the dependency is served this way
-	m.UserRepository = new(repository.UserRepository)
-	m.UserMongoRepository = repository.NewUserMongoRepository(db)
-	m.UserService = NewUserService(m.UserRepository)
-	m.UserHandler = NewUserHandler(m.UserService)
-	m.UserRouter = NewUserRouter(router, m)
+	m.Repository = new(repository.UserRepository)
+	m.MongoRepository = repository.NewUserMongoRepository(db)
+	m.Service = NewUserService(m.Repository)
+	m.Handler = NewUserHandler(m.Service)
+	m.Router = NewUserRouter(router, m)
 	return m
 }

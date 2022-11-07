@@ -24,23 +24,23 @@ func (r *ContentRouter) registerRoutes(version string, module *ContentModule) {
 		func(r chi.Router) {
 			r.Get(
 				util.RootPattern,
-				module.ContentHandler.ReadMany,
+				module.Handler.ReadMany,
 			)
 			r.Get(
 				util.RootPattern+"{id}",
-				module.ContentHandler.ReadOne,
+				module.Handler.ReadOne,
 			)
 			r.Post(
 				util.RootPattern,
-				module.ContentHandler.Create,
+				module.Handler.Create,
 			)
 			r.Patch(
 				util.RootPattern+"{id}",
-				module.ContentHandler.Update,
+				module.Handler.Update,
 			)
 			r.Delete(
 				util.RootPattern+"{id}",
-				module.ContentHandler.Delete,
+				module.Handler.Delete,
 			)
 		},
 	)

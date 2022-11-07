@@ -7,19 +7,19 @@ import (
 )
 
 type ContentModule struct {
-	ContentRouter     *ContentRouter
-	ContentHandler    *ContentHandler
-	ContentService    *ContentService
-	ContentRepository *ContentRepository
+	Router     *ContentRouter
+	Handler    *ContentHandler
+	Service    *ContentService
+	Repository *ContentRepository
 }
 
 func NewContentModule(db *mongo.Database, router *router.Router) *ContentModule {
 	m := new(ContentModule)
 	// init order is reversed of the field decleration
 	// as the dependency is served this way
-	m.ContentRepository = new(ContentRepository)
-	m.ContentService = NewContentService(m.ContentRepository)
-	m.ContentHandler = NewContentHandler(m.ContentService)
-	m.ContentRouter = NewContentRouter(router, m)
+	m.Repository = new(ContentRepository)
+	m.Service = NewContentService(m.Repository)
+	m.Handler = NewContentHandler(m.Service)
+	m.Router = NewContentRouter(router, m)
 	return m
 }
