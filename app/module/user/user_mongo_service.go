@@ -11,6 +11,7 @@ import (
 	"txp/restapistarter/app/util"
 	"txp/restapistarter/pkg/coreutil"
 	"txp/restapistarter/pkg/data/nosql/mongodb"
+	"txp/restapistarter/pkg/responseutil"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -30,7 +31,7 @@ func (s *UserMongoService) Create(w http.ResponseWriter, r *http.Request) {
 	var b *dto.CreateUpdateUserDto
 	err := coreutil.Decode(r, b)
 	if err != nil {
-		coreutil.RespondError(http.StatusBadRequest, err, w)
+		responseutil.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
 	res, err := s.repository.Create(
@@ -42,7 +43,7 @@ func (s *UserMongoService) Create(w http.ResponseWriter, r *http.Request) {
 		nil,
 	)
 	if err != nil {
-		coreutil.RespondError(
+		responseutil.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
@@ -50,7 +51,7 @@ func (s *UserMongoService) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(res)
-	coreutil.Respond(http.StatusOK, res, w)
+	responseutil.Respond(http.StatusOK, res, w)
 }
 
 func (s *UserMongoService) ReadMany(w http.ResponseWriter, r *http.Request) {
@@ -70,7 +71,7 @@ func (s *UserMongoService) ReadMany(w http.ResponseWriter, r *http.Request) {
 		} else if err == mongo.ErrNilCursor {
 			// This error means your query did not match any documents.
 		}
-		coreutil.RespondError(
+		responseutil.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
@@ -79,14 +80,14 @@ func (s *UserMongoService) ReadMany(w http.ResponseWriter, r *http.Request) {
 	}
 	data, err := mongodb.Decode(c)
 	if err != nil {
-		coreutil.RespondError(
+		responseutil.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
 		)
 		return
 	}
-	coreutil.Respond(http.StatusOK, data, w)
+	responseutil.Respond(http.StatusOK, data, w)
 }
 
 func (s *UserMongoService) ReadOne(w http.ResponseWriter, r *http.Request) {
@@ -98,7 +99,7 @@ func (s *UserMongoService) ReadOne(w http.ResponseWriter, r *http.Request) {
 		filter,
 		nil,
 	)
-	coreutil.Respond(http.StatusOK, res, w)
+	responseutil.Respond(http.StatusOK, res, w)
 }
 
 func (s *UserMongoService) Update(w http.ResponseWriter, r *http.Request) {
@@ -107,7 +108,7 @@ func (s *UserMongoService) Update(w http.ResponseWriter, r *http.Request) {
 	var b *dto.CreateUpdateUserDto
 	err := coreutil.Decode(r, b)
 	if err != nil {
-		coreutil.RespondError(http.StatusBadRequest, err, w)
+		responseutil.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
 	res, err := s.repository.Update(
@@ -120,7 +121,7 @@ func (s *UserMongoService) Update(w http.ResponseWriter, r *http.Request) {
 		nil,
 	)
 	if err != nil {
-		coreutil.RespondError(
+		responseutil.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
@@ -128,7 +129,7 @@ func (s *UserMongoService) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(res)
-	coreutil.Respond(http.StatusOK, res, w)
+	responseutil.Respond(http.StatusOK, res, w)
 }
 
 func (s *UserMongoService) Delete(w http.ResponseWriter, r *http.Request) {
@@ -141,7 +142,7 @@ func (s *UserMongoService) Delete(w http.ResponseWriter, r *http.Request) {
 		nil,
 	)
 	if err != nil {
-		coreutil.RespondError(
+		responseutil.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
@@ -149,5 +150,5 @@ func (s *UserMongoService) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(res)
-	coreutil.Respond(http.StatusOK, res, w)
+	responseutil.Respond(http.StatusOK, res, w)
 }

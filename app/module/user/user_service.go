@@ -10,6 +10,7 @@ import (
 	"txp/restapistarter/app/util"
 	"txp/restapistarter/pkg/coreutil"
 	sqlUtil "txp/restapistarter/pkg/data/sql"
+	"txp/restapistarter/pkg/responseutil"
 )
 
 type UserService struct {
@@ -26,7 +27,7 @@ func (s *UserService) Create(w http.ResponseWriter, r *http.Request) {
 	var b *dto.CreateUpdateUserDto
 	err := json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
-		coreutil.RespondError(http.StatusBadRequest, err, w)
+		responseutil.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
 	err = s.repository.Create(
@@ -35,20 +36,20 @@ func (s *UserService) Create(w http.ResponseWriter, r *http.Request) {
 		},
 	)
 	if err != nil {
-		coreutil.RespondError(
+		responseutil.RespondError(
 			http.StatusInternalServerError,
 			errors.New(util.InternalServerError),
 			w,
 		)
 		return
 	}
-	coreutil.Respond(http.StatusCreated, b, w)
+	responseutil.Respond(http.StatusCreated, responseutil.BuildData(b), w)
 }
 
 func (s *UserService) ReadMany(w http.ResponseWriter, r *http.Request) {
 	rows, err := s.repository.ReadMany()
 	if err != nil {
-		coreutil.RespondError(
+		responseutil.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
@@ -65,21 +66,21 @@ func (s *UserService) ReadMany(w http.ResponseWriter, r *http.Request) {
 		&e.UpdatedAt,
 	)
 	if err != nil {
-		coreutil.RespondError(
+		responseutil.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
 		)
 		return
 	}
-	coreutil.Respond(http.StatusOK, d, w)
+	responseutil.Respond(http.StatusOK, responseutil.BuildData(d), w)
 }
 
 func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
 	userId := coreutil.GetURLParam(r, util.UrlKeyId)
 	row := s.repository.ReadOne(userId)
 	if row == nil {
-		coreutil.RespondError(
+		responseutil.RespondError(
 			http.StatusInternalServerError,
 			errors.New(util.InternalServerError),
 			w,
@@ -96,14 +97,14 @@ func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
 		&e.UpdatedAt,
 	)
 	if err != nil {
-		coreutil.RespondError(
+		responseutil.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
 		)
 		return
 	}
-	coreutil.Respond(http.StatusOK, d, w)
+	responseutil.Respond(http.StatusOK, d, w)
 }
 
 func (s *UserService) Update(w http.ResponseWriter, r *http.Request) {
@@ -111,7 +112,7 @@ func (s *UserService) Update(w http.ResponseWriter, r *http.Request) {
 	var b *dto.CreateUpdateUserDto
 	err := json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
-		coreutil.RespondError(
+		responseutil.RespondError(
 			http.StatusBadRequest,
 			err,
 			w,
@@ -125,28 +126,28 @@ func (s *UserService) Update(w http.ResponseWriter, r *http.Request) {
 		},
 	)
 	if err != nil || rowsAffected <= 0 {
-		coreutil.RespondError(
+		responseutil.RespondError(
 			http.StatusInternalServerError,
 			errors.New(util.InternalServerError),
 			w,
 		)
 		return
 	}
-	coreutil.Respond(http.StatusOK, b, w)
+	responseutil.Respond(http.StatusOK, b, w)
 }
 
 func (s *UserService) Delete(w http.ResponseWriter, r *http.Request) {
 	userId := coreutil.GetURLParam(r, util.UrlKeyId)
 	rowsAffected, err := s.repository.Delete(userId)
 	if err != nil || rowsAffected <= 0 {
-		coreutil.RespondError(
+		responseutil.RespondError(
 			http.StatusInternalServerError,
 			errors.New(util.InternalServerError),
 			w,
 		)
 		return
 	}
-	coreutil.Respond(
+	responseutil.Respond(
 		http.StatusOK,
 		map[string]bool{"success": true},
 		w,

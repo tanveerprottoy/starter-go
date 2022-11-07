@@ -1,4 +1,4 @@
-package coreutil
+package responseutil
 
 import (
 	"encoding/json"
@@ -7,6 +7,12 @@ import (
 
 func writeResponse(w http.ResponseWriter, b []byte) {
 	_, _ = w.Write(b)
+}
+
+func BuildData[T any](p T) *Response[T] {
+	return &Response[T]{
+		Data: p,
+	}
 }
 
 func Respond(c int, p any, w http.ResponseWriter) {
