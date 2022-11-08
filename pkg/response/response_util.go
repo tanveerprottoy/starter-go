@@ -27,6 +27,7 @@ func Respond(c int, p any, w http.ResponseWriter) {
 
 func RespondError(c int, err error, w http.ResponseWriter) {
 	response, err := json.Marshal(map[string]string{"error": err.Error()})
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(c)
 	if err != nil {
 		writeResponse(w, []byte(err.Error()))
