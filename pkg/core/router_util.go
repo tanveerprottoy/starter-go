@@ -1,4 +1,4 @@
-package coreutil
+package core
 
 import (
 	"net/http"

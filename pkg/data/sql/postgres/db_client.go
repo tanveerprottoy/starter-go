@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"txp/restapistarter/pkg/configutil"
+	"txp/restapistarter/pkg/config"
 
 	_ "github.com/lib/pq"
 )
@@ -18,11 +18,11 @@ func InitDBClient() {
 	args := fmt.Sprintf(
 		"host=%s port=%s user=%s "+
 			"password=%s dbname=%s sslmode=disable",
-		configutil.GetEnvValue("DB_HOST"),
-		configutil.GetEnvValue("DB_PORT"),
-		configutil.GetEnvValue("DB_USER"),
-		configutil.GetEnvValue("DB_PASS"),
-		configutil.GetEnvValue("DB_NAME"),
+		config.GetEnvValue("DB_HOST"),
+		config.GetEnvValue("DB_PORT"),
+		config.GetEnvValue("DB_USER"),
+		config.GetEnvValue("DB_PASS"),
+		config.GetEnvValue("DB_NAME"),
 	)
 	DB, err = sql.Open("postgres", args)
 	if err != nil {

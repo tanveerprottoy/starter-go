@@ -3,7 +3,7 @@ package mongodb
 import (
 	"context"
 	"log"
-	"txp/restapistarter/pkg/configutil"
+	"txp/restapistarter/pkg/config"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -15,14 +15,14 @@ var (
 )
 
 func InitDBClient() {
-	uri := configutil.GetEnvValue("DB_URI")
+	uri := config.GetEnvValue("DB_URI")
 	var err error
 	Client, err = mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 	if err != nil {
 		panic(err)
 	}
 	log.Println("Successfully connected!")
-	DB = Client.Database(configutil.GetEnvValue("DB_NAME"))
+	DB = Client.Database(config.GetEnvValue("DB_NAME"))
 	// Establish and verify connection
 	DB.Client().Ping(context.TODO(), nil)
 	log.Println("Connected successfully to DB")

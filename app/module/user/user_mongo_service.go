@@ -9,9 +9,9 @@ import (
 	"txp/restapistarter/app/module/user/repository"
 	"txp/restapistarter/app/module/user/schema"
 	"txp/restapistarter/app/util"
-	"txp/restapistarter/pkg/coreutil"
+	"txp/restapistarter/pkg/core"
 	"txp/restapistarter/pkg/data/nosql/mongodb"
-	"txp/restapistarter/pkg/responseutil"
+	"txp/restapistarter/pkg/response"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -29,9 +29,9 @@ func NewUserMongoService(repository *repository.UserMongoRepository) *UserMongoS
 
 func (s *UserMongoService) Create(w http.ResponseWriter, r *http.Request) {
 	var b *dto.CreateUpdateUserDto
-	err := coreutil.Decode(r, b)
+	err := core.Decode(r, b)
 	if err != nil {
-		responseutil.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
 	res, err := s.repository.Create(
@@ -43,7 +43,7 @@ func (s *UserMongoService) Create(w http.ResponseWriter, r *http.Request) {
 		nil,
 	)
 	if err != nil {
-		responseutil.RespondError(
+		response.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
@@ -51,7 +51,7 @@ func (s *UserMongoService) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(res)
-	responseutil.Respond(http.StatusOK, res, w)
+	response.Respond(http.StatusOK, res, w)
 }
 
 func (s *UserMongoService) ReadMany(w http.ResponseWriter, r *http.Request) {
@@ -71,7 +71,7 @@ func (s *UserMongoService) ReadMany(w http.ResponseWriter, r *http.Request) {
 		} else if err == mongo.ErrNilCursor {
 			// This error means your query did not match any documents.
 		}
-		responseutil.RespondError(
+		response.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
@@ -80,18 +80,18 @@ func (s *UserMongoService) ReadMany(w http.ResponseWriter, r *http.Request) {
 	}
 	data, err := mongodb.Decode(c)
 	if err != nil {
-		responseutil.RespondError(
+		response.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
 		)
 		return
 	}
-	responseutil.Respond(http.StatusOK, data, w)
+	response.Respond(http.StatusOK, data, w)
 }
 
 func (s *UserMongoService) ReadOne(w http.ResponseWriter, r *http.Request) {
-	userId := coreutil.GetURLParam(r, util.UrlKeyId)
+	userId := core.GetURLParam(r, util.UrlKeyId)
 	filter := bson.D{{"_id", bson.D{{"$eq", userId}}}}
 	res := s.repository.ReadOne(
 		util.UsersCollection,
@@ -99,16 +99,16 @@ func (s *UserMongoService) ReadOne(w http.ResponseWriter, r *http.Request) {
 		filter,
 		nil,
 	)
-	responseutil.Respond(http.StatusOK, res, w)
+	response.Respond(http.StatusOK, res, w)
 }
 
 func (s *UserMongoService) Update(w http.ResponseWriter, r *http.Request) {
-	userId := coreutil.GetURLParam(r, util.UrlKeyId)
+	userId := core.GetURLParam(r, util.UrlKeyId)
 	filter := bson.D{{"_id", bson.D{{"$eq", userId}}}}
 	var b *dto.CreateUpdateUserDto
-	err := coreutil.Decode(r, b)
+	err := core.Decode(r, b)
 	if err != nil {
-		responseutil.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
 	res, err := s.repository.Update(
@@ -121,7 +121,7 @@ func (s *UserMongoService) Update(w http.ResponseWriter, r *http.Request) {
 		nil,
 	)
 	if err != nil {
-		responseutil.RespondError(
+		response.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
@@ -129,11 +129,11 @@ func (s *UserMongoService) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(res)
-	responseutil.Respond(http.StatusOK, res, w)
+	response.Respond(http.StatusOK, res, w)
 }
 
 func (s *UserMongoService) Delete(w http.ResponseWriter, r *http.Request) {
-	userId := coreutil.GetURLParam(r, util.UrlKeyId)
+	userId := core.GetURLParam(r, util.UrlKeyId)
 	filter := bson.D{{"_id", bson.D{{"$eq", userId}}}}
 	res, err := s.repository.Delete(
 		util.UsersCollection,
@@ -142,7 +142,7 @@ func (s *UserMongoService) Delete(w http.ResponseWriter, r *http.Request) {
 		nil,
 	)
 	if err != nil {
-		responseutil.RespondError(
+		response.RespondError(
 			http.StatusInternalServerError,
 			err,
 			w,
@@ -150,5 +150,5 @@ func (s *UserMongoService) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(res)
-	responseutil.Respond(http.StatusOK, res, w)
+	response.Respond(http.StatusOK, res, w)
 }

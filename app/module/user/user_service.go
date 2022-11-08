@@ -8,9 +8,9 @@ import (
 	"txp/restapistarter/app/module/user/entity"
 	"txp/restapistarter/app/module/user/repository"
 	"txp/restapistarter/app/util"
-	"txp/restapistarter/pkg/coreutil"
+	"txp/restapistarter/pkg/core"
 	sqlUtil "txp/restapistarter/pkg/data/sql"
-	"txp/restapistarter/pkg/responseutil"
+	"txp/restapistarter/pkg/response"
 )
 
 type UserService struct {
@@ -27,7 +27,7 @@ func (s *UserService) Create(w http.ResponseWriter, r *http.Request) {
 	var b *dto.CreateUpdateUserDto
 	err := json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
-		responseutil.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
 	err = s.repository.Create(
@@ -36,16 +36,16 @@ func (s *UserService) Create(w http.ResponseWriter, r *http.Request) {
 		},
 	)
 	if err != nil {
-		responseutil.RespondError(http.StatusInternalServerError, errors.New(util.InternalServerError), w)
+		response.RespondError(http.StatusInternalServerError, errors.New(util.InternalServerError), w)
 		return
 	}
-	responseutil.Respond(http.StatusCreated, responseutil.BuildData(b), w)
+	response.Respond(http.StatusCreated, response.BuildData(b), w)
 }
 
 func (s *UserService) ReadMany(w http.ResponseWriter, r *http.Request) {
 	rows, err := s.repository.ReadMany()
 	if err != nil {
-		responseutil.RespondError(http.StatusInternalServerError, err, w)
+		response.RespondError(http.StatusInternalServerError, err, w)
 		return
 	}
 	var e entity.User
@@ -58,17 +58,17 @@ func (s *UserService) ReadMany(w http.ResponseWriter, r *http.Request) {
 		&e.UpdatedAt,
 	)
 	if err != nil {
-		responseutil.RespondError(http.StatusInternalServerError, err, w)
+		response.RespondError(http.StatusInternalServerError, err, w)
 		return
 	}
-	responseutil.Respond(http.StatusOK, responseutil.BuildData(d), w)
+	response.Respond(http.StatusOK, response.BuildData(d), w)
 }
 
 func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
-	userId := coreutil.GetURLParam(r, util.UrlKeyId)
+	userId := core.GetURLParam(r, util.UrlKeyId)
 	row := s.repository.ReadOne(userId)
 	if row == nil {
-		responseutil.RespondError(http.StatusInternalServerError, errors.New(util.InternalServerError), w)
+		response.RespondError(http.StatusInternalServerError, errors.New(util.InternalServerError), w)
 		return
 	}
 	e := new(entity.User)
@@ -81,18 +81,18 @@ func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
 		&e.UpdatedAt,
 	)
 	if err != nil {
-		responseutil.RespondError(http.StatusInternalServerError, err, w)
+		response.RespondError(http.StatusInternalServerError, err, w)
 		return
 	}
-	responseutil.Respond(http.StatusOK, responseutil.BuildData(d), w)
+	response.Respond(http.StatusOK, response.BuildData(d), w)
 }
 
 func (s *UserService) Update(w http.ResponseWriter, r *http.Request) {
-	userId := coreutil.GetURLParam(r, util.UrlKeyId)
+	userId := core.GetURLParam(r, util.UrlKeyId)
 	var b *dto.CreateUpdateUserDto
 	err := json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
-		responseutil.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
 	rowsAffected, err := s.repository.Update(
@@ -102,18 +102,18 @@ func (s *UserService) Update(w http.ResponseWriter, r *http.Request) {
 		},
 	)
 	if err != nil || rowsAffected <= 0 {
-		responseutil.RespondError(http.StatusInternalServerError, errors.New(util.InternalServerError), w)
+		response.RespondError(http.StatusInternalServerError, errors.New(util.InternalServerError), w)
 		return
 	}
-	responseutil.Respond(http.StatusOK, responseutil.BuildData(b), w)
+	response.Respond(http.StatusOK, response.BuildData(b), w)
 }
 
 func (s *UserService) Delete(w http.ResponseWriter, r *http.Request) {
-	userId := coreutil.GetURLParam(r, util.UrlKeyId)
+	userId := core.GetURLParam(r, util.UrlKeyId)
 	rowsAffected, err := s.repository.Delete(userId)
 	if err != nil || rowsAffected <= 0 {
-		responseutil.RespondError(http.StatusInternalServerError, errors.New(util.InternalServerError), w)
+		response.RespondError(http.StatusInternalServerError, errors.New(util.InternalServerError), w)
 		return
 	}
-	responseutil.Respond(http.StatusOK, responseutil.BuildData(map[string]bool{"success": true}), w)
+	response.Respond(http.StatusOK, response.BuildData(map[string]bool{"success": true}), w)
 }

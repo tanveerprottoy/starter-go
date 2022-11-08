@@ -1,9 +1,9 @@
-package configutil
+package config
 
 import (
 	"log"
 	"os"
-	"txp/restapistarter/pkg/coreutil"
+	"txp/restapistarter/pkg/core"
 )
 
 var (
@@ -13,7 +13,7 @@ var (
 
 func init() {
 	fileBytes, _ := os.ReadFile("../config/dev.json")
-	_ = coreutil.Unmarshal(fileBytes, &Configs)
+	_ = core.Unmarshal(fileBytes, &Configs)
 	log.Print(Configs)
 }
 
