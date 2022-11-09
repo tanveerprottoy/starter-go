@@ -5,12 +5,12 @@ import (
 	"errors"
 	"net/http"
 	"txp/restapistarter/app/module/user/dto"
-	"txp/restapistarter/app/module/user/entity"
-	"txp/restapistarter/app/module/user/repository"
-	"txp/restapistarter/app/util"
-	"txp/restapistarter/pkg/core"
+	"txp/restapistarter/internal/app/module/user/entity"
+	"txp/restapistarter/internal/app/module/user/repository"
+	"txp/restapistarter/internal/app/pkg/constant"
 	sqlUtil "txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/response"
+	"txp/restapistarter/pkg/router"
 )
 
 type UserService struct {
@@ -36,7 +36,7 @@ func (s *UserService) Create(w http.ResponseWriter, r *http.Request) {
 		},
 	)
 	if err != nil {
-		response.RespondError(http.StatusInternalServerError, errors.New(util.InternalServerError), w)
+		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
 		return
 	}
 	response.Respond(http.StatusCreated, response.BuildData(b), w)
@@ -65,10 +65,10 @@ func (s *UserService) ReadMany(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
-	userId := core.GetURLParam(r, util.UrlKeyId)
+	userId := router.GetURLParam(r, constant.UrlKeyId)
 	row := s.repository.ReadOne(userId)
 	if row == nil {
-		response.RespondError(http.StatusInternalServerError, errors.New(util.InternalServerError), w)
+		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
 		return
 	}
 	e := new(entity.User)
@@ -88,7 +88,7 @@ func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserService) Update(w http.ResponseWriter, r *http.Request) {
-	userId := core.GetURLParam(r, util.UrlKeyId)
+	userId := router.GetURLParam(r, constant.UrlKeyId)
 	var b *dto.CreateUpdateUserDto
 	err := json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
@@ -102,17 +102,17 @@ func (s *UserService) Update(w http.ResponseWriter, r *http.Request) {
 		},
 	)
 	if err != nil || rowsAffected <= 0 {
-		response.RespondError(http.StatusInternalServerError, errors.New(util.InternalServerError), w)
+		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
 		return
 	}
 	response.Respond(http.StatusOK, response.BuildData(b), w)
 }
 
 func (s *UserService) Delete(w http.ResponseWriter, r *http.Request) {
-	userId := core.GetURLParam(r, util.UrlKeyId)
+	userId := router.GetURLParam(r, constant.UrlKeyId)
 	rowsAffected, err := s.repository.Delete(userId)
 	if err != nil || rowsAffected <= 0 {
-		response.RespondError(http.StatusInternalServerError, errors.New(util.InternalServerError), w)
+		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
 		return
 	}
 	response.Respond(http.StatusOK, response.BuildData(map[string]bool{"success": true}), w)

@@ -1,4 +1,4 @@
-package util
+package constant
 
 const ApiPattern = "/api"
 const RootPattern = "/"

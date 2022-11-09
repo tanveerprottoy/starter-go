@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"txp/restapistarter/app/module/user/entity"
+	"txp/restapistarter/internal/app/module/user/entity"
 	sqlUtil "txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/data/sql/postgres"
 )
@@ -13,7 +13,7 @@ type UserRepository struct {
 }
 
 func (r *UserRepository) Create(e *entity.User) error {
-	_, err :=  postgres.DB.Exec(
+	_, err := postgres.DB.Exec(
 		"INSERT INTO users (name)"+
 			"VALUES ($1)",
 		e.Name,

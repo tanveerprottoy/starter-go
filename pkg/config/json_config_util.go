@@ -3,17 +3,17 @@ package config
 import (
 	"log"
 	"os"
-	"txp/restapistarter/pkg/core"
+	"txp/restapistarter/pkg/json"
 )
 
 var (
 	// configs
-	Configs       map[string]interface{}
+	Configs map[string]interface{}
 )
 
 func init() {
 	fileBytes, _ := os.ReadFile("../config/dev.json")
-	_ = core.Unmarshal(fileBytes, &Configs)
+	_ = json.Unmarshal(fileBytes, &Configs)
 	log.Print(Configs)
 }
 

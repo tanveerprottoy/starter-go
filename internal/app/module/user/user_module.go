@@ -1,7 +1,7 @@
 package user
 
 import (
-	"txp/restapistarter/app/module/user/repository"
+	"txp/restapistarter/internal/app/module/user/repository"
 	"txp/restapistarter/pkg/router"
 
 	"go.mongodb.org/mongo-driver/mongo"

@@ -1,6 +1,6 @@
 package main
 
-import "txp/restapistarter/app"
+import "txp/restapistarter/internal/app"
 
 func main() {
 	a := new(app.App)

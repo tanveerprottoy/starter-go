@@ -4,12 +4,13 @@ import (
 	"log"
 	"net/http"
 	"txp/restapistarter/app/module/user/dto"
-	"txp/restapistarter/app/module/user/repository"
-	"txp/restapistarter/app/module/user/schema"
-	"txp/restapistarter/app/util"
-	"txp/restapistarter/pkg/core"
+	"txp/restapistarter/internal/app/module/user/repository"
+	"txp/restapistarter/internal/app/module/user/schema"
+	"txp/restapistarter/internal/app/pkg/constant"
 	"txp/restapistarter/pkg/data/nosql/mongodb"
+	"txp/restapistarter/pkg/json"
 	"txp/restapistarter/pkg/response"
+	"txp/restapistarter/pkg/router"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -27,13 +28,13 @@ func NewUserMongoService(repository *repository.UserMongoRepository) *UserMongoS
 
 func (s *UserMongoService) Create(w http.ResponseWriter, r *http.Request) {
 	var b dto.CreateUpdateUserDto
-	err := core.Decode(r.Body, &b)
+	err := json.Decode(r.Body, &b)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
 	res, err := s.repository.Create(
-		util.UsersCollection,
+		constant.UsersCollection,
 		r.Context(),
 		&schema.UserSchema{
 			Name: b.Name,
@@ -54,7 +55,7 @@ func (s *UserMongoService) ReadMany(w http.ResponseWriter, r *http.Request) {
 	defer cancel() */
 	// filter := bson.D{{"name", bson.D{{"$eq", "a"}}}}
 	c, err := s.repository.ReadMany(
-		util.UsersCollection,
+		constant.UsersCollection,
 		r.Context(),
 		bson.D{},
 		nil,
@@ -82,7 +83,7 @@ func (s *UserMongoService) ReadMany(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserMongoService) ReadOne(w http.ResponseWriter, r *http.Request) {
-	id := core.GetURLParam(r, util.UrlKeyId)
+	id := router.GetURLParam(r, constant.UrlKeyId)
 	objId, err := mongodb.BuildObjectID(id)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
@@ -90,7 +91,7 @@ func (s *UserMongoService) ReadOne(w http.ResponseWriter, r *http.Request) {
 	}
 	filter := bson.D{{Key: "_id", Value: bson.D{{Key: "$eq", Value: objId}}}}
 	res := s.repository.ReadOne(
-		util.UsersCollection,
+		constant.UsersCollection,
 		r.Context(),
 		filter,
 		nil,
@@ -109,14 +110,14 @@ func (s *UserMongoService) ReadOne(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserMongoService) Update(w http.ResponseWriter, r *http.Request) {
-	id := core.GetURLParam(r, util.UrlKeyId)
+	id := router.GetURLParam(r, constant.UrlKeyId)
 	objId, err := mongodb.BuildObjectID(id)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
 	var b dto.CreateUpdateUserDto
-	err = core.Decode(r.Body, b)
+	err = json.Decode(r.Body, b)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
@@ -124,7 +125,7 @@ func (s *UserMongoService) Update(w http.ResponseWriter, r *http.Request) {
 	filter := bson.D{{Key: "_id", Value: bson.D{{Key: "$eq", Value: objId}}}}
 	doc := bson.D{{Key: "$set", Value: bson.D{{Key: "name", Value: b.Name}}}}
 	res, err := s.repository.Update(
-		util.UsersCollection,
+		constant.UsersCollection,
 		r.Context(),
 		filter,
 		doc,
@@ -139,7 +140,7 @@ func (s *UserMongoService) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserMongoService) Delete(w http.ResponseWriter, r *http.Request) {
-	id := core.GetURLParam(r, util.UrlKeyId)
+	id := router.GetURLParam(r, constant.UrlKeyId)
 	objId, err := mongodb.BuildObjectID(id)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
@@ -147,7 +148,7 @@ func (s *UserMongoService) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 	filter := bson.D{{Key: "_id", Value: bson.D{{Key: "$eq", Value: objId}}}}
 	res, err := s.repository.Delete(
-		util.UsersCollection,
+		constant.UsersCollection,
 		r.Context(),
 		filter,
 		nil,

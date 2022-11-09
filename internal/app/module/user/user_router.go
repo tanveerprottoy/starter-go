@@ -1,7 +1,7 @@
 package user
 
 import (
-	"txp/restapistarter/app/util"
+	"txp/restapistarter/internal/app/pkg/constant"
 	"txp/restapistarter/pkg/router"
 
 	"github.com/go-chi/chi"
@@ -14,32 +14,32 @@ type UserRouter struct {
 func NewUserRouter(router *router.Router, module *UserModule) *UserRouter {
 	r := new(UserRouter)
 	r.router = router
-	r.registerRoutes(util.V1, module)
+	r.registerRoutes(constant.V1, module)
 	return r
 }
 
 func (r *UserRouter) registerRoutes(version string, module *UserModule) {
 	r.router.Mux.Route(
-		util.ApiPattern+version+util.UsersPattern,
+		constant.ApiPattern+version+constant.UsersPattern,
 		func(r chi.Router) {
 			r.Get(
-				util.RootPattern,
+				constant.RootPattern,
 				module.Handler.ReadMany,
 			)
 			r.Get(
-				util.RootPattern+"{id}",
+				constant.RootPattern+"{id}",
 				module.Handler.ReadOne,
 			)
 			r.Post(
-				util.RootPattern,
+				constant.RootPattern,
 				module.Handler.Create,
 			)
 			r.Patch(
-				util.RootPattern+"{id}",
+				constant.RootPattern+"{id}",
 				module.Handler.Update,
 			)
 			r.Delete(
-				util.RootPattern+"{id}",
+				constant.RootPattern+"{id}",
 				module.Handler.Delete,
 			)
 		},

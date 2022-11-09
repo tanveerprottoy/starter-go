@@ -26,7 +26,7 @@ func NewContentService(
 }
 
 func (s *ContentService) Create(w http.ResponseWriter, r *http.Request) {
-	var b *dto.CreateUpdateContentDto
+	var b dto.CreateUpdateContentDto
 	err := json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
@@ -114,7 +114,7 @@ func (s *ContentService) ReadOne(w http.ResponseWriter, r *http.Request) {
 
 func (s *ContentService) Update(w http.ResponseWriter, r *http.Request) {
 	userId := chi.URLParam(r, util.UrlKeyId)
-	var b *dto.CreateUpdateContentDto
+	var b dto.CreateUpdateContentDto
 	err := json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
 		response.RespondError(
