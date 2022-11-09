@@ -2,7 +2,7 @@ package core
 
 import (
 	"encoding/json"
-	"net/http"
+	"io"
 )
 
 func Marshal(v any) ([]byte, error) {
@@ -13,6 +13,6 @@ func Unmarshal(data []byte, spec any) error {
 	return json.Unmarshal(data, spec)
 }
 
-func Decode(r *http.Request, v any) error {
-	return json.NewDecoder(r.Body).Decode(&v)
+func Decode(r io.Reader, v any) error {
+	return json.NewDecoder(r).Decode(&v)
 }
