@@ -2,8 +2,7 @@ package adapter
 
 import (
 	"io"
-
-	"progga.io/tech-service/pkg/json"
+	"txp/restapistarter/pkg/json"
 )
 
 func IOReaderToBytes(r io.Reader) ([]byte, error) {
@@ -19,13 +18,13 @@ func BytesToValue[T any](d []byte) (*T, error) {
 
 func AnyToValue[T any](d any) (*T, error) {
 	var out T
-    b, err := json.Marshal(d)
-    if err != nil {
-      return &out, err
-    }
-    err = json.Unmarshal(b, &out)
-    if err != nil {
-      return nil, err
-    }
-    return &out, err
+	b, err := json.Marshal(d)
+	if err != nil {
+		return &out, err
+	}
+	err = json.Unmarshal(b, &out)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }

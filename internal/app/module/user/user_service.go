@@ -1,10 +1,8 @@
 package user
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
-	"txp/restapistarter/internal/app/module/user/dto"
 	"txp/restapistarter/internal/app/module/user/entity"
 	"txp/restapistarter/internal/app/module/user/repository"
 	"txp/restapistarter/internal/app/pkg/constant"
@@ -25,25 +23,26 @@ func NewUserService(repository *repository.UserRepository) *UserService {
 }
 
 func (s *UserService) Create(w http.ResponseWriter, r *http.Request) {
-	/* var b *dto.CreateUpdateUserDto
-	err := json.NewDecoder(r.Body).Decode(&b)
+	/*var b dto.CreateUpdateUserDto
+	err := json.Decode(r.Body, &b)
+	d, err := adapter.AnyToValue[schema.UserSchema](b)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	} */
 	defer r.Body.Close()
-	b, err := adapter.ConvertToBytes(r.Body)
+	b, err := adapter.IOReaderToBytes(r.Body)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	d, err := adapter.ConvertToObject[entity.User](b)
+	d, err := adapter.BytesToValue[entity.User](b)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
 	err = s.repository.Create(
-		&d,
+		d,
 	)
 	if err != nil {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
@@ -75,8 +74,8 @@ func (s *UserService) ReadMany(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
-	userId := router.GetURLParam(r, constant.UrlKeyId)
-	row := s.repository.ReadOne(userId)
+	id := router.GetURLParam(r, constant.UrlKeyId)
+	row := s.repository.ReadOne(id)
 	if row == nil {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
 		return
@@ -98,18 +97,21 @@ func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *UserService) Update(w http.ResponseWriter, r *http.Request) {
-	userId := router.GetURLParam(r, constant.UrlKeyId)
-	var b *dto.CreateUpdateUserDto
-	err := json.NewDecoder(r.Body).Decode(&b)
+	id := router.GetURLParam(r, constant.UrlKeyId)
+	defer r.Body.Close()
+	b, err := adapter.IOReaderToBytes(r.Body)
+	if err != nil {
+		response.RespondError(http.StatusBadRequest, err, w)
+		return
+	}
+	d, err := adapter.BytesToValue[entity.User](b)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
 	rowsAffected, err := s.repository.Update(
-		userId,
-		&entity.User{
-			Name: b.Name,
-		},
+		id,
+		d,
 	)
 	if err != nil || rowsAffected <= 0 {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
