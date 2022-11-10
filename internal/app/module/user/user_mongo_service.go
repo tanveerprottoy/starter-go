@@ -6,7 +6,7 @@ import (
 	"txp/restapistarter/internal/app/module/user/dto"
 	"txp/restapistarter/internal/app/module/user/repository"
 	"txp/restapistarter/internal/app/module/user/schema"
-	"txp/restapistarter/internal/app/pkg/constant"
+	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/pkg/data/nosql/mongodb"
 	"txp/restapistarter/pkg/json"
 	"txp/restapistarter/pkg/response"

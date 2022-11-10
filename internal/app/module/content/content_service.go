@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-	"txp/restapistarter/internal/app/module/content/entity"
 	"txp/restapistarter/internal/app/module/content/dto"
-	"txp/restapistarter/internal/app/pkg/constant"
+	"txp/restapistarter/internal/app/module/content/entity"
+	"txp/restapistarter/internal/pkg/constant"
 	sqlcore "txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/response"
 

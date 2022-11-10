@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"txp/restapistarter/internal/app/module/user/entity"
 	"txp/restapistarter/internal/app/module/user/repository"
-	"txp/restapistarter/internal/app/pkg/constant"
+	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/pkg/adapter"
 	sqlUtil "txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/response"

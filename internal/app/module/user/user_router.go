@@ -1,7 +1,7 @@
 package user
 
 import (
-	"txp/restapistarter/internal/app/pkg/constant"
+	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/pkg/router"
 
 	"github.com/go-chi/chi"
