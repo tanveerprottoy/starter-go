@@ -20,9 +20,9 @@ type UserMongoService struct {
 	repository *repository.UserMongoRepository
 }
 
-func NewUserMongoService(repository *repository.UserMongoRepository) *UserMongoService {
+func NewUserMongoService(r *repository.UserMongoRepository) *UserMongoService {
 	s := new(UserMongoService)
-	s.repository = repository
+	s.repository = r
 	return s
 }
 

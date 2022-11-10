@@ -8,9 +8,9 @@ type UserHandler struct {
 	service *UserService
 }
 
-func NewUserHandler(service *UserService) *UserHandler {
+func NewUserHandler(s *UserService) *UserHandler {
 	h := new(UserHandler)
-	h.service = service
+	h.service = s
 	return h
 }
 
