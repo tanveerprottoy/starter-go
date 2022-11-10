@@ -9,8 +9,8 @@ func Marshal(v any) ([]byte, error) {
 	return json.Marshal(v)
 }
 
-func Unmarshal(data []byte, spec any) error {
-	return json.Unmarshal(data, spec)
+func Unmarshal(d []byte, v any) error {
+	return json.Unmarshal(d, &v)
 }
 
 func Decode(r io.Reader, v any) error {

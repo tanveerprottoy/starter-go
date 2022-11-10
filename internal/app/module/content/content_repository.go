@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"txp/restapistarter/app/module/content/entity"
+	"txp/restapistarter/internal/app/module/content/entity"
 	sqlUtil "txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/data/sql/postgres"
 )

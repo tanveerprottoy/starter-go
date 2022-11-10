@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-	"txp/restapistarter/app/module/user/dto"
+	"txp/restapistarter/internal/app/module/user/dto"
 	"txp/restapistarter/internal/app/module/user/entity"
 	"txp/restapistarter/internal/app/module/user/repository"
 	"txp/restapistarter/internal/app/pkg/constant"
+	"txp/restapistarter/pkg/adapter"
 	sqlUtil "txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/response"
 	"txp/restapistarter/pkg/router"
@@ -24,16 +25,25 @@ func NewUserService(repository *repository.UserRepository) *UserService {
 }
 
 func (s *UserService) Create(w http.ResponseWriter, r *http.Request) {
-	var b *dto.CreateUpdateUserDto
+	/* var b *dto.CreateUpdateUserDto
 	err := json.NewDecoder(r.Body).Decode(&b)
+	if err != nil {
+		response.RespondError(http.StatusBadRequest, err, w)
+		return
+	} */
+	defer r.Body.Close()
+	b, err := adapter.ConvertToBytes(r.Body)
+	if err != nil {
+		response.RespondError(http.StatusBadRequest, err, w)
+		return
+	}
+	d, err := adapter.ConvertToObject[entity.User](b)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
 	err = s.repository.Create(
-		&entity.User{
-			Name: b.Name,
-		},
+		&d,
 	)
 	if err != nil {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)

@@ -3,7 +3,7 @@ package user
 import (
 	"log"
 	"net/http"
-	"txp/restapistarter/app/module/user/dto"
+	"txp/restapistarter/internal/app/module/user/dto"
 	"txp/restapistarter/internal/app/module/user/repository"
 	"txp/restapistarter/internal/app/module/user/schema"
 	"txp/restapistarter/internal/app/pkg/constant"

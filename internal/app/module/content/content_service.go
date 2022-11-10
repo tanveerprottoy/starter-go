@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-	"txp/restapistarter/app/module/content/dto"
-	"txp/restapistarter/app/module/content/entity"
-	"txp/restapistarter/app/util"
+	"txp/restapistarter/internal/app/module/content/entity"
+	"txp/restapistarter/internal/app/module/content/dto"
+	"txp/restapistarter/internal/app/pkg/constant"
 	sqlcore "txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/response"
 
@@ -40,7 +40,7 @@ func (s *ContentService) Create(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		response.RespondError(
 			http.StatusInternalServerError,
-			errors.New(util.InternalServerError),
+			errors.New(constant.InternalServerError),
 			w,
 		)
 		return
@@ -82,12 +82,12 @@ func (s *ContentService) ReadMany(
 }
 
 func (s *ContentService) ReadOne(w http.ResponseWriter, r *http.Request) {
-	userId := chi.URLParam(r, util.UrlKeyId)
+	userId := chi.URLParam(r, constant.UrlKeyId)
 	row := s.repository.ReadOne(userId)
 	if row == nil {
 		response.RespondError(
 			http.StatusInternalServerError,
-			errors.New(util.InternalServerError),
+			errors.New(constant.InternalServerError),
 			w,
 		)
 		return
@@ -113,7 +113,7 @@ func (s *ContentService) ReadOne(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *ContentService) Update(w http.ResponseWriter, r *http.Request) {
-	userId := chi.URLParam(r, util.UrlKeyId)
+	userId := chi.URLParam(r, constant.UrlKeyId)
 	var b dto.CreateUpdateContentDto
 	err := json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
@@ -133,7 +133,7 @@ func (s *ContentService) Update(w http.ResponseWriter, r *http.Request) {
 	if err != nil || rowsAffected <= 0 {
 		response.RespondError(
 			http.StatusInternalServerError,
-			errors.New(util.InternalServerError),
+			errors.New(constant.InternalServerError),
 			w,
 		)
 		return
@@ -142,12 +142,12 @@ func (s *ContentService) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *ContentService) Delete(w http.ResponseWriter, r *http.Request) {
-	userId := chi.URLParam(r, util.UrlKeyId)
+	userId := chi.URLParam(r, constant.UrlKeyId)
 	rowsAffected, err := s.repository.Delete(userId)
 	if err != nil || rowsAffected <= 0 {
 		response.RespondError(
 			http.StatusInternalServerError,
-			errors.New(util.InternalServerError),
+			errors.New(constant.InternalServerError),
 			w,
 		)
 		return
