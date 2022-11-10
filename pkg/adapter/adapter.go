@@ -2,6 +2,7 @@ package adapter
 
 import (
 	"io"
+
 	"txp/restapistarter/pkg/json"
 )
 
@@ -20,7 +21,7 @@ func AnyToValue[T any](d any) (*T, error) {
 	var out T
 	b, err := json.Marshal(d)
 	if err != nil {
-		return &out, err
+		return nil, err
 	}
 	err = json.Unmarshal(b, &out)
 	if err != nil {
