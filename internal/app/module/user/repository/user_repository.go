@@ -9,10 +9,10 @@ import (
 	"txp/restapistarter/pkg/data/sql/postgres"
 )
 
-type UserRepository struct {
+type UserRepository[T entity.User] struct {
 }
 
-func (r *UserRepository) Create(e *entity.User) error {
+func (r *UserRepository[T]) Create(e *T) error {
 	_, err := postgres.DB.Exec(
 		"INSERT INTO users (name)"+
 			"VALUES ($1)",
@@ -25,7 +25,7 @@ func (r *UserRepository) Create(e *entity.User) error {
 	return nil
 }
 
-func (r *UserRepository) ReadMany() (*sql.Rows, error) {
+func (r *UserRepository[T]) ReadMany() (*sql.Rows, error) {
 	rows, err := postgres.DB.Query(
 		"SELECT * FROM users", // WHERE id IS NOT NULL
 	)
@@ -35,7 +35,7 @@ func (r *UserRepository) ReadMany() (*sql.Rows, error) {
 	return rows, nil
 }
 
-func (r *UserRepository) ReadOne(id string) *sql.Row {
+func (r *UserRepository[T]) ReadOne(id string) *sql.Row {
 	row := postgres.DB.QueryRow(
 		"SELECT * FROM users WHERE id = $1 LIMIT 1",
 		id,
@@ -43,7 +43,7 @@ func (r *UserRepository) ReadOne(id string) *sql.Row {
 	return row
 }
 
-func (r *UserRepository) Update(id string, e *entity.User) (int64, error) {
+func (r *UserRepository[T]) Update(id string, e *entity.User) (int64, error) {
 	q := "UPDATE users SET name = $2 WHERE id = $1"
 	res, err := postgres.DB.Exec(
 		q,
@@ -57,7 +57,7 @@ func (r *UserRepository) Update(id string, e *entity.User) (int64, error) {
 	return sqlUtil.GetRowsAffected(res), nil
 }
 
-func (r *UserRepository) Delete(id string) (int64, error) {
+func (r *UserRepository[T]) Delete(id string) (int64, error) {
 	q := "DELETE FROM users WHERE id = $1"
 	res, err := postgres.DB.Exec(
 		q,

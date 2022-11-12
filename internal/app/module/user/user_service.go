@@ -13,12 +13,12 @@ import (
 )
 
 type UserService struct {
-	repository *repository.UserRepository
+	repository repository.UserRepository[entity.User]
 }
 
-func NewUserService(repository *repository.UserRepository) *UserService {
+func NewUserService(r repository.UserRepository[entity.User]) *UserService {
 	s := new(UserService)
-	s.repository = repository
+	s.repository = r
 	return s
 }
 
