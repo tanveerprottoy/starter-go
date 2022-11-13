@@ -15,11 +15,11 @@ type Router struct {
 func NewRouter() *Router {
 	r := &Router{}
 	r.Mux = chi.NewRouter()
-	r.registerMiddlewares()
+	r.registerGlobalMiddlewares()
 	return r
 }
 
-func (r *Router) registerMiddlewares() {
+func (r *Router) registerGlobalMiddlewares() {
 	r.Mux.Use(
 		middleware.JSONContentTypeMiddleWare,
 		cors.Handler(cors.Options{
