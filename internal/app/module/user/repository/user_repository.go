@@ -12,7 +12,7 @@ import (
 type UserRepository[T entity.User] struct {
 }
 
-func (r *UserRepository[T]) Create(e *T) error {
+func (r *UserRepository[T]) Create(e *entity.User) error {
 	_, err := postgres.DB.Exec(
 		"INSERT INTO users (name)"+
 			"VALUES ($1)",

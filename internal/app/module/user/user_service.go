@@ -4,19 +4,18 @@ import (
 	"errors"
 	"net/http"
 	"txp/restapistarter/internal/app/module/user/entity"
-	"txp/restapistarter/internal/app/module/user/repository"
 	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/pkg/adapter"
-	sqlUtil "txp/restapistarter/pkg/data/sql"
+	"txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/response"
 	"txp/restapistarter/pkg/router"
 )
 
 type UserService struct {
-	repository repository.UserRepository[entity.User]
+	repository sql.Repository[entity.User] // repository.UserRepository[entity.User]
 }
 
-func NewUserService(r repository.UserRepository[entity.User]) *UserService {
+func NewUserService(r sql.Repository[entity.User]) *UserService {
 	s := new(UserService)
 	s.repository = r
 	return s
@@ -58,7 +57,7 @@ func (s *UserService) ReadMany(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var e entity.User
-	d, err := sqlUtil.GetEntities(
+	d, err := sql.GetEntities(
 		rows,
 		&e,
 		&e.Id,
@@ -81,7 +80,7 @@ func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	e := new(entity.User)
-	d, err := sqlUtil.GetEntity(
+	d, err := sql.GetEntity(
 		row,
 		&e,
 		&e.Id,

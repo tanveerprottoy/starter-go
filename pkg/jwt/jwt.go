@@ -11,7 +11,7 @@ import (
 // Create the JWT key used to create the signature
 var JwtKey = []byte(config.GetEnvValue("secret"))
 
-// jwt.StandardClaims is an embedded type
+// jwt.RegisteredClaims is an embedded type
 type Claims struct {
 	Payload any `json:"payload"`
 	jwt.RegisteredClaims
