@@ -7,18 +7,18 @@ import (
 	"txp/restapistarter/internal/pkg/constant"
 )
 
-type AuthMiddleWare struct {
+type AuthMiddleware struct {
 	Service *auth.AuthService
 }
 
-func NewAuthMiddleWare(s *auth.AuthService) *AuthMiddleWare {
-	m := new(AuthMiddleWare)
+func NewAuthMiddleware(s *auth.AuthService) *AuthMiddleware {
+	m := new(AuthMiddleware)
 	m.Service = s
 	return m
 }
 
 // AuthUserMiddleWare auth user
-func (m *AuthMiddleWare) AuthUser(next http.Handler) http.Handler {
+func (m *AuthMiddleware) AuthUser(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		payload := m.Service.Authorize(w, r)
 		if payload == nil {
