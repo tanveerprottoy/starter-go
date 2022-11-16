@@ -25,7 +25,12 @@ func NewHTTPClient(
 	return c
 }
 
-func (c *HTTPClient) Request(method string, url string, body io.Reader, header http.Header) any {
+func (c *HTTPClient) Request(
+	method string,
+	url string,
+	header http.Header,
+	body io.Reader,
+) any {
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
 		fmt.Printf("client: could not create request: %s\n", err)
