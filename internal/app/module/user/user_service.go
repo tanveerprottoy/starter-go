@@ -3,6 +3,7 @@ package user
 import (
 	"errors"
 	"net/http"
+	_sql "database/sql"
 	"txp/restapistarter/internal/app/module/user/entity"
 	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/pkg/adapter"
@@ -72,9 +73,13 @@ func (s *UserService) ReadMany(w http.ResponseWriter, r *http.Request) {
 	response.Respond(http.StatusOK, response.BuildData(d), w)
 }
 
+func (s *UserService) ReadOneInternal(id string) *_sql.Row {
+	return s.repository.ReadOne(id)
+}
+
 func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.UrlKeyId)
-	row := s.repository.ReadOne(id)
+	row := s.ReadOneInternal(id)
 	if row == nil {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
 		return

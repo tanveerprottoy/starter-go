@@ -17,8 +17,8 @@ type App struct {
 	DBClient      *mongodb.DBClient
 	router        *router.Router
 	Configs       map[string]interface{}
-	Middlewares    []any
-	AuthModule     *auth.AuthModule
+	Middlewares   []any
+	AuthModule    *auth.AuthModule
 	UserModule    *user.UserModule
 	ContentModule *content.ContentModule
 }
@@ -34,9 +34,8 @@ func (a *App) initMiddlewares() {
 }
 
 func (a *App) initModules() {
-	a.AuthModule = auth.NewAuthModule()
-	a.initMiddlewares()
 	a.UserModule = user.NewUserModule(a.DBClient.DB, a.router)
+	a.AuthModule = auth.NewAuthModule(a.UserModule.Service)
 	a.ContentModule = content.NewContentModule(a.DBClient.DB, a.router)
 }
 
@@ -45,6 +44,7 @@ func (a *App) InitComponents() {
 	a.initDB()
 	a.router = router.NewRouter()
 	a.initModules()
+	a.initMiddlewares()
 }
 
 // Run app

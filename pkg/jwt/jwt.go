@@ -12,13 +12,18 @@ import (
 var JwtKey = []byte(config.GetEnvValue("secret"))
 
 // jwt.RegisteredClaims is an embedded type
+type Payload struct {
+	Id string `json:"id"`
+}
+
+// jwt.RegisteredClaims is an embedded type
 type Claims struct {
-	Payload any `json:"payload"`
+	Payload Payload `json:"payload"`
 	jwt.RegisteredClaims
 }
 
 // GenerateToken generates a new token
-func GenerateToken(payload any) string {
+func GenerateToken(payload Payload) string {
 	/* RegisteredClaims: jwt.RegisteredClaims{
 		ExpiresAt: jwt.NewNumericDate(expirationTime),
 		IssuedAt:  jwt.NewNumericDate(datetime.Now()),

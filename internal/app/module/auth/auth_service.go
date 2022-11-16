@@ -1,32 +1,30 @@
 package auth
 
 import (
-	"errors"
 	"net/http"
+
+	"txp/restapistarter/internal/app/module/user"
+	"txp/restapistarter/internal/app/module/user/entity"
+	"txp/restapistarter/internal/pkg/adapter"
+	_http "txp/restapistarter/pkg/http"
 	"txp/restapistarter/pkg/jwt"
 	"txp/restapistarter/pkg/response"
-	"txp/restapistarter/pkg/strings"
 )
 
 type AuthService struct {
+	userService *user.UserService
 }
 
-func NewAuthService() *AuthService {
+func NewAuthService(userService *user.UserService) *AuthService {
 	s := new(AuthService)
+	s.userService = userService
 	return s
 }
 
-func (s *AuthService) Authorize(w http.ResponseWriter, r *http.Request) any {
-	tokenHeader := r.Header.Get("Authorization")
-	if tokenHeader == "" {
-		// Token is missing
-		response.RespondError(http.StatusForbidden, errors.New("auth token is missing"), w)
-		return nil
-	}
-	splits := strings.Split(tokenHeader, " ")
-	// token format is `Bearer {tokenBody}`
-	if len(splits) != 2 {
-		response.RespondError(http.StatusForbidden, errors.New("token format is invalid"), w)
+func (s *AuthService) Authorize(w http.ResponseWriter, r *http.Request) *entity.User {
+	splits, err := _http.ParseToken(r)
+	if err != nil {
+		response.RespondError(http.StatusForbidden, err, w)
 		return nil
 	}
 	tokenBody := splits[1]
@@ -35,5 +33,16 @@ func (s *AuthService) Authorize(w http.ResponseWriter, r *http.Request) any {
 		response.RespondError(http.StatusForbidden, err, w)
 		return nil
 	}
-	return claims
+	// find user
+	row := s.userService.ReadOneInternal(claims.Payload.Id)
+	if row == nil {
+		response.RespondError(http.StatusForbidden, err, w)
+		return nil
+	}
+	d, err := adapter.RowToUserEntity(row)
+	if err != nil {
+		response.RespondError(http.StatusForbidden, err, w)
+		return nil
+	}
+	return d
 }
