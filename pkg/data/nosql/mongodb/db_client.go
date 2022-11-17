@@ -3,6 +3,7 @@ package mongodb
 import (
 	"context"
 	"log"
+	"sync"
 	"txp/restapistarter/pkg/config"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -16,10 +17,24 @@ type DBClient struct {
 
 func NewDBClient() *DBClient {
 	d := new(DBClient)
-	uri := config.GetEnvValue("DB_URI")
+	var once sync.Once
+	once.Do(func() {
+		d.connect()
+	})
+	return d
+}
+
+func (d *DBClient) connect() {
+	// uri := config.GetEnvValue("DB_URI")
+	// println(uri)
+	credential := options.Credential{
+		Username: "username",
+		Password: "pass",
+	}
 	var err error
 	ctx := context.TODO()
-	d.Client, err = mongo.Connect(ctx, options.Client().ApplyURI(uri))
+	opts := options.Client().ApplyURI("mongodb+srv://<host>").SetAuth(credential)
+	d.Client, err = mongo.Connect(ctx, opts)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,7 +50,6 @@ func NewDBClient() *DBClient {
 		log.Fatal(err)
 	}
 	log.Println("Connected successfully to DB")
-	return d
 }
 
 func (d *DBClient) Disconnect() {
