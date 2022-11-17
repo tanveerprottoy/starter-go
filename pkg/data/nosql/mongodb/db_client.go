@@ -21,7 +21,7 @@ func NewDBClient() *DBClient {
 	ctx := context.TODO()
 	d.Client, err = mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	err = d.Client.Ping(ctx, nil)
 	if err != nil {
