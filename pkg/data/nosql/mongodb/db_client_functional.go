@@ -9,29 +9,30 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type DBClient struct {
+var (
 	Client *mongo.Client
 	DB     *mongo.Database
-}
+)
 
-func NewDBClient() *DBClient {
-	d := &DBClient{}
+func InitDBClient() {
 	uri := config.GetEnvValue("DB_URI")
 	var err error
-	d.Client, err = mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	Client, err = mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 	if err != nil {
 		panic(err)
 	}
 	log.Println("Successfully connected!")
-	d.DB = d.Client.Database(config.GetEnvValue("DB_NAME"))
+	DB = Client.Database(config.GetEnvValue("DB_NAME"))
 	// Establish and verify connection
-	d.DB.Client().Ping(context.TODO(), nil)
+	err = DB.Client().Ping(context.TODO(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 	log.Println("Connected successfully to DB")
-	return d
 }
 
-func (d *DBClient) Disconnect() {
-	if err := d.Client.Disconnect(context.TODO()); err != nil {
+func Disconnect() {
+	if err := Client.Disconnect(context.TODO()); err != nil {
 		panic(err)
 	}
 }
