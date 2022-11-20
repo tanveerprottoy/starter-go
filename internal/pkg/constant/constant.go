@@ -14,3 +14,6 @@ const NotFound = "not found"
 const BadRequest = "bad request"
 const Error = "error"
 const UsersCollection = "users"
+
+// userservice auth endpoint
+const UserServiceAuthEndpoint = "/userservice/api/v2/auth/get-user-by-token"

@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func ParseToken(r *http.Request) ([]string, error) {
+func ParseAuthToken(r *http.Request) ([]string, error) {
 	tokenHeader := r.Header.Get("Authorization")
 	if tokenHeader == "" {
 		// Token is missing

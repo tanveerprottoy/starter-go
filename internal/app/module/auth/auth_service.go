@@ -22,7 +22,7 @@ func NewAuthService(userService *user.UserService) *AuthService {
 }
 
 func (s *AuthService) Authorize(w http.ResponseWriter, r *http.Request) *entity.User {
-	splits, err := _http.ParseToken(r)
+	splits, err := _http.ParseAuthToken(r)
 	if err != nil {
 		response.RespondError(http.StatusForbidden, err, w)
 		return nil

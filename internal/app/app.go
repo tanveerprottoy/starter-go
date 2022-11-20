@@ -34,7 +34,8 @@ func (a *App) initMiddlewares() {
 }
 
 func (a *App) initModules() {
-	a.UserModule = user.NewUserModule(a.DBClient.DB, a.router)
+	am := a.Middlewares[0].(*middleware.AuthMiddleware)
+	a.UserModule = user.NewUserModule(a.DBClient.DB, a.router, am)
 	a.AuthModule = auth.NewAuthModule(a.UserModule.Service)
 	a.ContentModule = content.NewContentModule(a.DBClient.DB, a.router)
 }
