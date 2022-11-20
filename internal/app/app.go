@@ -16,7 +16,6 @@ import (
 type App struct {
 	DBClient      *mongodb.DBClient
 	router        *router.Router
-	Configs       map[string]interface{}
 	Middlewares   []any
 	AuthModule    *auth.AuthModule
 	UserModule    *user.UserModule
@@ -42,6 +41,7 @@ func (a *App) initModules() {
 
 // Init app
 func (a *App) InitComponents() {
+	a.initDB()
 	a.initDB()
 	a.router = router.NewRouter()
 	a.initModules()

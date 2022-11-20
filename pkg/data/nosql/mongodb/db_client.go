@@ -26,14 +26,15 @@ func NewDBClient() *DBClient {
 
 func (d *DBClient) connect() {
 	// uri := config.GetEnvValue("DB_URI")
-	// println(uri)
-	credential := options.Credential{
+	uri := config.GetJsonValue("dbUri").(string)
+	/* credential := options.Credential{
 		Username: "username",
 		Password: "pass",
-	}
+	} */
 	var err error
 	ctx := context.TODO()
-	opts := options.Client().ApplyURI("mongodb+srv://<host>").SetAuth(credential)
+	// opts := options.Client().ApplyURI("mongodb+srv://<host>").SetAuth(credential)
+	opts := options.Client().ApplyURI(uri)
 	d.Client, err = mongo.Connect(ctx, opts)
 	if err != nil {
 		log.Fatal(err)
