@@ -4,8 +4,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
-
-	"progga.io/tech-service/pkg/adapter"
+	"txp/restapistarter/pkg/adapter"
 )
 
 func Request[T any](

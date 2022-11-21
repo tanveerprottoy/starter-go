@@ -1,6 +1,7 @@
-package user
+package router
 
 import (
+	"txp/restapistarter/internal/app/module/user"
 	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/internal/pkg/middleware"
 	"txp/restapistarter/pkg/router"
@@ -8,28 +9,11 @@ import (
 	"github.com/go-chi/chi"
 )
 
-type UserRouter struct {
-	router         *router.Router
-	authMiddleWare *middleware.AuthMiddleware
-}
-
-func NewUserRouter(
-	router *router.Router,
-	module *UserModule,
-	authMiddleWare *middleware.AuthMiddleware,
-) *UserRouter {
-	r := new(UserRouter)
-	r.router = router
-	r.authMiddleWare = authMiddleWare
-	r.registerRoutes(constant.V1, module)
-	return r
-}
-
-func (r *UserRouter) registerRoutes(version string, module *UserModule) {
-	r.router.Mux.Group(
-		func(router chi.Router) {
-			router.Use(r.authMiddleWare.AuthUser)
-			r.router.Mux.Route(
+func RegisterUserRoutes(router *router.Router, version string, module *user.UserModule, authMiddleWare *middleware.AuthMiddleware) {
+	router.Mux.Group(
+		func(r chi.Router) {
+			r.Use(authMiddleWare.AuthUser)
+			r.Route(
 				constant.ApiPattern+version+constant.UsersPattern,
 				func(r chi.Router) {
 					r.Get(constant.RootPattern, module.Handler.ReadMany)
