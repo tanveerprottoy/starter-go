@@ -8,7 +8,7 @@ import (
 	"txp/restapistarter/internal/app/module/user"
 	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/internal/pkg/middleware"
-	_routerInternal "txp/restapistarter/internal/pkg/router"
+	_routerModule "txp/restapistarter/internal/pkg/router"
 	"txp/restapistarter/pkg/data/nosql/mongodb"
 	"txp/restapistarter/pkg/data/sql/postgres"
 	"txp/restapistarter/pkg/router"
@@ -40,10 +40,10 @@ func (a *App) initModules() {
 	a.ContentModule = content.NewContentModule(a.DBClient.DB)
 }
 
-func (a *App) initRouters() {
+func (a *App) initModuleRouters() {
 	m := a.Middlewares[0].(*middleware.AuthMiddleware)
-	_routerInternal.RegisterUserRoutes(a.router, constant.V1, a.UserModule, m)
-	_routerInternal.RegisterContentRoutes(a.router, constant.V1, a.ContentModule)
+	_routerModule.RegisterUserRoutes(a.router, constant.V1, a.UserModule, m)
+	_routerModule.RegisterContentRoutes(a.router, constant.V1, a.ContentModule)
 }
 
 // Init app
@@ -53,6 +53,7 @@ func (a *App) InitComponents() {
 	a.router = router.NewRouter()
 	a.initModules()
 	a.initMiddlewares()
+	a.initModuleRouters()
 }
 
 // Run app
