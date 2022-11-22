@@ -54,6 +54,9 @@ func (s *UserMongoService) ReadMany(w http.ResponseWriter, r *http.Request) {
 	/* ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel() */
 	// filter := bson.D{{"name", bson.D{{"$eq", "a"}}}}
+	/* l := int64(limit)
+	skip := int64(page*limit - limit) */
+	// opts := options.FindOptions{Limit: &l, Skip: &skip}
 	c, err := s.repository.ReadMany(
 		constant.UsersCollection,
 		r.Context(),
