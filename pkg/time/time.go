@@ -14,6 +14,10 @@ func ToUnix(t time.Time) int64 {
 	return t.Unix()
 }
 
-func SecondMultiply(m time.Duration) time.Duration {
-	return time.Second * m
+func Sleep(d time.Duration) {
+	time.Sleep(d)
+}
+
+func SecondMultiply(d time.Duration) time.Duration {
+	return time.Second * d
 }
