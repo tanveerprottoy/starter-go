@@ -3,7 +3,7 @@ package jwt
 import (
 	"errors"
 	"txp/restapistarter/pkg/config"
-	"txp/restapistarter/pkg/datetime"
+	"txp/restapistarter/pkg/time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -34,7 +34,7 @@ func GenerateToken(payload Payload) string {
 		Audience:  []string{"somebody_else"},
 	}, */
 	// Declare the expiration time of the token
-	expirationTime := datetime.AddDate(0, 0, 3)
+	expirationTime := time.AddDate(0, 0, 3)
 	claims := &Claims{
 		Payload: payload,
 		RegisteredClaims: jwt.RegisteredClaims{
