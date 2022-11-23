@@ -9,7 +9,6 @@ import (
 	"txp/restapistarter/pkg/adapter"
 	"txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/response"
-	"txp/restapistarter/pkg/router"
 	"txp/restapistarter/pkg/time"
 )
 
@@ -43,7 +42,8 @@ func (s *UserService) ReadMany(limit, page int, w http.ResponseWriter, r *http.R
 	offset := limit * (page - 1)
 	rows, err := s.repository.ReadMany(limit, offset)
 	if err != nil {
-		response.RespondError(http.StatusInternalServerError, err, w)
+		// log err
+		response.Respond(http.StatusOK, make([]any, 0), w)
 		return
 	}
 	var e entity.User
@@ -56,7 +56,8 @@ func (s *UserService) ReadMany(limit, page int, w http.ResponseWriter, r *http.R
 		&e.UpdatedAt,
 	)
 	if err != nil {
-		response.RespondError(http.StatusInternalServerError, err, w)
+		// log err
+		response.Respond(http.StatusOK, make([]any, 0), w)
 		return
 	}
 	response.Respond(http.StatusOK, response.BuildData(d), w)
@@ -107,8 +108,7 @@ func (s *UserService) Update(id string, p []byte, w http.ResponseWriter, r *http
 }
 
 func (s *UserService) Delete(id string, w http.ResponseWriter, r *http.Request) {
-	userId := router.GetURLParam(r, constant.KeyId)
-	rowsAffected, err := s.repository.Delete(userId)
+	rowsAffected, err := s.repository.Delete(id)
 	if err != nil || rowsAffected <= 0 {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
 		return
