@@ -24,7 +24,7 @@ func (m *AuthMiddleware) AuthUser(next http.Handler) http.Handler {
 		if payload == nil {
 			return
 		}
-		ctx :=  context.WithValue(r.Context(), constant.AuthUserKey, payload)
+		ctx := context.WithValue(r.Context(), constant.KeyAuthUser, payload)
 		req := r.WithContext(ctx)
 		next.ServeHTTP(w, req)
 	})
