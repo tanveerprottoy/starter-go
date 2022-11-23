@@ -1,19 +1,20 @@
 package user
 
 import (
+	_sql "database/sql"
 	"errors"
 	"net/http"
-	_sql "database/sql"
 	"txp/restapistarter/internal/app/module/user/entity"
 	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/pkg/adapter"
 	"txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/response"
 	"txp/restapistarter/pkg/router"
+	"txp/restapistarter/pkg/time"
 )
 
 type UserService struct {
-	repository sql.Repository[entity.User] // repository.UserRepository[entity.User]
+	repository sql.Repository[entity.User]
 }
 
 func NewUserService(r sql.Repository[entity.User]) *UserService {
@@ -22,36 +23,23 @@ func NewUserService(r sql.Repository[entity.User]) *UserService {
 	return s
 }
 
-func (s *UserService) Create(w http.ResponseWriter, r *http.Request) {
-	/*var b dto.CreateUpdateUserDto
-	err := json.Decode(r.Body, &b)
-	d, err := adapter.AnyToValue[schema.UserSchema](b)
-	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
-		return
-	} */
-	defer r.Body.Close()
-	b, err := adapter.IOReaderToBytes(r.Body)
+func (s *UserService) Create(p []byte, w http.ResponseWriter, r *http.Request) {
+	d, err := adapter.BytesToValue[entity.User](p)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	d, err := adapter.BytesToValue[entity.User](b)
-	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
-		return
-	}
-	err = s.repository.Create(
-		d,
-	)
+	d.CreatedAt = time.Now()
+	d.UpdatedAt = time.Now()
+	err = s.repository.Create(d)
 	if err != nil {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
 		return
 	}
-	response.Respond(http.StatusCreated, response.BuildData(b), w)
+	response.Respond(http.StatusCreated, response.BuildData(d), w)
 }
 
-func (s *UserService) ReadMany(w http.ResponseWriter, r *http.Request) {
+func (s *UserService) ReadMany(page, limit int, w http.ResponseWriter, r *http.Request) {
 	rows, err := s.repository.ReadMany()
 	if err != nil {
 		response.RespondError(http.StatusInternalServerError, err, w)
@@ -77,8 +65,7 @@ func (s *UserService) ReadOneInternal(id string) *_sql.Row {
 	return s.repository.ReadOne(id)
 }
 
-func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
-	id := router.GetURLParam(r, constant.UrlKeyId)
+func (s *UserService) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
 	row := s.ReadOneInternal(id)
 	if row == nil {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
@@ -100,19 +87,13 @@ func (s *UserService) ReadOne(w http.ResponseWriter, r *http.Request) {
 	response.Respond(http.StatusOK, response.BuildData(d), w)
 }
 
-func (s *UserService) Update(w http.ResponseWriter, r *http.Request) {
-	id := router.GetURLParam(r, constant.UrlKeyId)
-	defer r.Body.Close()
-	b, err := adapter.IOReaderToBytes(r.Body)
+func (s *UserService) Update(id string, p []byte, w http.ResponseWriter, r *http.Request) {
+	d, err := adapter.BytesToValue[entity.User](p)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	d, err := adapter.BytesToValue[entity.User](b)
-	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
-		return
-	}
+	d.UpdatedAt = time.Now()
 	rowsAffected, err := s.repository.Update(
 		id,
 		d,
@@ -121,11 +102,11 @@ func (s *UserService) Update(w http.ResponseWriter, r *http.Request) {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
 		return
 	}
-	response.Respond(http.StatusOK, response.BuildData(b), w)
+	response.Respond(http.StatusOK, response.BuildData(d), w)
 }
 
-func (s *UserService) Delete(w http.ResponseWriter, r *http.Request) {
-	userId := router.GetURLParam(r, constant.UrlKeyId)
+func (s *UserService) Delete(id string, w http.ResponseWriter, r *http.Request) {
+	userId := router.GetURLParam(r, constant.KeyId)
 	rowsAffected, err := s.repository.Delete(userId)
 	if err != nil || rowsAffected <= 0 {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)

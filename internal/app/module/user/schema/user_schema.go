@@ -2,7 +2,7 @@ package schema
 
 import "time"
 
-type UserSchema struct {
+type User struct {
 	Id        string    `bson:"_id,omitempty" json:"id,omitempty"`
 	Name      string    `bson:"name,omitempty" json:"name,omitempty"`
 	CreatedAt time.Time `bson:"createdAt,omitempty" json:"createdAt,omitempty"`

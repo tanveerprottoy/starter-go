@@ -9,3 +9,7 @@ import (
 func GetURLParam(r *http.Request, k string) string {
 	return chi.URLParam(r, k)
 }
+
+func GetQueryParam(r *http.Request, k string) string {
+	return r.URL.Query().Get(k)
+}

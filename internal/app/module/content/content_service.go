@@ -82,7 +82,7 @@ func (s *ContentService) ReadMany(
 }
 
 func (s *ContentService) ReadOne(w http.ResponseWriter, r *http.Request) {
-	userId := chi.URLParam(r, constant.UrlKeyId)
+	userId := chi.URLParam(r, constant.KeyId)
 	row := s.repository.ReadOne(userId)
 	if row == nil {
 		response.RespondError(
@@ -113,7 +113,7 @@ func (s *ContentService) ReadOne(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *ContentService) Update(w http.ResponseWriter, r *http.Request) {
-	userId := chi.URLParam(r, constant.UrlKeyId)
+	userId := chi.URLParam(r, constant.KeyId)
 	var b dto.CreateUpdateContentDto
 	err := json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
@@ -142,7 +142,7 @@ func (s *ContentService) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *ContentService) Delete(w http.ResponseWriter, r *http.Request) {
-	userId := chi.URLParam(r, constant.UrlKeyId)
+	userId := chi.URLParam(r, constant.KeyId)
 	rowsAffected, err := s.repository.Delete(userId)
 	if err != nil || rowsAffected <= 0 {
 		response.RespondError(
