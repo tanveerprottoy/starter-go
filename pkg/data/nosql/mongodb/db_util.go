@@ -5,6 +5,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func DecodeCursor[T any](c *mongo.Cursor, ctx context.Context) (T, error) {
@@ -22,4 +23,10 @@ func DecodeSingleResult[T any](c *mongo.SingleResult) (T, error) {
 func BuildObjectID(id string) (primitive.ObjectID, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	return objId, err
+}
+
+func BuildPaginatedOpts(limit, skip int) options.FindOptions {
+	l := int64(limit)
+	_skip := int64(skip*limit - limit)
+	return options.FindOptions{Limit: &l, Skip: &_skip}
 }
