@@ -39,8 +39,9 @@ func (s *UserService) Create(p []byte, w http.ResponseWriter, r *http.Request) {
 	response.Respond(http.StatusCreated, response.BuildData(d), w)
 }
 
-func (s *UserService) ReadMany(page, limit int, w http.ResponseWriter, r *http.Request) {
-	rows, err := s.repository.ReadMany()
+func (s *UserService) ReadMany(limit, page int, w http.ResponseWriter, r *http.Request) {
+	offset := limit * (page - 1)
+	rows, err := s.repository.ReadMany(limit, offset)
 	if err != nil {
 		response.RespondError(http.StatusInternalServerError, err, w)
 		return

@@ -25,9 +25,11 @@ func (r *UserRepository[T]) Create(e *entity.User) error {
 	return nil
 }
 
-func (r *UserRepository[T]) ReadMany() (*sql.Rows, error) {
+func (r *UserRepository[T]) ReadMany(limit, offset int) (*sql.Rows, error) {
 	rows, err := postgres.DB.Query(
-		"SELECT * FROM users", // WHERE id IS NOT NULL
+		"SELECT * FROM users LIMIT $1 OFFSET $2", // WHERE id IS NOT NULL
+		limit,
+		offset,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("ReadMany %v", err)

@@ -36,19 +36,26 @@ func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *UserHandler) ReadMany(w http.ResponseWriter, r *http.Request) {
-	pageStr := router.GetURLParam(r, constant.KeyPage)
+	limit := 10
+	page := 1
+	var err error
 	limitStr := router.GetURLParam(r, constant.KeyLimit)
-	page, err := adapter.StringToInt(pageStr)
-	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
-		return
+	if limitStr != "" {
+		limit, err = adapter.StringToInt(limitStr)
+		if err != nil {
+			response.RespondError(http.StatusBadRequest, err, w)
+			return
+		}
 	}
-	limit, err := adapter.StringToInt(limitStr)
-	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
-		return
+	pageStr := router.GetURLParam(r, constant.KeyPage)
+	if pageStr != "" {
+		page, err = adapter.StringToInt(pageStr)
+		if err != nil {
+			response.RespondError(http.StatusBadRequest, err, w)
+			return
+		}
 	}
-	h.service.ReadMany(page, limit, w, r)
+	h.service.ReadMany(limit, page, w, r)
 }
 
 func (h *UserHandler) ReadOne(w http.ResponseWriter, r *http.Request) {
