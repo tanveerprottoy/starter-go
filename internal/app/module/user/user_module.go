@@ -2,15 +2,17 @@ package user
 
 import (
 	"txp/restapistarter/internal/app/module/user/entity"
+	"txp/restapistarter/internal/app/module/user/handler"
 	"txp/restapistarter/internal/app/module/user/repository"
+	"txp/restapistarter/internal/app/module/user/service"
 	data "txp/restapistarter/pkg/data/sql"
 
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type UserModule struct {
-	Handler         *UserHandler
-	Service         *UserService
+	Handler         *handler.UserHandler
+	Service         *service.UserService
 	Repository      data.Repository[entity.User]
 	MongoRepository *repository.UserMongoRepository
 }
@@ -21,7 +23,7 @@ func NewUserModule(db *mongo.Database) *UserModule {
 	// as the dependency is served this way
 	m.Repository = new(repository.UserRepository[entity.User])
 	m.MongoRepository = repository.NewUserMongoRepository(db)
-	m.Service = NewUserService(m.Repository)
-	m.Handler = NewUserHandler(m.Service)
+	m.Service = service.NewUserService(m.Repository)
+	m.Handler = handler.NewUserHandler(m.Service)
 	return m
 }

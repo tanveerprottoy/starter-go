@@ -27,6 +27,6 @@ func BuildObjectID(id string) (primitive.ObjectID, error) {
 
 func BuildPaginatedOpts(limit, skip int) options.FindOptions {
 	l := int64(limit)
-	_skip := int64(skip*limit - limit)
-	return options.FindOptions{Limit: &l, Skip: &_skip}
+	s := int64(skip*limit - limit)
+	return options.FindOptions{Limit: &l, Skip: &s}
 }

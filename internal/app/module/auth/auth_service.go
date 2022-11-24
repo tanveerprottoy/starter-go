@@ -2,9 +2,9 @@ package auth
 
 import (
 	"net/http"
-
-	"txp/restapistarter/internal/app/module/user"
+	
 	"txp/restapistarter/internal/app/module/user/entity"
+	"txp/restapistarter/internal/app/module/user/service"
 	"txp/restapistarter/internal/pkg/adapter"
 	_http "txp/restapistarter/pkg/http"
 	"txp/restapistarter/pkg/jwt"
@@ -12,10 +12,10 @@ import (
 )
 
 type AuthService struct {
-	userService *user.UserService
+	userService *service.UserService
 }
 
-func NewAuthService(userService *user.UserService) *AuthService {
+func NewAuthService(userService *service.UserService) *AuthService {
 	s := new(AuthService)
 	s.userService = userService
 	return s

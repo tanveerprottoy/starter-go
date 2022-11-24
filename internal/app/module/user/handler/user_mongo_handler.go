@@ -1,24 +1,25 @@
-package user
+package handler
 
 import (
 	"net/http"
+	"txp/restapistarter/internal/app/module/user/service"
 	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/pkg/adapter"
 	"txp/restapistarter/pkg/response"
 	"txp/restapistarter/pkg/router"
 )
 
-type UserHandler struct {
-	service *UserService
+type UserMongoHandler struct {
+	service *service.UserMongoService
 }
 
-func NewUserHandler(s *UserService) *UserHandler {
-	h := new(UserHandler)
+func NewUserMongoHandler(s *service.UserMongoService) *UserMongoHandler {
+	h := new(UserMongoHandler)
 	h.service = s
 	return h
 }
 
-func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
+func (h *UserMongoHandler) Create(w http.ResponseWriter, r *http.Request) {
 	/*var b dto.CreateUpdateUserDto
 	err := json.Decode(r.Body, &b)
 	d, err := adapter.AnyToValue[schema.UserSchema](b)
@@ -35,7 +36,7 @@ func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 	h.service.Create(p, w, r)
 }
 
-func (h *UserHandler) ReadMany(w http.ResponseWriter, r *http.Request) {
+func (h *UserMongoHandler) ReadMany(w http.ResponseWriter, r *http.Request) {
 	limit := 10
 	page := 1
 	var err error
@@ -58,12 +59,12 @@ func (h *UserHandler) ReadMany(w http.ResponseWriter, r *http.Request) {
 	h.service.ReadMany(limit, page, w, r)
 }
 
-func (h *UserHandler) ReadOne(w http.ResponseWriter, r *http.Request) {
+func (h *UserMongoHandler) ReadOne(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.KeyId)
 	h.service.ReadOne(id, w, r)
 }
 
-func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h *UserMongoHandler) Update(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.KeyId)
 	defer r.Body.Close()
 	p, err := adapter.IOReaderToBytes(r.Body)
@@ -74,7 +75,7 @@ func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 	h.service.Update(id, p, w, r)
 }
 
-func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
+func (h *UserMongoHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.KeyId)
 	h.service.Delete(id, w, r)
 }
