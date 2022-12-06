@@ -2,6 +2,7 @@ package http
 
 import (
 	"errors"
+	"mime/multipart"
 	"net/http"
 	"strings"
 )
@@ -18,4 +19,8 @@ func ParseAuthToken(r *http.Request) ([]string, error) {
 		return nil, errors.New("token format is invalid")
 	}
 	return splits, nil
+}
+
+func GetFile(r *http.Request, k string) (multipart.File, *multipart.FileHeader, error) {
+	return r.FormFile(k)
 }
