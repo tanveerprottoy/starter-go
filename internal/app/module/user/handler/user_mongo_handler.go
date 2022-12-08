@@ -40,7 +40,7 @@ func (h *UserMongoHandler) ReadMany(w http.ResponseWriter, r *http.Request) {
 	limit := 10
 	page := 1
 	var err error
-	limitStr := router.GetURLParam(r, constant.KeyLimit)
+	limitStr := router.GetQueryParam(r, constant.KeyLimit)
 	if limitStr != "" {
 		limit, err = adapter.StringToInt(limitStr)
 		if err != nil {
@@ -48,7 +48,7 @@ func (h *UserMongoHandler) ReadMany(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	pageStr := router.GetURLParam(r, constant.KeyPage)
+	pageStr := router.GetQueryParam(r, constant.KeyPage)
 	if pageStr != "" {
 		page, err = adapter.StringToInt(pageStr)
 		if err != nil {
