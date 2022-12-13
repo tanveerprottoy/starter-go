@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/pkg/data/nosql/mongodb"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -19,14 +20,13 @@ func NewUserMongoRepository(db *mongo.Database) *UserMongoRepository {
 }
 
 func (r *UserMongoRepository) Create(
-	collectionName string,
 	ctx context.Context,
 	doc any,
 	opts ...*options.InsertOneOptions,
 ) (*mongo.InsertOneResult, error) {
 	return mongodb.InsertOne(
 		r.DB,
-		collectionName,
+		constant.UsersCollection,
 		ctx,
 		doc,
 		opts...,
@@ -34,14 +34,13 @@ func (r *UserMongoRepository) Create(
 }
 
 func (r *UserMongoRepository) ReadMany(
-	collectionName string,
 	ctx context.Context,
 	filter any,
 	opts ...*options.FindOptions,
 ) (*mongo.Cursor, error) {
 	return mongodb.Find(
 		r.DB,
-		collectionName,
+		constant.UsersCollection,
 		ctx,
 		filter,
 		opts...,
@@ -49,14 +48,13 @@ func (r *UserMongoRepository) ReadMany(
 }
 
 func (r *UserMongoRepository) ReadOne(
-	collectionName string,
 	ctx context.Context,
 	filter any,
 	opts ...*options.FindOneOptions,
 ) *mongo.SingleResult {
 	return mongodb.FindOne(
 		r.DB,
-		collectionName,
+		constant.UsersCollection,
 		ctx,
 		filter,
 		opts...,
@@ -64,7 +62,6 @@ func (r *UserMongoRepository) ReadOne(
 }
 
 func (r *UserMongoRepository) Update(
-	collectionName string,
 	ctx context.Context,
 	filter any,
 	doc any,
@@ -72,7 +69,7 @@ func (r *UserMongoRepository) Update(
 ) (*mongo.UpdateResult, error) {
 	return mongodb.UpdateOne(
 		r.DB,
-		collectionName,
+		constant.UsersCollection,
 		ctx,
 		filter,
 		doc,
@@ -81,14 +78,13 @@ func (r *UserMongoRepository) Update(
 }
 
 func (r *UserMongoRepository) Delete(
-	collectionName string,
 	ctx context.Context,
 	filter any,
 	opts ...*options.DeleteOptions,
 ) (*mongo.DeleteResult, error) {
 	return mongodb.DeleteOne(
 		r.DB,
-		collectionName,
+		constant.UsersCollection,
 		ctx,
 		filter,
 		opts...,
