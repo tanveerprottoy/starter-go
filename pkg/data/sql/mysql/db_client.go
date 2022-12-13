@@ -3,6 +3,8 @@ package mysql
 import (
 	"database/sql"
 	"log"
+	"sync"
+	"sync/atomic"
 	"txp/restapistarter/pkg/config"
 
 	"github.com/go-sql-driver/mysql"
@@ -13,11 +15,51 @@ const (
 )
 
 var (
-	DB  *sql.DB
-	err error
+	instance    *DBClient
+	once        sync.Once
+	mu          sync.Mutex
+	initialized uint32
 )
 
-func InitDBClient() {
+type DBClient struct {
+	DB *sql.DB
+}
+
+func GetInstance() *DBClient {
+	once.Do(func() {
+		instance = new(DBClient)
+		instance.init()
+	})
+	return instance
+}
+
+func GetInstanceMutex() *DBClient {
+	if instance == nil {
+		mu.Lock()
+		defer mu.Unlock()
+		if instance == nil {
+			instance = new(DBClient)
+			instance.init()
+		}
+	}
+	return instance
+}
+
+func GetInstanceAtomic() *DBClient {
+	if atomic.LoadUint32(&initialized) == 1 {
+		return instance
+	}
+	mu.Lock()
+	defer mu.Unlock()
+	if initialized == 0 {
+		instance = new(DBClient)
+		instance.init()
+		atomic.StoreUint32(&initialized, 1)
+	}
+	return instance
+}
+
+func (d *DBClient) init() {
 	cfg := mysql.Config{
 		User:   config.GetEnvValue("DB_USER"),
 		Passwd: config.GetEnvValue("DB_PASS"),
@@ -25,12 +67,13 @@ func InitDBClient() {
 		Addr:   config.GetEnvValue("DB_HOST") + ":" + config.GetEnvValue("DB_PORT"),
 		DBName: config.GetEnvValue("DB_NAME"),
 	}
-	DB, err = sql.Open("mysql", cfg.FormatDSN())
+	var err error
+	d.DB, err = sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {
 		panic(err)
 	}
 	// ping is necessary to create connection
-	err = DB.Ping()
+	err = d.DB.Ping()
 	if err != nil {
 		panic(err)
 	}

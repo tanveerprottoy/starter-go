@@ -16,17 +16,18 @@ import (
 
 // App struct
 type App struct {
-	DBClient      *mongodb.DBClient
-	router        *router.Router
-	Middlewares   []any
-	AuthModule    *auth.AuthModule
-	UserModule    *user.UserModule
-	ContentModule *content.ContentModule
+	MongoDBClient    *mongodb.DBClient
+	PostgresDBClient *postgres.DBClient
+	router           *router.Router
+	Middlewares      []any
+	AuthModule       *auth.AuthModule
+	UserModule       *user.UserModule
+	ContentModule    *content.ContentModule
 }
 
 func (a *App) initDB() {
-	postgres.InitDBClient()
-	a.DBClient = mongodb.NewDBClient()
+	a.MongoDBClient = mongodb.GetInstance()
+	a.PostgresDBClient = postgres.GetInstance()
 }
 
 func (a *App) initMiddlewares() {
@@ -35,9 +36,9 @@ func (a *App) initMiddlewares() {
 }
 
 func (a *App) initModules() {
-	a.UserModule = user.NewUserModule(a.DBClient.DB)
+	a.UserModule = user.NewUserModule(a.MongoDBClient.DB, a.PostgresDBClient.DB)
 	a.AuthModule = auth.NewAuthModule(a.UserModule.Service)
-	a.ContentModule = content.NewContentModule(a.DBClient.DB)
+	a.ContentModule = content.NewContentModule(a.PostgresDBClient.DB)
 }
 
 func (a *App) initModuleRouters() {
@@ -48,7 +49,6 @@ func (a *App) initModuleRouters() {
 
 // Init app
 func (a *App) InitComponents() {
-	a.initDB()
 	a.initDB()
 	a.router = router.NewRouter()
 	a.initModules()

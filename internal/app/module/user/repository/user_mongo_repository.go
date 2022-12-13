@@ -10,12 +10,12 @@ import (
 )
 
 type UserMongoRepository struct {
-	DB *mongo.Database
+	db *mongo.Database
 }
 
 func NewUserMongoRepository(db *mongo.Database) *UserMongoRepository {
 	r := new(UserMongoRepository)
-	r.DB = db
+	r.db = db
 	return r
 }
 
@@ -25,7 +25,7 @@ func (r *UserMongoRepository) Create(
 	opts ...*options.InsertOneOptions,
 ) (*mongo.InsertOneResult, error) {
 	return mongodb.InsertOne(
-		r.DB,
+		r.db,
 		constant.UsersCollection,
 		ctx,
 		doc,
@@ -39,7 +39,7 @@ func (r *UserMongoRepository) ReadMany(
 	opts ...*options.FindOptions,
 ) (*mongo.Cursor, error) {
 	return mongodb.Find(
-		r.DB,
+		r.db,
 		constant.UsersCollection,
 		ctx,
 		filter,
@@ -53,7 +53,7 @@ func (r *UserMongoRepository) ReadOne(
 	opts ...*options.FindOneOptions,
 ) *mongo.SingleResult {
 	return mongodb.FindOne(
-		r.DB,
+		r.db,
 		constant.UsersCollection,
 		ctx,
 		filter,
@@ -68,7 +68,7 @@ func (r *UserMongoRepository) Update(
 	opts ...*options.UpdateOptions,
 ) (*mongo.UpdateResult, error) {
 	return mongodb.UpdateOne(
-		r.DB,
+		r.db,
 		constant.UsersCollection,
 		ctx,
 		filter,
@@ -83,7 +83,7 @@ func (r *UserMongoRepository) Delete(
 	opts ...*options.DeleteOptions,
 ) (*mongo.DeleteResult, error) {
 	return mongodb.DeleteOne(
-		r.DB,
+		r.db,
 		constant.UsersCollection,
 		ctx,
 		filter,

@@ -6,14 +6,20 @@ import (
 	"log"
 	"txp/restapistarter/internal/app/module/user/entity"
 	sqlUtil "txp/restapistarter/pkg/data/sql"
-	"txp/restapistarter/pkg/data/sql/postgres"
 )
 
 type UserRepository[T entity.User] struct {
+	db *sql.DB
+}
+
+func NewUserRepository(db *sql.DB) *UserRepository[entity.User] {
+	r := new(UserRepository[entity.User])
+	r.db = db
+	return r
 }
 
 func (r *UserRepository[T]) Create(e *entity.User) error {
-	_, err := postgres.DB.Exec(
+	_, err := r.db.Exec(
 		"INSERT INTO users (name)"+
 			"VALUES ($1)",
 		e.Name,
@@ -26,7 +32,7 @@ func (r *UserRepository[T]) Create(e *entity.User) error {
 }
 
 func (r *UserRepository[T]) ReadMany(limit, offset int) (*sql.Rows, error) {
-	rows, err := postgres.DB.Query(
+	rows, err := r.db.Query(
 		"SELECT * FROM users LIMIT $1 OFFSET $2", // WHERE id IS NOT NULL
 		limit,
 		offset,
@@ -38,7 +44,7 @@ func (r *UserRepository[T]) ReadMany(limit, offset int) (*sql.Rows, error) {
 }
 
 func (r *UserRepository[T]) ReadOne(id string) *sql.Row {
-	row := postgres.DB.QueryRow(
+	row := r.db.QueryRow(
 		"SELECT * FROM users WHERE id = $1 LIMIT 1",
 		id,
 	)
@@ -47,7 +53,7 @@ func (r *UserRepository[T]) ReadOne(id string) *sql.Row {
 
 func (r *UserRepository[T]) Update(id string, e *entity.User) (int64, error) {
 	q := "UPDATE users SET name = $2 WHERE id = $1"
-	res, err := postgres.DB.Exec(
+	res, err := r.db.Exec(
 		q,
 		id,
 		e.Name,
@@ -61,7 +67,7 @@ func (r *UserRepository[T]) Update(id string, e *entity.User) (int64, error) {
 
 func (r *UserRepository[T]) Delete(id string) (int64, error) {
 	q := "DELETE FROM users WHERE id = $1"
-	res, err := postgres.DB.Exec(
+	res, err := r.db.Exec(
 		q,
 		id,
 	)

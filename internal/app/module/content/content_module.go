@@ -1,7 +1,7 @@
 package content
 
 import (
-	"go.mongodb.org/mongo-driver/mongo"
+	"database/sql"
 )
 
 type ContentModule struct {
@@ -10,11 +10,11 @@ type ContentModule struct {
 	Repository *ContentRepository
 }
 
-func NewContentModule(db *mongo.Database) *ContentModule {
+func NewContentModule(db *sql.DB) *ContentModule {
 	m := new(ContentModule)
 	// init order is reversed of the field decleration
 	// as the dependency is served this way
-	m.Repository = new(ContentRepository)
+	m.Repository = NewContentRepository(db)
 	m.Service = NewContentService(m.Repository)
 	m.Handler = NewContentHandler(m.Service)
 	return m

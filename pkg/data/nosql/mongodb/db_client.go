@@ -4,10 +4,18 @@ import (
 	"context"
 	"log"
 	"sync"
+	"sync/atomic"
 	"txp/restapistarter/pkg/config"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+)
+
+var (
+	instance    *DBClient
+	once        sync.Once
+	mu          sync.Mutex
+	initialized uint32
 )
 
 type DBClient struct {
@@ -15,13 +23,38 @@ type DBClient struct {
 	DB     *mongo.Database
 }
 
-func NewDBClient() *DBClient {
-	d := new(DBClient)
-	var once sync.Once
+func GetInstance() *DBClient {
 	once.Do(func() {
-		d.connect()
+		instance = new(DBClient)
+		instance.connect()
 	})
-	return d
+	return instance
+}
+
+func GetInstanceMutex() *DBClient {
+	if instance == nil {
+		mu.Lock()
+		defer mu.Unlock()
+		if instance == nil {
+			instance = new(DBClient)
+			instance.connect()
+		}
+	}
+	return instance
+}
+
+func GetInstanceAtomic() *DBClient {
+	if atomic.LoadUint32(&initialized) == 1 {
+		return instance
+	}
+	mu.Lock()
+	defer mu.Unlock()
+	if initialized == 0 {
+		instance = new(DBClient)
+		instance.connect()
+		atomic.StoreUint32(&initialized, 1)
+	}
+	return instance
 }
 
 func (d *DBClient) connect() {

@@ -6,14 +6,20 @@ import (
 	"log"
 	"txp/restapistarter/internal/app/module/content/entity"
 	sqlUtil "txp/restapistarter/pkg/data/sql"
-	"txp/restapistarter/pkg/data/sql/postgres"
 )
 
 type ContentRepository struct {
+	db *sql.DB
+}
+
+func NewContentRepository(db *sql.DB) *ContentRepository {
+	r := new(ContentRepository)
+	r.db = db
+	return r
 }
 
 func (r *ContentRepository) Create(e *entity.Content) error {
-	_, err := postgres.DB.Exec(
+	_, err := r.db.Exec(
 		"INSERT INTO contents (name)"+
 			"VALUES ($1)",
 		e.Name,
@@ -26,7 +32,7 @@ func (r *ContentRepository) Create(e *entity.Content) error {
 }
 
 func (r *ContentRepository) ReadMany() (*sql.Rows, error) {
-	rows, err := postgres.DB.Query(
+	rows, err := r.db.Query(
 		"SELECT * FROM contents", // WHERE id IS NOT NULL
 	)
 	if err != nil {
@@ -36,7 +42,7 @@ func (r *ContentRepository) ReadMany() (*sql.Rows, error) {
 }
 
 func (r *ContentRepository) ReadOne(id string) *sql.Row {
-	row := postgres.DB.QueryRow(
+	row := r.db.QueryRow(
 		"SELECT * FROM contents WHERE id = $1 LIMIT 1",
 		id,
 	)
@@ -45,7 +51,7 @@ func (r *ContentRepository) ReadOne(id string) *sql.Row {
 
 func (r *ContentRepository) Update(id string, e *entity.Content) (int64, error) {
 	q := "UPDATE contents SET name = $2 WHERE id = $1"
-	res, err := postgres.DB.Exec(
+	res, err := r.db.Exec(
 		q,
 		id,
 		e.Name,
@@ -59,7 +65,7 @@ func (r *ContentRepository) Update(id string, e *entity.Content) (int64, error) 
 
 func (r *ContentRepository) Delete(id string) (int64, error) {
 	q := "DELETE FROM contents WHERE id = $1"
-	res, err := postgres.DB.Exec(
+	res, err := r.db.Exec(
 		q,
 		id,
 	)

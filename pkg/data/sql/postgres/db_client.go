@@ -4,17 +4,59 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"sync"
+	"sync/atomic"
 	"txp/restapistarter/pkg/config"
 
 	_ "github.com/lib/pq"
 )
 
 var (
-	DB  *sql.DB
-	err error
+	instance    *DBClient
+	once        sync.Once
+	mu          sync.Mutex
+	initialized uint32
 )
 
-func InitDBClient() {
+type DBClient struct {
+	DB *sql.DB
+}
+
+func GetInstance() *DBClient {
+	once.Do(func() {
+		instance = new(DBClient)
+		instance.init()
+	})
+	return instance
+}
+
+func GetInstanceMutex() *DBClient {
+	if instance == nil {
+		mu.Lock()
+		defer mu.Unlock()
+		if instance == nil {
+			instance = new(DBClient)
+			instance.init()
+		}
+	}
+	return instance
+}
+
+func GetInstanceAtomic() *DBClient {
+	if atomic.LoadUint32(&initialized) == 1 {
+		return instance
+	}
+	mu.Lock()
+	defer mu.Unlock()
+	if initialized == 0 {
+		instance = new(DBClient)
+		instance.init()
+		atomic.StoreUint32(&initialized, 1)
+	}
+	return instance
+}
+
+func (d *DBClient) init() {
 	args := fmt.Sprintf(
 		"host=%s port=%s user=%s "+
 			"password=%s dbname=%s sslmode=disable",
@@ -24,12 +66,13 @@ func InitDBClient() {
 		config.GetEnvValue("DB_PASS"),
 		config.GetEnvValue("DB_NAME"),
 	)
-	DB, err = sql.Open("postgres", args)
+	var err error
+	d.DB, err = sql.Open("postgres", args)
 	if err != nil {
 		panic(err)
 	}
 	// ping is necessary to create connection
-	err = DB.Ping()
+	err = d.DB.Ping()
 	if err != nil {
 		panic(err)
 	}
