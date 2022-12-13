@@ -18,6 +18,11 @@ func TrimSuffix(v, suffix string) string {
 	return strings.TrimSuffix(v, suffix)
 }
 
+// If n < 0, there is no limit on the number of replacements.
+func Replace(s, old, new string, n int) string {
+	return strings.Replace(s, old, new, n)
+}
+
 func ToLower(v string) string {
 	return strings.ToLower(v)
 }
