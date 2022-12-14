@@ -60,7 +60,11 @@ func (s *UserService) ReadMany(limit, page int, w http.ResponseWriter, r *http.R
 		response.Respond(http.StatusOK, make([]any, 0), w)
 		return
 	}
-	response.Respond(http.StatusOK, response.BuildData(d), w)
+	m := make(map[string]any)
+	m["items"] = d
+	m["limit"] = limit
+	m["page"] = page
+	response.Respond(http.StatusOK, response.BuildData(m), w)
 }
 
 func (s *UserService) ReadOneInternal(id string) *_sql.Row {

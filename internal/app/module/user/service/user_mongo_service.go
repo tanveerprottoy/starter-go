@@ -73,7 +73,11 @@ func (s *UserMongoService) ReadMany(limit, skip int, w http.ResponseWriter, r *h
 	if data == nil {
 		data = []schema.User{}
 	}
-	response.Respond(http.StatusOK, response.BuildData(data), w)
+	m := make(map[string]any)
+	m["items"] = data
+	m["limit"] = limit
+	m["page"] = skip
+	response.Respond(http.StatusOK, response.BuildData(m), w)
 }
 
 func (s *UserMongoService) ReadManyWithNestedDocQuery(limit, skip int, key0, key1 string, w http.ResponseWriter, r *http.Request) {
