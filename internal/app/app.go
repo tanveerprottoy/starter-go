@@ -15,7 +15,6 @@ import (
 	"txp/restapistarter/pkg/router"
 
 	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 )
 
 // App struct
