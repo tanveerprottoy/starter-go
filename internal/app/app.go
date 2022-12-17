@@ -3,6 +3,7 @@ package app
 import (
 	"log"
 	"net/http"
+	"time"
 	"txp/restapistarter/internal/app/module/auth"
 	"txp/restapistarter/internal/app/module/content"
 	"txp/restapistarter/internal/app/module/user"
@@ -12,6 +13,9 @@ import (
 	"txp/restapistarter/pkg/data/nosql/mongodb"
 	"txp/restapistarter/pkg/data/sql/postgres"
 	"txp/restapistarter/pkg/router"
+
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 // App struct
@@ -47,6 +51,23 @@ func (a *App) initModuleRouters() {
 	_routerModule.RegisterContentRoutes(a.router, constant.V1, a.ContentModule)
 }
 
+func (a *App) initLogger() {
+	cfg := zap.NewProductionConfig()
+	cfg.OutputPaths = []string{
+		"proxy.log",
+	}
+	cfg.Build()
+	logger, _ := zap.NewProduction()
+	defer logger.Sync()
+	task := "taskName"
+	logger.Info("failed to do task",
+		// Structured context as strongly typed Field values.
+		zap.String("url", task),
+		zap.Int("attempt", 3),
+		zap.Duration("backoff", time.Second),
+	)
+}
+
 // Init app
 func (a *App) InitComponents() {
 	a.initDB()
@@ -54,6 +75,7 @@ func (a *App) InitComponents() {
 	a.initModules()
 	a.initMiddlewares()
 	a.initModuleRouters()
+	a.initLogger()
 }
 
 // Run app
