@@ -1,6 +1,9 @@
 package app
 
 import (
+	"crypto/tls"
+	"crypto/x509"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
@@ -86,4 +89,32 @@ func (a *App) Run() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+// Run app
+func (a *App) RunTLSSimpleConfig() {
+	err := http.ListenAndServeTLS(":443", "cert.crt", "key.key", a.router.Mux)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+// use mutual TLS and not just one-way TLS,
+// we must instruct it to require client authentication to ensure clients present a certificate from our CA when they connect
+func (a *App) RunTLSMutual() {
+	caCert, _ := ioutil.ReadFile("ca.crt")
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
+
+	tlsConfig := &tls.Config{
+		ClientCAs:  caCertPool,
+		ClientAuth: tls.RequireAndVerifyClientCert,
+	}
+	tlsConfig.BuildNameToCertificate()
+	server := &http.Server{
+		Addr:      ":443",
+		TLSConfig: tlsConfig,
+		Handler: a.router.Mux,
+	}
+	server.ListenAndServeTLS("cert.crt", "key.key")
 }
