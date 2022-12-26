@@ -7,32 +7,36 @@ import (
 	"txp/restapistarter/pkg/adapter"
 	"txp/restapistarter/pkg/response"
 	"txp/restapistarter/pkg/router"
+
+	"github.com/go-playground/validator"
 )
 
 type UserHandler struct {
-	service *service.UserService
+	service  *service.UserService
+	validate *validator.Validate
 }
 
-func NewUserHandler(s *service.UserService) *UserHandler {
+func NewUserHandler(s *service.UserService, v *validator.Validate) *UserHandler {
 	h := new(UserHandler)
 	h.service = s
+	h.validate = v
 	return h
 }
 
 func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
-	/*var b dto.CreateUpdateUserDto
+	var b dto.CreateUpdateUserDto
 	err := json.Decode(r.Body, &b)
 	d, err := adapter.AnyToValue[schema.UserSchema](b)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
-	} */
-	defer r.Body.Close()
+	}
+	/* defer r.Body.Close()
 	p, err := adapter.IOReaderToBytes(r.Body)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
-	}
+	} */
 	h.service.Create(p, w, r)
 }
 

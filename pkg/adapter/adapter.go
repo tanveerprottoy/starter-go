@@ -31,6 +31,19 @@ func AnyToValue[T any](v any) (*T, error) {
 	return &out, err
 }
 
+func AnyToValue[T any](v any) (*T, error) {
+	var out T
+	b, err := json.Marshal(v)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(b, &out)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
 func StringToInt(s string) (int, error) {
 	return strconv.Atoi(s)
 }

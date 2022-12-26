@@ -8,6 +8,7 @@ import (
 	"txp/restapistarter/internal/app/module/user/service"
 	data "txp/restapistarter/pkg/data/sql"
 
+	"github.com/go-playground/validator"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -18,7 +19,7 @@ type UserModule struct {
 	MongoRepository *repository.UserMongoRepository
 }
 
-func NewUserModule(db *mongo.Database, dbSql *sql.DB) *UserModule {
+func NewUserModule(db *mongo.Database, dbSql *sql.DB, validate *validator.Validate) *UserModule {
 	m := new(UserModule)
 	// init order is reversed of the field decleration
 	// as the dependency is served this way

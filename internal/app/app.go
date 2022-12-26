@@ -12,12 +12,14 @@ import (
 	"txp/restapistarter/internal/app/module/user"
 	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/internal/pkg/middleware"
-	_routerModule "txp/restapistarter/internal/pkg/router"
+	routerModule "txp/restapistarter/internal/pkg/router"
 	"txp/restapistarter/pkg/data/nosql/mongodb"
 	"txp/restapistarter/pkg/data/sql/postgres"
 	"txp/restapistarter/pkg/router"
 
+	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
+	validatorCustom "txp/restapistarter/pkg/validator"
 )
 
 // App struct
@@ -29,6 +31,7 @@ type App struct {
 	AuthModule       *auth.AuthModule
 	UserModule       *user.UserModule
 	ContentModule    *content.ContentModule
+	Validate         *validator.Validate
 }
 
 func (a *App) initDB() {
@@ -49,8 +52,13 @@ func (a *App) initModules() {
 
 func (a *App) initModuleRouters() {
 	m := a.Middlewares[0].(*middleware.AuthMiddleware)
-	_routerModule.RegisterUserRoutes(a.router, constant.V1, a.UserModule, m)
-	_routerModule.RegisterContentRoutes(a.router, constant.V1, a.ContentModule)
+	routerModule.RegisterUserRoutes(a.router, constant.V1, a.UserModule, m)
+	routerModule.RegisterContentRoutes(a.router, constant.V1, a.ContentModule)
+}
+
+func (a *App) initValidators() {
+	a.Validate = validator.New()
+	_ = a.Validate.RegisterValidation("notempty", validatorCustom.NotEmpty)
 }
 
 func (a *App) initLogger() {
@@ -77,6 +85,7 @@ func (a *App) InitComponents() {
 	a.initModules()
 	a.initMiddlewares()
 	a.initModuleRouters()
+	a.initValidators()
 	a.initLogger()
 }
 
@@ -114,7 +123,7 @@ func (a *App) RunTLSMutual() {
 	server := &http.Server{
 		Addr:      ":443",
 		TLSConfig: tlsConfig,
-		Handler: a.router.Mux,
+		Handler:   a.router.Mux,
 	}
 	server.ListenAndServeTLS("cert.crt", "key.key")
 }
