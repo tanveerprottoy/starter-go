@@ -1,14 +1,14 @@
 package content
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
-	"txp/restapistarter/internal/app/module/content/dto"
 	"txp/restapistarter/internal/app/module/content/entity"
 	"txp/restapistarter/internal/pkg/constant"
-	sqlcore "txp/restapistarter/pkg/data/sql"
+	"txp/restapistarter/pkg/adapter"
+	datasql "txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/response"
+	"txp/restapistarter/pkg/time"
 
 	"github.com/go-chi/chi"
 )
@@ -25,18 +25,15 @@ func NewContentService(
 	return s
 }
 
-func (s *ContentService) Create(w http.ResponseWriter, r *http.Request) {
-	var b dto.CreateUpdateContentDto
-	err := json.NewDecoder(r.Body).Decode(&b)
+func (s *ContentService) Create(p []byte, w http.ResponseWriter, r *http.Request) {
+	d, err := adapter.BytesToValue[entity.Content](p)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	err = s.repository.Create(
-		&entity.Content{
-			Name: b.Name,
-		},
-	)
+	d.CreatedAt = time.Now()
+	d.UpdatedAt = time.Now()
+	err = s.repository.Create(d)
 	if err != nil {
 		response.RespondError(
 			http.StatusInternalServerError,
@@ -45,13 +42,10 @@ func (s *ContentService) Create(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-	response.Respond(http.StatusCreated, b, w)
+	response.Respond(http.StatusCreated, d, w)
 }
 
-func (s *ContentService) ReadMany(
-	w http.ResponseWriter,
-	r *http.Request,
-) {
+func (s *ContentService) ReadMany(limit, page int, w http.ResponseWriter, r *http.Request) {
 	rows, err := s.repository.ReadMany()
 	if err != nil {
 		response.RespondError(
@@ -62,7 +56,7 @@ func (s *ContentService) ReadMany(
 		return
 	}
 	var e entity.Content
-	d, err := sqlcore.GetEntities(
+	d, err := datasql.GetEntities(
 		rows,
 		&e,
 		&e.Id,
@@ -81,9 +75,8 @@ func (s *ContentService) ReadMany(
 	response.Respond(http.StatusOK, d, w)
 }
 
-func (s *ContentService) ReadOne(w http.ResponseWriter, r *http.Request) {
-	userId := chi.URLParam(r, constant.KeyId)
-	row := s.repository.ReadOne(userId)
+func (s *ContentService) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
+	row := s.repository.ReadOne(id)
 	if row == nil {
 		response.RespondError(
 			http.StatusInternalServerError,
@@ -93,7 +86,7 @@ func (s *ContentService) ReadOne(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	e := new(entity.Content)
-	d, err := sqlcore.GetEntity(
+	d, err := datasql.GetEntity(
 		row,
 		&e,
 		&e.Id,
@@ -112,24 +105,16 @@ func (s *ContentService) ReadOne(w http.ResponseWriter, r *http.Request) {
 	response.Respond(http.StatusOK, d, w)
 }
 
-func (s *ContentService) Update(w http.ResponseWriter, r *http.Request) {
+func (s *ContentService) Update(id string, p []byte, w http.ResponseWriter, r *http.Request) {
 	userId := chi.URLParam(r, constant.KeyId)
-	var b dto.CreateUpdateContentDto
-	err := json.NewDecoder(r.Body).Decode(&b)
+	d, err := adapter.BytesToValue[entity.Content](p)
 	if err != nil {
-		response.RespondError(
-			http.StatusBadRequest,
-			err,
-			w,
-		)
+		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	rowsAffected, err := s.repository.Update(
-		userId,
-		&entity.Content{
-			Name: b.Name,
-		},
-	)
+	d.CreatedAt = time.Now()
+	d.UpdatedAt = time.Now()
+	rowsAffected, err := s.repository.Update(userId, d)
 	if err != nil || rowsAffected <= 0 {
 		response.RespondError(
 			http.StatusInternalServerError,
@@ -138,12 +123,11 @@ func (s *ContentService) Update(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-	response.Respond(http.StatusOK, b, w)
+	response.Respond(http.StatusOK, d, w)
 }
 
-func (s *ContentService) Delete(w http.ResponseWriter, r *http.Request) {
-	userId := chi.URLParam(r, constant.KeyId)
-	rowsAffected, err := s.repository.Delete(userId)
+func (s *ContentService) Delete(id string, w http.ResponseWriter, r *http.Request) {
+	rowsAffected, err := s.repository.Delete(id)
 	if err != nil || rowsAffected <= 0 {
 		response.RespondError(
 			http.StatusInternalServerError,

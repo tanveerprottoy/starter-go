@@ -6,16 +6,16 @@ import (
 	"txp/restapistarter/internal/app/module/user/handler"
 	"txp/restapistarter/internal/app/module/user/repository"
 	"txp/restapistarter/internal/app/module/user/service"
-	data "txp/restapistarter/pkg/data/sql"
+	sqlPkg "txp/restapistarter/pkg/data/sql"
 
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type UserModule struct {
 	Handler         *handler.UserHandler
 	Service         *service.UserService
-	Repository      data.Repository[entity.User]
+	Repository      sqlPkg.Repository[entity.User]
 	MongoRepository *repository.UserMongoRepository
 }
 
@@ -26,6 +26,6 @@ func NewUserModule(db *mongo.Database, dbSql *sql.DB, validate *validator.Valida
 	m.Repository = repository.NewUserRepository(dbSql)
 	m.MongoRepository = repository.NewUserMongoRepository(db)
 	m.Service = service.NewUserService(m.Repository)
-	m.Handler = handler.NewUserHandler(m.Service)
+	m.Handler = handler.NewUserHandler(m.Service, validate)
 	return m
 }

@@ -1,7 +1,6 @@
 package http
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -47,7 +46,7 @@ func (c *HTTPClient) Request(
 	if err != nil {
 		return -1, nil, err
 	}
-	// defer res.Body.Close()
+	defer res.Body.Close()
 	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return -1, nil, err
@@ -62,18 +61,15 @@ func (c *HTTPClient) PostForm(
 	url string,
 	header http.Header,
 	values url.Values,
-) []byte {
+) (int, []byte, error) {
 	res, err := http.PostForm(url, values)
 	if err != nil {
-		fmt.Printf("client: error making http request: %s\n", err)
-		return nil
+		return -1, nil, err
 	}
-	fmt.Printf("client: status code: %d\n", res.StatusCode)
+	defer res.Body.Close()
 	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
-		fmt.Printf("client: could not read response body: %s\n", err)
-		return nil
+		return -1, nil, err
 	}
-	fmt.Printf("client: response body: %s\n", resBody)
-	return resBody
+	return res.StatusCode, resBody, nil
 }

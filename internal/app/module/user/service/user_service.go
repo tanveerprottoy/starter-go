@@ -1,36 +1,37 @@
 package service
 
 import (
-	_sql "database/sql"
+	sql "database/sql"
 	"errors"
 	"net/http"
+	"txp/restapistarter/internal/app/module/user/dto"
 	"txp/restapistarter/internal/app/module/user/entity"
 	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/pkg/adapter"
-	"txp/restapistarter/pkg/data/sql"
+	datasql "txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/response"
 	"txp/restapistarter/pkg/time"
 )
 
 type UserService struct {
-	repository sql.Repository[entity.User]
+	repository datasql.Repository[entity.User]
 }
 
-func NewUserService(r sql.Repository[entity.User]) *UserService {
+func NewUserService(r datasql.Repository[entity.User]) *UserService {
 	s := new(UserService)
 	s.repository = r
 	return s
 }
 
-func (s *UserService) Create(p []byte, w http.ResponseWriter, r *http.Request) {
-	d, err := adapter.BytesToValue[entity.User](p)
+func (s *UserService) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
+	v, err := adapter.AnyToValue[entity.User](d)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	d.CreatedAt = time.Now()
-	d.UpdatedAt = time.Now()
-	err = s.repository.Create(d)
+	v.CreatedAt = time.Now()
+	v.UpdatedAt = time.Now()
+	err = s.repository.Create(v)
 	if err != nil {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
 		return
@@ -47,7 +48,7 @@ func (s *UserService) ReadMany(limit, page int, w http.ResponseWriter, r *http.R
 		return
 	}
 	var e entity.User
-	d, err := sql.GetEntities(
+	d, err := datasql.GetEntities(
 		rows,
 		&e,
 		&e.Id,
@@ -67,7 +68,7 @@ func (s *UserService) ReadMany(limit, page int, w http.ResponseWriter, r *http.R
 	response.Respond(http.StatusOK, response.BuildData(m), w)
 }
 
-func (s *UserService) ReadOneInternal(id string) *_sql.Row {
+func (s *UserService) ReadOneInternal(id string) *sql.Row {
 	return s.repository.ReadOne(id)
 }
 
@@ -78,7 +79,7 @@ func (s *UserService) ReadOne(id string, w http.ResponseWriter, r *http.Request)
 		return
 	}
 	e := new(entity.User)
-	d, err := sql.GetEntity(
+	d, err := datasql.GetEntity(
 		row,
 		&e,
 		&e.Id,
@@ -93,16 +94,16 @@ func (s *UserService) ReadOne(id string, w http.ResponseWriter, r *http.Request)
 	response.Respond(http.StatusOK, response.BuildData(d), w)
 }
 
-func (s *UserService) Update(id string, p []byte, w http.ResponseWriter, r *http.Request) {
-	d, err := adapter.BytesToValue[entity.User](p)
+func (s *UserService) Update(id string, d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
+	v, err := adapter.AnyToValue[entity.User](d)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	d.UpdatedAt = time.Now()
+	v.UpdatedAt = time.Now()
 	rowsAffected, err := s.repository.Update(
 		id,
-		d,
+		v,
 	)
 	if err != nil || rowsAffected <= 0 {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)

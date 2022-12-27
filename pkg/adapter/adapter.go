@@ -18,17 +18,13 @@ func BytesToValue[T any](b []byte) (*T, error) {
 	return &out, err
 }
 
-func AnyToValue[T any](v any) (*T, error) {
+func BodyToValue[T any](b io.ReadCloser) (*T, error) {
 	var out T
-	b, err := json.Marshal(v)
+	err := json.Decode(b, &out)
 	if err != nil {
 		return nil, err
 	}
-	err = json.Unmarshal(b, &out)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
+	return AnyToValue[T](out)
 }
 
 func AnyToValue[T any](v any) (*T, error) {

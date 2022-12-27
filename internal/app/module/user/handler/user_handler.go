@@ -2,13 +2,14 @@ package handler
 
 import (
 	"net/http"
+	"txp/restapistarter/internal/app/module/user/dto"
 	"txp/restapistarter/internal/app/module/user/service"
 	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/pkg/adapter"
 	"txp/restapistarter/pkg/response"
 	"txp/restapistarter/pkg/router"
 
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 )
 
 type UserHandler struct {
@@ -24,20 +25,12 @@ func NewUserHandler(s *service.UserService, v *validator.Validate) *UserHandler 
 }
 
 func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
-	var b dto.CreateUpdateUserDto
-	err := json.Decode(r.Body, &b)
-	d, err := adapter.AnyToValue[schema.UserSchema](b)
+	d, err := adapter.BodyToValue[dto.CreateUpdateUserDto](r.Body)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	/* defer r.Body.Close()
-	p, err := adapter.IOReaderToBytes(r.Body)
-	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
-		return
-	} */
-	h.service.Create(p, w, r)
+	h.service.Create(d, w, r)
 }
 
 func (h *UserHandler) ReadMany(w http.ResponseWriter, r *http.Request) {
@@ -70,13 +63,16 @@ func (h *UserHandler) ReadOne(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.KeyId)
-	defer r.Body.Close()
-	p, err := adapter.IOReaderToBytes(r.Body)
+	d, err := adapter.BodyToValue[dto.CreateUpdateUserDto](r.Body)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	h.service.Update(id, p, w, r)
+	if err != nil {
+		response.RespondError(http.StatusBadRequest, err, w)
+		return
+	}
+	h.service.Update(id, d, w, r)
 }
 
 func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {

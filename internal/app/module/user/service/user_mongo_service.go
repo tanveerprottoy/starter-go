@@ -3,6 +3,7 @@ package service
 import (
 	"net/http"
 	"txp/restapistarter/internal/app/module/user/dto"
+	"txp/restapistarter/internal/app/module/user/entity"
 	"txp/restapistarter/internal/app/module/user/repository"
 	"txp/restapistarter/internal/app/module/user/schema"
 	"txp/restapistarter/pkg/adapter"
@@ -24,17 +25,17 @@ func NewUserMongoService(r *repository.UserMongoRepository) *UserMongoService {
 	return s
 }
 
-func (s *UserMongoService) Create(p []byte, w http.ResponseWriter, r *http.Request) {
-	d, err := adapter.BytesToValue[schema.User](p)
+func (s *UserMongoService) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
+	v, err := adapter.AnyToValue[entity.User](d)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	d.CreatedAt = time.Now()
-	d.UpdatedAt = time.Now()
+	v.CreatedAt = time.Now()
+	v.UpdatedAt = time.Now()
 	res, err := s.repository.Create(
 		r.Context(),
-		&d,
+		&v,
 		nil,
 	)
 	if err != nil {
@@ -147,13 +148,8 @@ func (s *UserMongoService) ReadOne(id string, w http.ResponseWriter, r *http.Req
 	response.Respond(http.StatusOK, response.BuildData(data), w)
 }
 
-func (s *UserMongoService) Update(id string, p []byte, w http.ResponseWriter, r *http.Request) {
+func (s *UserMongoService) Update(id string, d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
 	objId, err := mongodb.BuildObjectID(id)
-	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
-		return
-	}
-	d, err := adapter.BytesToValue[dto.CreateUpdateUserDto](p)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
