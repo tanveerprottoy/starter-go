@@ -34,7 +34,8 @@ go.work
 .env
 
 # binaries
-bin
+bin/
 
 # log
-.log
+log/
+*.log
