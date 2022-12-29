@@ -16,51 +16,51 @@ const (
 )
 
 var (
-	instance    *DBClient
+	instance    *Client
 	once        sync.Once
 	mu          sync.Mutex
 	initialized uint32
 )
 
-type DBClient struct {
+type Client struct {
 	DB *sqlx.DB
 }
 
-func GetInstance() *DBClient {
+func GetInstance() *Client {
 	once.Do(func() {
-		instance = new(DBClient)
+		instance = new(Client)
 		instance.init()
 	})
 	return instance
 }
 
-func GetInstanceMutex() *DBClient {
+func GetInstanceMutex() *Client {
 	if instance == nil {
 		mu.Lock()
 		defer mu.Unlock()
 		if instance == nil {
-			instance = new(DBClient)
+			instance = new(Client)
 			instance.init()
 		}
 	}
 	return instance
 }
 
-func GetInstanceAtomic() *DBClient {
+func GetInstanceAtomic() *Client {
 	if atomic.LoadUint32(&initialized) == 1 {
 		return instance
 	}
 	mu.Lock()
 	defer mu.Unlock()
 	if initialized == 0 {
-		instance = new(DBClient)
+		instance = new(Client)
 		instance.init()
 		atomic.StoreUint32(&initialized, 1)
 	}
 	return instance
 }
 
-func (d *DBClient) init() {
+func (d *Client) init() {
 	// Capture connection properties.
 	cfg := mysql.Config{
 		User:   os.Getenv("DB_USER"),

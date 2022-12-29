@@ -6,26 +6,26 @@ import (
 	"txp/restapistarter/internal/app/module/content/entity"
 	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/pkg/adapter"
-	datasql "txp/restapistarter/pkg/data/sql"
+	sqlPkg "txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/response"
 	"txp/restapistarter/pkg/time"
 
 	"github.com/go-chi/chi"
 )
 
-type ContentService struct {
-	repository *ContentRepository
+type Service struct {
+	repository *Repository
 }
 
-func NewContentService(
-	repository *ContentRepository,
-) *ContentService {
-	s := new(ContentService)
+func NewService(
+	repository *Repository,
+) *Service {
+	s := new(Service)
 	s.repository = repository
 	return s
 }
 
-func (s *ContentService) Create(p []byte, w http.ResponseWriter, r *http.Request) {
+func (s *Service) Create(p []byte, w http.ResponseWriter, r *http.Request) {
 	d, err := adapter.BytesToValue[entity.Content](p)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
@@ -45,7 +45,7 @@ func (s *ContentService) Create(p []byte, w http.ResponseWriter, r *http.Request
 	response.Respond(http.StatusCreated, d, w)
 }
 
-func (s *ContentService) ReadMany(limit, page int, w http.ResponseWriter, r *http.Request) {
+func (s *Service) ReadMany(limit, page int, w http.ResponseWriter, r *http.Request) {
 	rows, err := s.repository.ReadMany()
 	if err != nil {
 		response.RespondError(
@@ -56,7 +56,7 @@ func (s *ContentService) ReadMany(limit, page int, w http.ResponseWriter, r *htt
 		return
 	}
 	var e entity.Content
-	d, err := datasql.GetEntities(
+	d, err := sqlPkg.GetEntities(
 		rows,
 		&e,
 		&e.Id,
@@ -75,7 +75,7 @@ func (s *ContentService) ReadMany(limit, page int, w http.ResponseWriter, r *htt
 	response.Respond(http.StatusOK, d, w)
 }
 
-func (s *ContentService) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
+func (s *Service) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
 	row := s.repository.ReadOne(id)
 	if row == nil {
 		response.RespondError(
@@ -86,7 +86,7 @@ func (s *ContentService) ReadOne(id string, w http.ResponseWriter, r *http.Reque
 		return
 	}
 	e := new(entity.Content)
-	d, err := datasql.GetEntity(
+	d, err := sqlPkg.GetEntity(
 		row,
 		&e,
 		&e.Id,
@@ -105,7 +105,7 @@ func (s *ContentService) ReadOne(id string, w http.ResponseWriter, r *http.Reque
 	response.Respond(http.StatusOK, d, w)
 }
 
-func (s *ContentService) Update(id string, p []byte, w http.ResponseWriter, r *http.Request) {
+func (s *Service) Update(id string, p []byte, w http.ResponseWriter, r *http.Request) {
 	userId := chi.URLParam(r, constant.KeyId)
 	d, err := adapter.BytesToValue[entity.Content](p)
 	if err != nil {
@@ -126,7 +126,7 @@ func (s *ContentService) Update(id string, p []byte, w http.ResponseWriter, r *h
 	response.Respond(http.StatusOK, d, w)
 }
 
-func (s *ContentService) Delete(id string, w http.ResponseWriter, r *http.Request) {
+func (s *Service) Delete(id string, w http.ResponseWriter, r *http.Request) {
 	rowsAffected, err := s.repository.Delete(id)
 	if err != nil || rowsAffected <= 0 {
 		response.RespondError(

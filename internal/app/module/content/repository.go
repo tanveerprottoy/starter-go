@@ -8,17 +8,17 @@ import (
 	sqlUtil "txp/restapistarter/pkg/data/sql"
 )
 
-type ContentRepository struct {
+type Repository struct {
 	db *sql.DB
 }
 
-func NewContentRepository(db *sql.DB) *ContentRepository {
-	r := new(ContentRepository)
+func NewRepository(db *sql.DB) *Repository {
+	r := new(Repository)
 	r.db = db
 	return r
 }
 
-func (r *ContentRepository) Create(e *entity.Content) error {
+func (r *Repository) Create(e *entity.Content) error {
 	_, err := r.db.Exec(
 		"INSERT INTO contents (name)"+
 			"VALUES ($1)",
@@ -31,7 +31,7 @@ func (r *ContentRepository) Create(e *entity.Content) error {
 	return nil
 }
 
-func (r *ContentRepository) ReadMany() (*sql.Rows, error) {
+func (r *Repository) ReadMany() (*sql.Rows, error) {
 	rows, err := r.db.Query(
 		"SELECT * FROM contents", // WHERE id IS NOT NULL
 	)
@@ -41,7 +41,7 @@ func (r *ContentRepository) ReadMany() (*sql.Rows, error) {
 	return rows, nil
 }
 
-func (r *ContentRepository) ReadOne(id string) *sql.Row {
+func (r *Repository) ReadOne(id string) *sql.Row {
 	row := r.db.QueryRow(
 		"SELECT * FROM contents WHERE id = $1 LIMIT 1",
 		id,
@@ -49,7 +49,7 @@ func (r *ContentRepository) ReadOne(id string) *sql.Row {
 	return row
 }
 
-func (r *ContentRepository) Update(id string, e *entity.Content) (int64, error) {
+func (r *Repository) Update(id string, e *entity.Content) (int64, error) {
 	q := "UPDATE contents SET name = $2 WHERE id = $1"
 	res, err := r.db.Exec(
 		q,
@@ -63,7 +63,7 @@ func (r *ContentRepository) Update(id string, e *entity.Content) (int64, error) 
 	return sqlUtil.GetRowsAffected(res), nil
 }
 
-func (r *ContentRepository) Delete(id string) (int64, error) {
+func (r *Repository) Delete(id string) (int64, error) {
 	q := "DELETE FROM contents WHERE id = $1"
 	res, err := r.db.Exec(
 		q,

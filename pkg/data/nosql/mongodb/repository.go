@@ -8,34 +8,13 @@ import (
 )
 
 type Repository interface {
-	Create(
-		ctx context.Context,
-		doc any,
-		opts ...*options.InsertOneOptions,
-	) (*mongo.InsertOneResult, error)
+	Create(ctx context.Context, doc any, opts ...*options.InsertOneOptions) (*mongo.InsertOneResult, error)
 
-	ReadMany(
-		ctx context.Context,
-		filter any,
-		opts ...*options.FindOptions,
-	) (*mongo.Cursor, error)
+	ReadMany(ctx context.Context, filter any, opts ...*options.FindOptions) (*mongo.Cursor, error)
 
-	ReadOne(
-		ctx context.Context,
-		filter any,
-		opts ...*options.FindOneOptions,
-	) *mongo.SingleResult
+	ReadOne(ctx context.Context, filter any, opts ...*options.FindOneOptions) *mongo.SingleResult
 
-	Update(
-		ctx context.Context,
-		filter any,
-		doc any,
-		opts ...*options.UpdateOptions,
-	) (*mongo.UpdateResult, error)
+	Update(ctx context.Context, filter any, doc any, opts ...*options.UpdateOptions) (*mongo.UpdateResult, error)
 
-	Delete(
-		ctx context.Context,
-		filter any,
-		opts ...*options.DeleteOptions,
-	) (*mongo.DeleteResult, error)
+	Delete(ctx context.Context, filter any, opts ...*options.DeleteOptions) (*mongo.DeleteResult, error)
 }

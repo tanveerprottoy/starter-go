@@ -9,7 +9,7 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func RegisterUserRoutes(router *router.Router, version string, module *user.UserModule, authMiddleWare *middleware.AuthMiddleware) {
+func RegisterUserRoutes(router *router.Router, version string, module *user.Module, authMiddleWare *middleware.AuthMiddleware) {
 	router.Mux.Group(
 		func(r chi.Router) {
 			r.Use(authMiddleWare.AuthUser)

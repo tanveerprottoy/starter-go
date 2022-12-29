@@ -10,19 +10,19 @@ import (
 )
 
 var (
-	Client *mongo.Client
-	DB     *mongo.Database
+	DBClient *mongo.Client
+	DB       *mongo.Database
 )
 
 func InitDBClient() {
 	uri := config.GetEnvValue("DB_URI")
 	var err error
-	Client, err = mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	DBClient, err = mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 	if err != nil {
 		panic(err)
 	}
 	log.Println("Successfully connected!")
-	DB = Client.Database(config.GetEnvValue("DB_NAME"))
+	DB = DBClient.Database(config.GetEnvValue("DB_NAME"))
 	// Establish and verify connection
 	err = DB.Client().Ping(context.TODO(), nil)
 	if err != nil {
@@ -32,7 +32,7 @@ func InitDBClient() {
 }
 
 func Disconnect() {
-	if err := Client.Disconnect(context.TODO()); err != nil {
+	if err := DBClient.Disconnect(context.TODO()); err != nil {
 		panic(err)
 	}
 }

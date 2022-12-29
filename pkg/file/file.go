@@ -2,20 +2,17 @@ package file
 
 import (
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"os"
 	"path/filepath"
 )
 
 func GetPWD() (string, error) {
-	pwd, err := os.Getwd()
-	return pwd, err
+	return os.Getwd()
 }
 
-func ReadFile(pwd string, path string) ([]byte, error) {
-	b, err := ioutil.ReadFile(pwd + path)
-	return b, err
+func ReadFile(name string) ([]byte, error) {
+	return os.ReadFile(name)
 }
 
 func SaveFile(multipartFile multipart.File, rootDir string, fileName string) (string, error) {

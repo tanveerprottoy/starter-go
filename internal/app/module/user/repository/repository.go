@@ -8,17 +8,17 @@ import (
 	sqlUtil "txp/restapistarter/pkg/data/sql"
 )
 
-type UserRepository[T entity.User] struct {
+type Repository[T entity.User] struct {
 	db *sql.DB
 }
 
-func NewUserRepository(db *sql.DB) *UserRepository[entity.User] {
-	r := new(UserRepository[entity.User])
+func NewRepository(db *sql.DB) *Repository[entity.User] {
+	r := new(Repository[entity.User])
 	r.db = db
 	return r
 }
 
-func (r *UserRepository[T]) Create(e *entity.User) error {
+func (r *Repository[T]) Create(e *entity.User) error {
 	_, err := r.db.Exec(
 		"INSERT INTO users (name)"+
 			"VALUES ($1)",
@@ -31,7 +31,7 @@ func (r *UserRepository[T]) Create(e *entity.User) error {
 	return nil
 }
 
-func (r *UserRepository[T]) ReadMany(limit, offset int) (*sql.Rows, error) {
+func (r *Repository[T]) ReadMany(limit, offset int) (*sql.Rows, error) {
 	rows, err := r.db.Query(
 		"SELECT * FROM users LIMIT $1 OFFSET $2", // WHERE id IS NOT NULL
 		limit,
@@ -43,7 +43,7 @@ func (r *UserRepository[T]) ReadMany(limit, offset int) (*sql.Rows, error) {
 	return rows, nil
 }
 
-func (r *UserRepository[T]) ReadOne(id string) *sql.Row {
+func (r *Repository[T]) ReadOne(id string) *sql.Row {
 	row := r.db.QueryRow(
 		"SELECT * FROM users WHERE id = $1 LIMIT 1",
 		id,
@@ -51,7 +51,7 @@ func (r *UserRepository[T]) ReadOne(id string) *sql.Row {
 	return row
 }
 
-func (r *UserRepository[T]) Update(id string, e *entity.User) (int64, error) {
+func (r *Repository[T]) Update(id string, e *entity.User) (int64, error) {
 	q := "UPDATE users SET name = $2 WHERE id = $1"
 	res, err := r.db.Exec(
 		q,
@@ -65,7 +65,7 @@ func (r *UserRepository[T]) Update(id string, e *entity.User) (int64, error) {
 	return sqlUtil.GetRowsAffected(res), nil
 }
 
-func (r *UserRepository[T]) Delete(id string) (int64, error) {
+func (r *Repository[T]) Delete(id string) (int64, error) {
 	q := "DELETE FROM users WHERE id = $1"
 	res, err := r.db.Exec(
 		q,

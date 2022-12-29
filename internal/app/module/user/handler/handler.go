@@ -12,19 +12,19 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type UserHandler struct {
-	service  *service.UserService
+type Handler struct {
+	service  *service.Service
 	validate *validator.Validate
 }
 
-func NewUserHandler(s *service.UserService, v *validator.Validate) *UserHandler {
-	h := new(UserHandler)
+func NewHandler(s *service.Service, v *validator.Validate) *Handler {
+	h := new(Handler)
 	h.service = s
 	h.validate = v
 	return h
 }
 
-func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	d, err := adapter.BodyToValue[dto.CreateUpdateUserDto](r.Body)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
@@ -33,7 +33,7 @@ func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 	h.service.Create(d, w, r)
 }
 
-func (h *UserHandler) ReadMany(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) ReadMany(w http.ResponseWriter, r *http.Request) {
 	limit := 10
 	page := 1
 	var err error
@@ -56,12 +56,12 @@ func (h *UserHandler) ReadMany(w http.ResponseWriter, r *http.Request) {
 	h.service.ReadMany(limit, page, w, r)
 }
 
-func (h *UserHandler) ReadOne(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) ReadOne(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.KeyId)
 	h.service.ReadOne(id, w, r)
 }
 
-func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.KeyId)
 	d, err := adapter.BodyToValue[dto.CreateUpdateUserDto](r.Body)
 	if err != nil {
@@ -75,7 +75,7 @@ func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 	h.service.Update(id, d, w, r)
 }
 
-func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.KeyId)
 	h.service.Delete(id, w, r)
 }

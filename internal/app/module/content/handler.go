@@ -8,19 +8,19 @@ import (
 	"txp/restapistarter/pkg/router"
 )
 
-type ContentHandler struct {
-	service *ContentService
+type Handler struct {
+	service *Service
 }
 
-func NewContentHandler(
-	service *ContentService,
-) *ContentHandler {
-	h := new(ContentHandler)
+func NewHandler(
+	service *Service,
+) *Handler {
+	h := new(Handler)
 	h.service = service
 	return h
 }
 
-func (h *ContentHandler) Create(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	p, err := adapter.IOReaderToBytes(r.Body)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
@@ -29,7 +29,7 @@ func (h *ContentHandler) Create(w http.ResponseWriter, r *http.Request) {
 	h.service.Create(p, w, r)
 }
 
-func (h *ContentHandler) ReadMany(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) ReadMany(w http.ResponseWriter, r *http.Request) {
 	limit := 10
 	page := 1
 	var err error
@@ -52,12 +52,12 @@ func (h *ContentHandler) ReadMany(w http.ResponseWriter, r *http.Request) {
 	h.service.ReadMany(limit, page, w, r)
 }
 
-func (h *ContentHandler) ReadOne(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) ReadOne(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.KeyId)
 	h.service.ReadOne(id, w, r)
 }
 
-func (h *ContentHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.KeyId)
 	p, err := adapter.IOReaderToBytes(r.Body)
 	if err != nil {
@@ -67,7 +67,7 @@ func (h *ContentHandler) Update(w http.ResponseWriter, r *http.Request) {
 	h.service.Update(id, p, w, r)
 }
 
-func (h *ContentHandler) Delete(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.KeyId)
 	h.service.Delete(id, w, r)
 }

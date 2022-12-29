@@ -12,20 +12,20 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type UserModule struct {
-	Handler         *handler.UserHandler
-	Service         *service.UserService
+type Module struct {
+	Handler         *handler.Handler
+	Service         *service.Service
 	Repository      sqlPkg.Repository[entity.User]
-	MongoRepository *repository.UserMongoRepository
+	MongoRepository *repository.RepositoryAlt
 }
 
-func NewUserModule(db *mongo.Database, dbSql *sql.DB, validate *validator.Validate) *UserModule {
-	m := new(UserModule)
+func NewModule(db *mongo.Database, dbSql *sql.DB, validate *validator.Validate) *Module {
+	m := new(Module)
 	// init order is reversed of the field decleration
 	// as the dependency is served this way
-	m.Repository = repository.NewUserRepository(dbSql)
-	m.MongoRepository = repository.NewUserMongoRepository(db)
-	m.Service = service.NewUserService(m.Repository)
-	m.Handler = handler.NewUserHandler(m.Service, validate)
+	m.Repository = repository.NewRepository(dbSql)
+	m.MongoRepository = repository.NewRepositoryAlt(db)
+	m.Service = service.NewService(m.Repository)
+	m.Handler = handler.NewHandler(m.Service, validate)
 	return m
 }

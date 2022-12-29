@@ -15,17 +15,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type UserMongoService struct {
-	repository *repository.UserMongoRepository
+type ServiceAlt struct {
+	repository *repository.RepositoryAlt
 }
 
-func NewUserMongoService(r *repository.UserMongoRepository) *UserMongoService {
-	s := new(UserMongoService)
+func NewServiceAlt(r *repository.RepositoryAlt) *ServiceAlt {
+	s := new(ServiceAlt)
 	s.repository = r
 	return s
 }
 
-func (s *UserMongoService) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
+func (s *ServiceAlt) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
 	v, err := adapter.AnyToValue[entity.User](d)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
@@ -45,7 +45,7 @@ func (s *UserMongoService) Create(d *dto.CreateUpdateUserDto, w http.ResponseWri
 	response.Respond(http.StatusOK, response.BuildData(res), w)
 }
 
-func (s *UserMongoService) ReadMany(limit, skip int, w http.ResponseWriter, r *http.Request) {
+func (s *ServiceAlt) ReadMany(limit, skip int, w http.ResponseWriter, r *http.Request) {
 	opts := mongodb.BuildPaginatedOpts(limit, skip)
 	c, err := s.repository.ReadMany(
 		r.Context(),
@@ -81,7 +81,7 @@ func (s *UserMongoService) ReadMany(limit, skip int, w http.ResponseWriter, r *h
 	response.Respond(http.StatusOK, response.BuildData(m), w)
 }
 
-func (s *UserMongoService) ReadManyWithNestedDocQuery(limit, skip int, key0, key1 string, w http.ResponseWriter, r *http.Request) {
+func (s *ServiceAlt) ReadManyWithNestedDocQuery(limit, skip int, key0, key1 string, w http.ResponseWriter, r *http.Request) {
 	opts := mongodb.BuildPaginatedOpts(limit, skip)
 	filter := bson.D{}
 	if key0 != "" {
@@ -123,7 +123,7 @@ func (s *UserMongoService) ReadManyWithNestedDocQuery(limit, skip int, key0, key
 	response.Respond(http.StatusOK, response.BuildData(data), w)
 }
 
-func (s *UserMongoService) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
+func (s *ServiceAlt) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
 	objId, err := mongodb.BuildObjectID(id)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
@@ -148,7 +148,7 @@ func (s *UserMongoService) ReadOne(id string, w http.ResponseWriter, r *http.Req
 	response.Respond(http.StatusOK, response.BuildData(data), w)
 }
 
-func (s *UserMongoService) Update(id string, d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
+func (s *ServiceAlt) Update(id string, d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
 	objId, err := mongodb.BuildObjectID(id)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
@@ -169,7 +169,7 @@ func (s *UserMongoService) Update(id string, d *dto.CreateUpdateUserDto, w http.
 	response.Respond(http.StatusOK, response.BuildData(res), w)
 }
 
-func (s *UserMongoService) Delete(id string, w http.ResponseWriter, r *http.Request) {
+func (s *ServiceAlt) Delete(id string, w http.ResponseWriter, r *http.Request) {
 	objId, err := mongodb.BuildObjectID(id)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)

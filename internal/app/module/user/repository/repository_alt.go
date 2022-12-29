@@ -9,17 +9,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type UserMongoRepository struct {
+type RepositoryAlt struct {
 	db *mongo.Database
 }
 
-func NewUserMongoRepository(db *mongo.Database) *UserMongoRepository {
-	r := new(UserMongoRepository)
+func NewRepositoryAlt(db *mongo.Database) *RepositoryAlt {
+	r := new(RepositoryAlt)
 	r.db = db
 	return r
 }
 
-func (r *UserMongoRepository) Create(
+func (r *RepositoryAlt) Create(
 	ctx context.Context,
 	doc any,
 	opts ...*options.InsertOneOptions,
@@ -33,7 +33,7 @@ func (r *UserMongoRepository) Create(
 	)
 }
 
-func (r *UserMongoRepository) ReadMany(
+func (r *RepositoryAlt) ReadMany(
 	ctx context.Context,
 	filter any,
 	opts ...*options.FindOptions,
@@ -47,7 +47,7 @@ func (r *UserMongoRepository) ReadMany(
 	)
 }
 
-func (r *UserMongoRepository) ReadOne(
+func (r *RepositoryAlt) ReadOne(
 	ctx context.Context,
 	filter any,
 	opts ...*options.FindOneOptions,
@@ -61,7 +61,7 @@ func (r *UserMongoRepository) ReadOne(
 	)
 }
 
-func (r *UserMongoRepository) Update(
+func (r *RepositoryAlt) Update(
 	ctx context.Context,
 	filter any,
 	doc any,
@@ -77,7 +77,7 @@ func (r *UserMongoRepository) Update(
 	)
 }
 
-func (r *UserMongoRepository) Delete(
+func (r *RepositoryAlt) Delete(
 	ctx context.Context,
 	filter any,
 	opts ...*options.DeleteOptions,

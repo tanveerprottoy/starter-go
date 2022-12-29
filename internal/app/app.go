@@ -2,8 +2,6 @@ package app
 
 import (
 	"crypto/tls"
-	"crypto/x509"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
@@ -13,24 +11,27 @@ import (
 	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/internal/pkg/middleware"
 	routerPkg "txp/restapistarter/internal/pkg/router"
+	"txp/restapistarter/pkg/crypto"
 	"txp/restapistarter/pkg/data/nosql/mongodb"
 	"txp/restapistarter/pkg/data/sql/postgres"
+	"txp/restapistarter/pkg/file"
 	"txp/restapistarter/pkg/router"
+
+	validatorPkg "txp/restapistarter/pkg/validator"
 
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
-	validatorPkg "txp/restapistarter/pkg/validator"
 )
 
 // App struct
 type App struct {
-	MongoDBClient    *mongodb.DBClient
-	PostgresDBClient *postgres.DBClient
+	MongoDBClient    *mongodb.Client
+	PostgresDBClient *postgres.Client
 	router           *router.Router
 	Middlewares      []any
-	AuthModule       *auth.AuthModule
-	UserModule       *user.UserModule
-	ContentModule    *content.ContentModule
+	AuthModule       *auth.Module
+	UserModule       *user.Module
+	ContentModule    *content.Module
 	Validate         *validator.Validate
 }
 
@@ -45,9 +46,9 @@ func (a *App) initMiddlewares() {
 }
 
 func (a *App) initModules() {
-	a.UserModule = user.NewUserModule(a.MongoDBClient.DB, a.PostgresDBClient.DB, a.Validate)
-	a.AuthModule = auth.NewAuthModule(a.UserModule.Service)
-	a.ContentModule = content.NewContentModule(a.PostgresDBClient.DB)
+	a.UserModule = user.NewModule(a.MongoDBClient.DB, a.PostgresDBClient.DB, a.Validate)
+	a.AuthModule = auth.NewModule(a.UserModule.Service)
+	a.ContentModule = content.NewModule(a.PostgresDBClient.DB)
 }
 
 func (a *App) initModuleRouters() {
@@ -111,12 +112,10 @@ func (a *App) RunTLSSimpleConfig() {
 // use mutual TLS and not just one-way TLS,
 // we must instruct it to require client authentication to ensure clients present a certificate from our CA when they connect
 func (a *App) RunTLSMutual() {
-	caCert, _ := ioutil.ReadFile("ca.crt")
-	caCertPool := x509.NewCertPool()
-	caCertPool.AppendCertsFromPEM(caCert)
-
+	caCert, _ := file.ReadFile("ca.crt")
+	cp, _ := crypto.AppendCertsFromPEM(caCert)
 	tlsConfig := &tls.Config{
-		ClientCAs:  caCertPool,
+		ClientCAs:  cp,
 		ClientAuth: tls.RequireAndVerifyClientCert,
 	}
 	tlsConfig.BuildNameToCertificate()

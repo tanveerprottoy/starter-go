@@ -10,17 +10,17 @@ import (
 	"txp/restapistarter/pkg/router"
 )
 
-type UserMongoHandler struct {
-	service *service.UserMongoService
+type HandlerAlt struct {
+	service *service.ServiceAlt
 }
 
-func NewUserMongoHandler(s *service.UserMongoService) *UserMongoHandler {
-	h := new(UserMongoHandler)
+func NewHandlerAlt(s *service.ServiceAlt) *HandlerAlt {
+	h := new(HandlerAlt)
 	h.service = s
 	return h
 }
 
-func (h *UserMongoHandler) Create(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerAlt) Create(w http.ResponseWriter, r *http.Request) {
 	d, err := adapter.BodyToValue[dto.CreateUpdateUserDto](r.Body)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
@@ -29,7 +29,7 @@ func (h *UserMongoHandler) Create(w http.ResponseWriter, r *http.Request) {
 	h.service.Create(d, w, r)
 }
 
-func (h *UserMongoHandler) ReadMany(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerAlt) ReadMany(w http.ResponseWriter, r *http.Request) {
 	limit := 10
 	page := 1
 	var err error
@@ -52,7 +52,7 @@ func (h *UserMongoHandler) ReadMany(w http.ResponseWriter, r *http.Request) {
 	h.service.ReadMany(limit, page, w, r)
 }
 
-func (h *UserMongoHandler) ReadManyWithNestedDocQuery(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerAlt) ReadManyWithNestedDocQuery(w http.ResponseWriter, r *http.Request) {
 	limit := 10
 	page := 1
 	var err error
@@ -77,12 +77,12 @@ func (h *UserMongoHandler) ReadManyWithNestedDocQuery(w http.ResponseWriter, r *
 	h.service.ReadManyWithNestedDocQuery(limit, page, k0, k1, w, r)
 }
 
-func (h *UserMongoHandler) ReadOne(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerAlt) ReadOne(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.KeyId)
 	h.service.ReadOne(id, w, r)
 }
 
-func (h *UserMongoHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerAlt) Update(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.KeyId)
 	d, err := adapter.BodyToValue[dto.CreateUpdateUserDto](r.Body)
 	if err != nil {
@@ -96,7 +96,7 @@ func (h *UserMongoHandler) Update(w http.ResponseWriter, r *http.Request) {
 	h.service.Update(id, d, w, r)
 }
 
-func (h *UserMongoHandler) Delete(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerAlt) Delete(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.KeyId)
 	h.service.Delete(id, w, r)
 }

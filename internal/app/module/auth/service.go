@@ -2,7 +2,7 @@ package auth
 
 import (
 	"net/http"
-	
+
 	"txp/restapistarter/internal/app/module/user/entity"
 	"txp/restapistarter/internal/app/module/user/service"
 	"txp/restapistarter/internal/pkg/adapter"
@@ -11,17 +11,17 @@ import (
 	"txp/restapistarter/pkg/response"
 )
 
-type AuthService struct {
-	userService *service.UserService
+type Service struct {
+	userService *service.Service
 }
 
-func NewAuthService(userService *service.UserService) *AuthService {
-	s := new(AuthService)
+func NewService(userService *service.Service) *Service {
+	s := new(Service)
 	s.userService = userService
 	return s
 }
 
-func (s *AuthService) Authorize(w http.ResponseWriter, r *http.Request) *entity.User {
+func (s *Service) Authorize(w http.ResponseWriter, r *http.Request) *entity.User {
 	splits, err := _http.ParseAuthToken(r)
 	if err != nil {
 		response.RespondError(http.StatusForbidden, err, w)

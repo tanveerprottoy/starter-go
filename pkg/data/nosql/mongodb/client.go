@@ -12,52 +12,52 @@ import (
 )
 
 var (
-	instance    *DBClient
+	instance    *Client
 	once        sync.Once
 	mu          sync.Mutex
 	initialized uint32
 )
 
-type DBClient struct {
-	Client *mongo.Client
-	DB     *mongo.Database
+type Client struct {
+	DBClient *mongo.Client
+	DB       *mongo.Database
 }
 
-func GetInstance() *DBClient {
+func GetInstance() *Client {
 	once.Do(func() {
-		instance = new(DBClient)
+		instance = new(Client)
 		instance.connect()
 	})
 	return instance
 }
 
-func GetInstanceMutex() *DBClient {
+func GetInstanceMutex() *Client {
 	if instance == nil {
 		mu.Lock()
 		defer mu.Unlock()
 		if instance == nil {
-			instance = new(DBClient)
+			instance = new(Client)
 			instance.connect()
 		}
 	}
 	return instance
 }
 
-func GetInstanceAtomic() *DBClient {
+func GetInstanceAtomic() *Client {
 	if atomic.LoadUint32(&initialized) == 1 {
 		return instance
 	}
 	mu.Lock()
 	defer mu.Unlock()
 	if initialized == 0 {
-		instance = new(DBClient)
+		instance = new(Client)
 		instance.connect()
 		atomic.StoreUint32(&initialized, 1)
 	}
 	return instance
 }
 
-func (d *DBClient) connect() {
+func (d *Client) connect() {
 	// uri := config.GetEnvValue("DB_URI")
 	uri := config.GetJsonValue("dbUri").(string)
 	/* credential := options.Credential{
@@ -68,16 +68,16 @@ func (d *DBClient) connect() {
 	ctx := context.TODO()
 	// opts := options.Client().ApplyURI("mongodb+srv://<host>").SetAuth(credential)
 	opts := options.Client().ApplyURI(uri)
-	d.Client, err = mongo.Connect(ctx, opts)
+	d.DBClient, err = mongo.Connect(ctx, opts)
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = d.Client.Ping(ctx, nil)
+	err = d.DBClient.Ping(ctx, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Println("Successfully connected!")
-	d.DB = d.Client.Database(config.GetEnvValue("DB_NAME"))
+	d.DB = d.DBClient.Database(config.GetEnvValue("DB_NAME"))
 	// Establish and verify connection
 	err = d.DB.Client().Ping(context.TODO(), nil)
 	if err != nil {
@@ -86,8 +86,8 @@ func (d *DBClient) connect() {
 	log.Println("Connected successfully to DB")
 }
 
-func (d *DBClient) Disconnect() {
-	if err := d.Client.Disconnect(context.TODO()); err != nil {
+func (d *Client) Disconnect() {
+	if err := d.DBClient.Disconnect(context.TODO()); err != nil {
 		panic(err)
 	}
 }

@@ -14,7 +14,7 @@ var (
 func init() {
 	pwd, _ := file.GetPWD()
 	log.Println(pwd)
-	b, _ := file.ReadFile(pwd, "/config/dev.json")
+	b, _ := file.ReadFile(pwd + "/config/dev.json")
 	_ = json.Unmarshal(b, &Configs)
 	log.Print(Configs)
 }

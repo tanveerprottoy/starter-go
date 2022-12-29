@@ -8,22 +8,22 @@ import (
 	"txp/restapistarter/internal/app/module/user/entity"
 	"txp/restapistarter/internal/pkg/constant"
 	"txp/restapistarter/pkg/adapter"
-	datasql "txp/restapistarter/pkg/data/sql"
+	sqlPkg "txp/restapistarter/pkg/data/sql"
 	"txp/restapistarter/pkg/response"
 	"txp/restapistarter/pkg/time"
 )
 
-type UserService struct {
-	repository datasql.Repository[entity.User]
+type Service struct {
+	repository sqlPkg.Repository[entity.User]
 }
 
-func NewUserService(r datasql.Repository[entity.User]) *UserService {
-	s := new(UserService)
+func NewService(r sqlPkg.Repository[entity.User]) *Service {
+	s := new(Service)
 	s.repository = r
 	return s
 }
 
-func (s *UserService) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
+func (s *Service) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
 	v, err := adapter.AnyToValue[entity.User](d)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
@@ -39,7 +39,7 @@ func (s *UserService) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, 
 	response.Respond(http.StatusCreated, response.BuildData(d), w)
 }
 
-func (s *UserService) ReadMany(limit, page int, w http.ResponseWriter, r *http.Request) {
+func (s *Service) ReadMany(limit, page int, w http.ResponseWriter, r *http.Request) {
 	offset := limit * (page - 1)
 	rows, err := s.repository.ReadMany(limit, offset)
 	if err != nil {
@@ -48,7 +48,7 @@ func (s *UserService) ReadMany(limit, page int, w http.ResponseWriter, r *http.R
 		return
 	}
 	var e entity.User
-	d, err := datasql.GetEntities(
+	d, err := sqlPkg.GetEntities(
 		rows,
 		&e,
 		&e.Id,
@@ -68,18 +68,18 @@ func (s *UserService) ReadMany(limit, page int, w http.ResponseWriter, r *http.R
 	response.Respond(http.StatusOK, response.BuildData(m), w)
 }
 
-func (s *UserService) ReadOneInternal(id string) *sql.Row {
+func (s *Service) ReadOneInternal(id string) *sql.Row {
 	return s.repository.ReadOne(id)
 }
 
-func (s *UserService) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
+func (s *Service) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
 	row := s.ReadOneInternal(id)
 	if row == nil {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
 		return
 	}
 	e := new(entity.User)
-	d, err := datasql.GetEntity(
+	d, err := sqlPkg.GetEntity(
 		row,
 		&e,
 		&e.Id,
@@ -94,7 +94,7 @@ func (s *UserService) ReadOne(id string, w http.ResponseWriter, r *http.Request)
 	response.Respond(http.StatusOK, response.BuildData(d), w)
 }
 
-func (s *UserService) Update(id string, d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
+func (s *Service) Update(id string, d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
 	v, err := adapter.AnyToValue[entity.User](d)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
@@ -112,7 +112,7 @@ func (s *UserService) Update(id string, d *dto.CreateUpdateUserDto, w http.Respo
 	response.Respond(http.StatusOK, response.BuildData(d), w)
 }
 
-func (s *UserService) Delete(id string, w http.ResponseWriter, r *http.Request) {
+func (s *Service) Delete(id string, w http.ResponseWriter, r *http.Request) {
 	rowsAffected, err := s.repository.Delete(id)
 	if err != nil || rowsAffected <= 0 {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)

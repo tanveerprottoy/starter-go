@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func RegisterContentRoutes(router *router.Router, version string, module *content.ContentModule) {
+func RegisterContentRoutes(router *router.Router, version string, module *content.Module) {
 	router.Mux.Route(
 		constant.ApiPattern+version+constant.ContentsPattern,
 		func(r chi.Router) {

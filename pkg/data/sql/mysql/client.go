@@ -1,73 +1,74 @@
-package postgres
+package mysql
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"sync"
 	"sync/atomic"
 	"txp/restapistarter/pkg/config"
 
-	_ "github.com/lib/pq"
+	"github.com/go-sql-driver/mysql"
+)
+
+const (
+	netType = "tcp"
 )
 
 var (
-	instance    *DBClient
+	instance    *Client
 	once        sync.Once
 	mu          sync.Mutex
 	initialized uint32
 )
 
-type DBClient struct {
+type Client struct {
 	DB *sql.DB
 }
 
-func GetInstance() *DBClient {
+func GetInstance() *Client {
 	once.Do(func() {
-		instance = new(DBClient)
+		instance = new(Client)
 		instance.init()
 	})
 	return instance
 }
 
-func GetInstanceMutex() *DBClient {
+func GetInstanceMutex() *Client {
 	if instance == nil {
 		mu.Lock()
 		defer mu.Unlock()
 		if instance == nil {
-			instance = new(DBClient)
+			instance = new(Client)
 			instance.init()
 		}
 	}
 	return instance
 }
 
-func GetInstanceAtomic() *DBClient {
+func GetInstanceAtomic() *Client {
 	if atomic.LoadUint32(&initialized) == 1 {
 		return instance
 	}
 	mu.Lock()
 	defer mu.Unlock()
 	if initialized == 0 {
-		instance = new(DBClient)
+		instance = new(Client)
 		instance.init()
 		atomic.StoreUint32(&initialized, 1)
 	}
 	return instance
 }
 
-func (d *DBClient) init() {
-	args := fmt.Sprintf(
-		"host=%s port=%s user=%s "+
-			"password=%s dbname=%s sslmode=disable",
-		config.GetEnvValue("DB_HOST"),
-		config.GetEnvValue("DB_PORT"),
-		config.GetEnvValue("DB_USER"),
-		config.GetEnvValue("DB_PASS"),
-		config.GetEnvValue("DB_NAME"),
-	)
+func (d *Client) init() {
+	cfg := mysql.Config{
+		User:   config.GetEnvValue("DB_USER"),
+		Passwd: config.GetEnvValue("DB_PASS"),
+		Net:    netType,
+		Addr:   config.GetEnvValue("DB_HOST") + ":" + config.GetEnvValue("DB_PORT"),
+		DBName: config.GetEnvValue("DB_NAME"),
+	}
 	var err error
-	d.DB, err = sql.Open("postgres", args)
+	d.DB, err = sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {
 		panic(err)
 	}

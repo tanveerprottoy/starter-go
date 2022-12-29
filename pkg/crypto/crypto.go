@@ -1,6 +1,10 @@
 package crypto
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"crypto/x509"
+
+	"golang.org/x/crypto/bcrypt"
+)
 
 // GenerateHashFromPassword generates password hash
 func GenerateHashFromPassword(p string) string {
@@ -14,8 +18,11 @@ func GenerateHashFromPassword(p string) string {
 // CompareHashAndPassword compares pass with hash
 func CompareHashAndPassword(h string, p string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(h), []byte(p))
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
+}
+
+func AppendCertsFromPEM(pemCerts []byte) (*x509.CertPool, bool) {
+	cp := x509.NewCertPool()
+	b := cp.AppendCertsFromPEM(pemCerts)
+	return cp, b
 }
