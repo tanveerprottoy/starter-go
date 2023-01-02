@@ -5,9 +5,10 @@ import (
 	"errors"
 	"net/http"
 	"strings"
-	"txp/restapistarter/pkg/constant"
-	"txp/restapistarter/pkg/jwt"
-	"txp/restapistarter/pkg/response"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/constant"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/jwt"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/response"
 )
 
 // JSONContentTypeMiddleWare content type json setter middleware

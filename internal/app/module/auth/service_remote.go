@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"txp/restapistarter/internal/app/module/auth/dto"
-	"txp/restapistarter/internal/pkg/constant"
-	"txp/restapistarter/pkg/config"
-	httpPkg "txp/restapistarter/pkg/http"
-	"txp/restapistarter/pkg/response"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/auth/dto"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/pkg/constant"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/config"
+	httpPkg "github.com/tanveerprottoy/rest-api-starter-go/pkg/http"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/response"
 )
 
 type ServiceRemote struct {

@@ -1,6 +1,6 @@
 package auth
 
-import "txp/restapistarter/internal/app/module/user/service"
+import "github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/service"
 
 type Module struct {
 	Service *Service

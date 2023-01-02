@@ -4,13 +4,14 @@ import (
 	sql "database/sql"
 	"errors"
 	"net/http"
-	"txp/restapistarter/internal/app/module/user/dto"
-	"txp/restapistarter/internal/app/module/user/entity"
-	"txp/restapistarter/internal/pkg/constant"
-	"txp/restapistarter/pkg/adapter"
-	sqlPkg "txp/restapistarter/pkg/data/sql"
-	"txp/restapistarter/pkg/response"
-	"txp/restapistarter/pkg/time"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/dto"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/entity"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/pkg/constant"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/adapter"
+	sqlPkg "github.com/tanveerprottoy/rest-api-starter-go/pkg/data/sql"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/response"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/time"
 )
 
 type Service struct {

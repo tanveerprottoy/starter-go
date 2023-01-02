@@ -5,7 +5,8 @@ import (
 	"log"
 	"sync"
 	"sync/atomic"
-	"txp/restapistarter/pkg/config"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/config"
 
 	"github.com/go-sql-driver/mysql"
 )

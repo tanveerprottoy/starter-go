@@ -1,7 +1,7 @@
 package router
 
 import (
-	"txp/restapistarter/pkg/middleware"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/middleware"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"

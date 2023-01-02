@@ -1,4 +1,4 @@
-module txp/restapistarter
+module github.com/tanveerprottoy/rest-api-starter-go
 
 go 1.19
 

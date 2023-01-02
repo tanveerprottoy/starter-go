@@ -2,8 +2,9 @@ package config
 
 import (
 	"log"
-	"txp/restapistarter/pkg/file"
-	"txp/restapistarter/pkg/json"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/file"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/json"
 )
 
 var (

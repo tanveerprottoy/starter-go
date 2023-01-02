@@ -3,12 +3,13 @@ package content
 import (
 	"errors"
 	"net/http"
-	"txp/restapistarter/internal/app/module/content/entity"
-	"txp/restapistarter/internal/pkg/constant"
-	"txp/restapistarter/pkg/adapter"
-	sqlPkg "txp/restapistarter/pkg/data/sql"
-	"txp/restapistarter/pkg/response"
-	"txp/restapistarter/pkg/time"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/content/entity"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/pkg/constant"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/adapter"
+	sqlPkg "github.com/tanveerprottoy/rest-api-starter-go/pkg/data/sql"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/response"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/time"
 
 	"github.com/go-chi/chi"
 )

@@ -2,8 +2,9 @@ package repository
 
 import (
 	"context"
-	"txp/restapistarter/internal/pkg/constant"
-	"txp/restapistarter/pkg/data/nosql/mongodb"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/pkg/constant"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/data/nosql/mongodb"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

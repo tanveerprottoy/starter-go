@@ -3,12 +3,12 @@ package auth
 import (
 	"net/http"
 
-	"txp/restapistarter/internal/app/module/user/entity"
-	"txp/restapistarter/internal/app/module/user/service"
-	"txp/restapistarter/internal/pkg/adapter"
-	_http "txp/restapistarter/pkg/http"
-	"txp/restapistarter/pkg/jwt"
-	"txp/restapistarter/pkg/response"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/entity"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/service"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/pkg/adapter"
+	_http "github.com/tanveerprottoy/rest-api-starter-go/pkg/http"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/jwt"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/response"
 )
 
 type Service struct {

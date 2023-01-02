@@ -4,7 +4,8 @@ import (
 	"errors"
 	"io"
 	"net/http"
-	"txp/restapistarter/pkg/adapter"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/adapter"
 )
 
 func Request[T any](

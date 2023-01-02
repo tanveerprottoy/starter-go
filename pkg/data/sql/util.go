@@ -4,7 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"txp/restapistarter/pkg/core"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/core"
 )
 
 func GetRowsAffected(result sql.Result) int64 {

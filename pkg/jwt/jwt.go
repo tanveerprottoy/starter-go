@@ -2,8 +2,9 @@ package jwt
 
 import (
 	"errors"
-	"txp/restapistarter/pkg/config"
-	"txp/restapistarter/pkg/time"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/config"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/time"
 
 	"github.com/golang-jwt/jwt/v4"
 )

@@ -2,8 +2,9 @@ package multipart
 
 import (
 	"net/http"
-	"txp/restapistarter/pkg/file"
-	_http "txp/restapistarter/pkg/http"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/file"
+	_http "github.com/tanveerprottoy/rest-api-starter-go/pkg/http"
 )
 
 func ParseMultipartForm(r *http.Request) (*http.Request, error) {

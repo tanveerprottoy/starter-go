@@ -2,10 +2,11 @@ package content
 
 import (
 	"net/http"
-	"txp/restapistarter/internal/pkg/constant"
-	"txp/restapistarter/pkg/adapter"
-	"txp/restapistarter/pkg/response"
-	"txp/restapistarter/pkg/router"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/pkg/constant"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/adapter"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/response"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/router"
 )
 
 type Handler struct {

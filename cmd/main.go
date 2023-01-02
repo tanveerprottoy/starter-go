@@ -1,6 +1,6 @@
 package main
 
-import "txp/restapistarter/internal/app"
+import "github.com/tanveerprottoy/rest-api-starter-go/internal/app"
 
 func main() {
 	a := new(app.App)

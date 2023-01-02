@@ -4,7 +4,7 @@ import (
 	"io"
 	"strconv"
 
-	"txp/restapistarter/pkg/json"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/json"
 )
 
 func IOReaderToBytes(r io.Reader) ([]byte, error) {

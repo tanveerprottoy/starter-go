@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"txp/restapistarter/internal/app/module/content/entity"
-	sqlUtil "txp/restapistarter/pkg/data/sql"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/content/entity"
+	sqlUtil "github.com/tanveerprottoy/rest-api-starter-go/pkg/data/sql"
 )
 
 type Repository struct {

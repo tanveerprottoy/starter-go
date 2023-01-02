@@ -3,7 +3,8 @@ package mongodb
 import (
 	"context"
 	"log"
-	"txp/restapistarter/pkg/config"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/config"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

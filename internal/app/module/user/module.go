@@ -2,11 +2,12 @@ package user
 
 import (
 	"database/sql"
-	"txp/restapistarter/internal/app/module/user/entity"
-	"txp/restapistarter/internal/app/module/user/handler"
-	"txp/restapistarter/internal/app/module/user/repository"
-	"txp/restapistarter/internal/app/module/user/service"
-	sqlPkg "txp/restapistarter/pkg/data/sql"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/entity"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/handler"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/repository"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/service"
+	sqlPkg "github.com/tanveerprottoy/rest-api-starter-go/pkg/data/sql"
 
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/mongo"

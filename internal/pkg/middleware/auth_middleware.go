@@ -3,8 +3,9 @@ package middleware
 import (
 	"context"
 	"net/http"
-	"txp/restapistarter/internal/app/module/auth"
-	"txp/restapistarter/internal/pkg/constant"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/auth"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/pkg/constant"
 )
 
 type AuthMiddleware struct {

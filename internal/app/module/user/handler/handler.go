@@ -2,12 +2,13 @@ package handler
 
 import (
 	"net/http"
-	"txp/restapistarter/internal/app/module/user/dto"
-	"txp/restapistarter/internal/app/module/user/service"
-	"txp/restapistarter/internal/pkg/constant"
-	"txp/restapistarter/pkg/adapter"
-	"txp/restapistarter/pkg/response"
-	"txp/restapistarter/pkg/router"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/dto"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/service"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/pkg/constant"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/adapter"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/response"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/router"
 
 	"github.com/go-playground/validator/v10"
 )

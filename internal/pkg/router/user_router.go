@@ -1,10 +1,10 @@
 package router
 
 import (
-	"txp/restapistarter/internal/app/module/user"
-	"txp/restapistarter/internal/pkg/constant"
-	"txp/restapistarter/internal/pkg/middleware"
-	"txp/restapistarter/pkg/router"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/pkg/constant"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/pkg/middleware"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/router"
 
 	"github.com/go-chi/chi"
 )

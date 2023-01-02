@@ -2,14 +2,15 @@ package service
 
 import (
 	"net/http"
-	"txp/restapistarter/internal/app/module/user/dto"
-	"txp/restapistarter/internal/app/module/user/entity"
-	"txp/restapistarter/internal/app/module/user/repository"
-	"txp/restapistarter/internal/app/module/user/schema"
-	"txp/restapistarter/pkg/adapter"
-	"txp/restapistarter/pkg/data/nosql/mongodb"
-	"txp/restapistarter/pkg/response"
-	"txp/restapistarter/pkg/time"
+
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/dto"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/entity"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/repository"
+	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/user/schema"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/adapter"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/data/nosql/mongodb"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/response"
+	"github.com/tanveerprottoy/rest-api-starter-go/pkg/time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
