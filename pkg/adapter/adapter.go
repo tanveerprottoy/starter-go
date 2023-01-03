@@ -12,22 +12,22 @@ func IOReaderToBytes(r io.Reader) ([]byte, error) {
 	return b, err
 }
 
-func BytesToValue[T any](b []byte) (*T, error) {
+func BytesToType[T any](b []byte) (*T, error) {
 	var out T
 	err := json.Unmarshal(b, &out)
 	return &out, err
 }
 
-func BodyToValue[T any](b io.ReadCloser) (*T, error) {
+func BodyToType[T any](b io.ReadCloser) (*T, error) {
 	var out T
 	err := json.Decode(b, &out)
 	if err != nil {
 		return nil, err
 	}
-	return AnyToValue[T](out)
+	return AnyToType[T](out)
 }
 
-func AnyToValue[T any](v any) (*T, error) {
+func AnyToType[T any](v any) (*T, error) {
 	var out T
 	b, err := json.Marshal(v)
 	if err != nil {

@@ -27,7 +27,7 @@ func NewServiceAlt(r *repository.RepositoryAlt) *ServiceAlt {
 }
 
 func (s *ServiceAlt) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
-	v, err := adapter.AnyToValue[entity.User](d)
+	v, err := adapter.AnyToType[entity.User](d)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return

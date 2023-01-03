@@ -27,7 +27,7 @@ func NewService(
 }
 
 func (s *Service) Create(p []byte, w http.ResponseWriter, r *http.Request) {
-	d, err := adapter.BytesToValue[entity.Content](p)
+	d, err := adapter.BytesToType[entity.Content](p)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
@@ -108,7 +108,7 @@ func (s *Service) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
 
 func (s *Service) Update(id string, p []byte, w http.ResponseWriter, r *http.Request) {
 	userId := chi.URLParam(r, constant.KeyId)
-	d, err := adapter.BytesToValue[entity.Content](p)
+	d, err := adapter.BytesToType[entity.Content](p)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return

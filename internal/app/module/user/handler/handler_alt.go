@@ -22,7 +22,7 @@ func NewHandlerAlt(s *service.ServiceAlt) *HandlerAlt {
 }
 
 func (h *HandlerAlt) Create(w http.ResponseWriter, r *http.Request) {
-	d, err := adapter.BodyToValue[dto.CreateUpdateUserDto](r.Body)
+	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](r.Body)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
@@ -85,7 +85,7 @@ func (h *HandlerAlt) ReadOne(w http.ResponseWriter, r *http.Request) {
 
 func (h *HandlerAlt) Update(w http.ResponseWriter, r *http.Request) {
 	id := router.GetURLParam(r, constant.KeyId)
-	d, err := adapter.BodyToValue[dto.CreateUpdateUserDto](r.Body)
+	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](r.Body)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return

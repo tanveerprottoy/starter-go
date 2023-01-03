@@ -21,14 +21,14 @@ func Request[T any](
 	}
 	if code >= http.StatusOK && code < http.StatusMultipleChoices {
 		// res ok, parse response body to type
-		d, err := adapter.BytesToValue[T](resBody)
+		d, err := adapter.BytesToType[T](resBody)
 		if err != nil {
 			return nil, err
 		}
 		return d, nil
 	} else {
 		// res not ok, parse error
-		errBody, err := adapter.BytesToValue[ErrorBody](resBody)
+		errBody, err := adapter.BytesToType[ErrorBody](resBody)
 		if err != nil {
 			return nil, err
 		}

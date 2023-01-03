@@ -25,7 +25,7 @@ func NewService(r sqlPkg.Repository[entity.User]) *Service {
 }
 
 func (s *Service) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
-	v, err := adapter.AnyToValue[entity.User](d)
+	v, err := adapter.AnyToType[entity.User](d)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
@@ -96,7 +96,7 @@ func (s *Service) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Service) Update(id string, d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
-	v, err := adapter.AnyToValue[entity.User](d)
+	v, err := adapter.AnyToType[entity.User](d)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
