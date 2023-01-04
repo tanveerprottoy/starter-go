@@ -24,7 +24,7 @@ func Dereference[T any](obj *T) (T, error) {
 	return *obj, nil
 }
 
-func ValuesToStruct[T any](params []interface{}, t *T) {
+func ValuesToStruct[T any](params []any, t *T) {
 	value := reflect.Indirect(
 		reflect.ValueOf(t).Elem(),
 	)
@@ -53,4 +53,15 @@ func ValuesToStruct[T any](params []interface{}, t *T) {
 			}
 		}
 	}
+}
+
+func ExtractFieldsFromStruct[T any](t *T) []any {
+	v := reflect.Indirect(
+		reflect.ValueOf(t).Elem(),
+	)
+	f := make([]any, v.NumField())
+	for i := 0; i < v.NumField(); i++ {
+		f[0] = v.Field(i).Interface()
+	}
+	return f
 }

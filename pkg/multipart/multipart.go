@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/tanveerprottoy/rest-api-starter-go/pkg/file"
-	_http "github.com/tanveerprottoy/rest-api-starter-go/pkg/http"
+	httpPkg "github.com/tanveerprottoy/rest-api-starter-go/pkg/http"
 )
 
 func ParseMultipartForm(r *http.Request) (*http.Request, error) {
@@ -17,7 +17,7 @@ func ParseMultipartForm(r *http.Request) (*http.Request, error) {
 	return r, nil
 }
 
-func HandleFiles(r *http.Request, keys []string) ([]string, error) {
+func HandleFiles(r *http.Request, keys []string, rootDir string) ([]string, error) {
 	var paths []string
 	r, err := ParseMultipartForm(r)
 	if err != nil {
@@ -25,12 +25,12 @@ func HandleFiles(r *http.Request, keys []string) ([]string, error) {
 	}
 	for _, k := range keys {
 		// Retrieve the file from form data
-		f, header, err := _http.GetFile(r, k)
+		f, header, err := httpPkg.GetFile(r, k)
 		if err != nil {
 			return paths, err
 		}
 		defer f.Close()
-		p, err := file.SaveFile(f, "temp", header.Filename)
+		p, err := file.SaveFile(f, rootDir, header.Filename)
 		if err != nil {
 			return paths, err
 		}
