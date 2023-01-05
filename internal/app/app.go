@@ -4,7 +4,6 @@ import (
 	"crypto/tls"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/auth"
 	"github.com/tanveerprottoy/rest-api-starter-go/internal/app/module/content"
@@ -21,7 +20,7 @@ import (
 	validatorPkg "github.com/tanveerprottoy/rest-api-starter-go/pkg/validator"
 
 	"github.com/go-playground/validator/v10"
-	"go.uber.org/zap"
+	// "go.uber.org/zap"
 )
 
 // App struct
@@ -63,7 +62,7 @@ func (a *App) initValidators() {
 	_ = a.Validate.RegisterValidation("notempty", validatorPkg.NotEmpty)
 }
 
-func (a *App) initLogger() {
+/* func (a *App) initLogger() {
 	cfg := zap.NewProductionConfig()
 	cfg.OutputPaths = []string{
 		"proxy.log",
@@ -78,7 +77,7 @@ func (a *App) initLogger() {
 		zap.Int("attempt", 3),
 		zap.Duration("backoff", time.Second),
 	)
-}
+} */
 
 // Init app
 func (a *App) InitComponents() {
@@ -88,7 +87,7 @@ func (a *App) InitComponents() {
 	a.initMiddlewares()
 	a.initModuleRouters()
 	a.initValidators()
-	a.initLogger()
+	// a.initLogger()
 }
 
 // Run app
