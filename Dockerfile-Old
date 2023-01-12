@@ -3,13 +3,13 @@ FROM golang:1.19-buster AS build
 
 WORKDIR /app
 
-RUN mkdir ./build
-
 COPY go.mod go.sum ./
 
 RUN go mod download
 
 COPY ./ ./
+
+RUN mkdir -p ./bin
 
 RUN go build -o ./bin/app ./cmd/main.go
 
