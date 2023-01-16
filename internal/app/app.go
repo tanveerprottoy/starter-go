@@ -114,15 +114,24 @@ func (a *App) RunTLSSimpleConfig() {
 func (a *App) RunTLSMutual() {
 	caCert, _ := file.ReadFile("ca.crt")
 	cp, _ := crypto.AppendCertsFromPEM(caCert)
-	tlsConfig := &tls.Config{
+	tlsConf := &tls.Config{
 		ClientCAs:  cp,
 		ClientAuth: tls.RequireAndVerifyClientCert,
 	}
-	tlsConfig.BuildNameToCertificate()
-	server := &http.Server{
+	tlsConf.BuildNameToCertificate()
+	srv := &http.Server{
 		Addr:      ":443",
-		TLSConfig: tlsConfig,
+		TLSConfig: tlsConf,
 		Handler:   a.router.Mux,
 	}
-	server.ListenAndServeTLS("cert.crt", "key.key")
+	srv.ListenAndServeTLS("cert.crt", "key.key")
+}
+
+func (a *App) RunDisableHTTP2() {
+	srv := &http.Server{
+		Handler:      a.router.Mux,
+		Addr:         "127.0.0.1:8080",
+		TLSNextProto: make(map[string]func(*http.Server, *tls.Conn, http.Handler)),
+	}
+	log.Fatal(srv.ListenAndServe())
 }
