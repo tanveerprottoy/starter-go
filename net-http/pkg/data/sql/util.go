@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/tanveerprottoy/rest-api-starter-go/net-http/pkg/core"
+	"github.com/tanveerprottoy/rest-api-starter-go/net-http/pkg/adapter"
 )
 
 func GetRowsAffected(result sql.Result) int64 {
@@ -23,7 +23,7 @@ func GetEntities[T any](rows *sql.Rows, obj *T, params ...interface{}) ([]*T, er
 		if err := rows.Scan(params...); err != nil {
 			return nil, fmt.Errorf("GetEntities %v", err)
 		}
-		core.ValuesToStruct(params, obj)
+		adapter.ValuesToStruct(params, obj)
 		entities = append(entities, obj)
 	}
 	return entities, nil
@@ -33,6 +33,6 @@ func GetEntity[T any](row *sql.Row, obj *T, params ...interface{}) (*T, error) {
 	if err := row.Scan(params...); err != nil {
 		return nil, fmt.Errorf("GetEntity %v", err)
 	}
-	core.ValuesToStruct(params, obj)
+	adapter.ValuesToStruct(params, obj)
 	return obj, nil
 }
