@@ -24,20 +24,20 @@ func ExtractFieldsFromStruct[T any](t *T) []any {
 	return f
 }
 
-func TypeCastIfInt(x any) int32 {
+func TypeCastIfInt(x any) (int32, error) {
 	switch v := x.(type) {
 	case int, int32, int64 :
-		return v.(int32)
+		return v.(int32), nil
 	default:
-		return -1
+		return -1, errors.New("TypeCastIfInt error")
 	}
 }
 
-func TypeCastIfFloat(x any) float32 {
+func TypeCastIfFloat(x any) (float32, error) {
 	switch v := x.(type) {
 	case float32, float64 :
-		return v.(float32)
+		return v.(float32), nil
 	default:
-		return -1
+		return -1, errors.New("TypeCastIfFloat error")
 	}
 }
