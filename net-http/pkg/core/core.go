@@ -24,7 +24,7 @@ func ExtractFieldsFromStruct[T any](t *T) []any {
 	return f
 }
 
-func CastTypeIfInt(x any) int32 {
+func TypeCastIfInt(x any) int32 {
 	switch v := x.(type) {
 	case int, int32, int64 :
 		return v.(int32)
@@ -33,7 +33,7 @@ func CastTypeIfInt(x any) int32 {
 	}
 }
 
-func CastTypeIfFloat(x any) float32 {
+func TypeCastIfFloat(x any) float32 {
 	switch v := x.(type) {
 	case float32, float64 :
 		return v.(float32)
