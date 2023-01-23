@@ -34,3 +34,7 @@ func ToUpper(v string) string {
 func Substring(value string, start int, end int) string {
 	return value[start:end]
 }
+
+func HasPrefix(value, prefix string) bool {
+	return strings.HasPrefix(value, prefix)
+}
