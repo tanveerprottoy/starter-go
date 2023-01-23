@@ -30,3 +30,7 @@ func ToLower(v string) string {
 func ToUpper(v string) string {
 	return strings.ToUpper(v)
 }
+
+func Substring(value string, start int, end int) string {
+	return value[start:end]
+}
