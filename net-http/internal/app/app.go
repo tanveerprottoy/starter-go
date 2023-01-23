@@ -35,6 +35,12 @@ type App struct {
 	Validate         *validator.Validate
 }
 
+func NewApp() *App{
+	a := new(App)
+	a.initComponents()
+	return a
+}
+
 func (a *App) initDB() {
 	a.MongoDBClient = mongodb.GetInstance()
 	a.PostgresDBClient = postgres.GetInstance()
@@ -80,7 +86,7 @@ func (a *App) initValidators() {
 } */
 
 // Init app
-func (a *App) InitComponents() {
+func (a *App) initComponents() {
 	a.initDB()
 	a.router = router.NewRouter()
 	a.initModules()

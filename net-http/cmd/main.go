@@ -3,8 +3,7 @@ package main
 import "github.com/tanveerprottoy/rest-api-starter-go/net-http/internal/app"
 
 func main() {
-	a := new(app.App)
-	a.InitComponents()
+	a := app.NewApp()
 	a.Run()
 }
 
