@@ -2,17 +2,8 @@ package core
 
 import (
 	"errors"
-	"fmt"
 	"reflect"
 )
-
-func InterfaceToStruct[T any](inter interface{}) T {
-	s, ok := inter.(T)
-	if ok {
-		fmt.Println(s)
-	}
-	return s
-}
 
 func Dereference[T any](obj *T) (T, error) {
 	if obj == nil {

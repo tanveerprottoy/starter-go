@@ -1,6 +1,7 @@
 package adapter
 
 import (
+	"errors"
 	"io"
 	"log"
 	"reflect"
@@ -41,6 +42,14 @@ func AnyToType[T any](v any) (*T, error) {
 		return nil, err
 	}
 	return &out, err
+}
+
+func InterfaceToStruct[T any](inter interface{}) (T, error) {
+	s, ok := inter.(T)
+	if ok {
+		return s, errors.New("TypeCast error")
+	}
+	return s, nil
 }
 
 func StringToInt(s string) (int, error) {
