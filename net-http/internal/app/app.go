@@ -35,7 +35,7 @@ type App struct {
 	Validate         *validator.Validate
 }
 
-func NewApp() *App{
+func NewApp() *App {
 	a := new(App)
 	a.initComponents()
 	return a
