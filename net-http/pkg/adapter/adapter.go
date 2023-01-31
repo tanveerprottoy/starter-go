@@ -56,6 +56,10 @@ func StringToInt(s string) (int, error) {
 	return strconv.Atoi(s)
 }
 
+func StringToFloat(s string, bitSize int) (float64, error) {
+	return strconv.ParseFloat(s, bitSize)
+}
+
 func ValuesToStruct[T any](params []any, t *T) {
 	value := reflect.Indirect(
 		reflect.ValueOf(t).Elem(),
