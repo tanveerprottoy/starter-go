@@ -13,9 +13,9 @@ import (
 
 // JSONContentTypeMiddleWare content type json setter middleware
 func JSONContentTypeMiddleWare(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		writer.Header().Set("Content-Type", "application/json")
-		next.ServeHTTP(writer, request)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		next.ServeHTTP(w, r)
 	})
 }
 
@@ -23,6 +23,8 @@ func JSONContentTypeMiddleWare(next http.Handler) http.Handler {
 func CORSEnableMiddleWare(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Authorization, Content-Type, X-CSRF-Token")
 		next.ServeHTTP(w, r)
 	})
 }
@@ -48,8 +50,7 @@ func JWTMiddleWare(next http.Handler) http.Handler {
 			response.RespondError(http.StatusForbidden, err, w)
 			return
 		}
-		// print(fmt.Sprintf("Id %s", claims.Id))
-		ctx := context.WithValue(r.Context(), constant.ContextKey, claims.Payload)
+		ctx := context.WithValue(r.Context(), constant.ContextPayloadKey, claims.Payload)
 		req := r.WithContext(ctx)
 		next.ServeHTTP(w, req)
 	})

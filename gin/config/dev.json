@@ -1,0 +1,9 @@
+{
+    "appHost": "127.0.0.1",
+    "appPort": "8080",
+    "dbHost": "localhost",
+    "dbUri": "mongodb://localhost:27017",
+    "dbUsername": "postgres",
+    "dbPass": "root",
+    "dbName": "gateway_service"
+}
