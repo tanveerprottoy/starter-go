@@ -23,20 +23,20 @@ func NewServiceRemote(c *httpPkg.HTTPClient) *ServiceRemote {
 }
 
 func (s *ServiceRemote) Authorize(ctx *gin.Context) any {
-	_, err := httpPkg.ParseAuthToken(r)
+	_, err := httpPkg.ParseAuthToken(ctx)
 	if err != nil {
-		response.RespondError(http.StatusForbidden, err, w)
+		response.RespondError(http.StatusForbidden, err)
 		return nil
 	}
 	u, err := httpPkg.Request[dto.AuthUserDto](
 		http.MethodPost,
 		fmt.Sprintf("%s%s", config.GetEnvValue("USER_SERVICE_BASE_URL"), constant.UserServiceAuthEndpoint),
-		r.Header,
+		ctx.Header,
 		nil,
 		s.HTTPClient,
 	)
 	if err != nil {
-		response.RespondError(http.StatusForbidden, err, w)
+		response.RespondError(http.StatusForbidden, err)
 		return nil
 	}
 	return u

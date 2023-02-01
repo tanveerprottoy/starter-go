@@ -98,46 +98,10 @@ func (a *App) initComponents() {
 
 // Run app
 func (a *App) Run() {
-	err := http.ListenAndServe(
-		":8080",
-		a.router.Mux,
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
+	a.router.Engine.Run(":8080")
 }
 
 // Run app
-func (a *App) RunTLSSimpleConfig() {
-	err := http.ListenAndServeTLS(":443", "cert.crt", "key.key", a.router.Mux)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-// use mutual TLS and not just one-way TLS,
-// we must instruct it to require client authentication to ensure clients present a certificate from our CA when they connect
-func (a *App) RunTLSMutual() {
-	caCert, _ := file.ReadFile("ca.crt")
-	cp, _ := crypto.AppendCertsFromPEM(caCert)
-	tlsConf := &tls.Config{
-		ClientCAs:  cp,
-		ClientAuth: tls.RequireAndVerifyClientCert,
-	}
-	tlsConf.BuildNameToCertificate()
-	srv := &http.Server{
-		Addr:      ":443",
-		TLSConfig: tlsConf,
-		Handler:   a.router.Mux,
-	}
-	srv.ListenAndServeTLS("cert.crt", "key.key")
-}
-
-func (a *App) RunDisableHTTP2() {
-	srv := &http.Server{
-		Handler:      a.router.Mux,
-		Addr:         "127.0.0.1:8080",
-		TLSNextProto: make(map[string]func(*http.Server, *tls.Conn, http.Handler)),
-	}
-	log.Fatal(srv.ListenAndServe())
+func (a *App) RunTLS() {
+	a.router.Engine.Run(":443", "cert.crt", "key.key")
 }
