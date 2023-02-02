@@ -27,57 +27,57 @@ func NewHandler(s *service.Service, v *validator.Validate) *Handler {
 }
 
 func (h *Handler) Create(ctx *gin.Context) {
-	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](r.Body)
+	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](ctx.Request.Body)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err)
 		return
 	}
-	h.service.Create(d, w, r)
+	h.service.Create(d, ctx)
 }
 
 func (h *Handler) ReadMany(ctx *gin.Context) {
 	limit := 10
 	page := 1
 	var err error
-	limitStr := router.GetQueryParam(r, constant.KeyLimit)
+	limitStr := router.GetQueryParam(ctx, constant.KeyLimit)
 	if limitStr != "" {
 		limit, err = adapter.StringToInt(limitStr)
 		if err != nil {
-			response.RespondError(http.StatusBadRequest, err, w)
+			response.RespondError(http.StatusBadRequest, err)
 			return
 		}
 	}
-	pageStr := router.GetQueryParam(r, constant.KeyPage)
+	pageStr := router.GetQueryParam(ctx, constant.KeyPage)
 	if pageStr != "" {
 		page, err = adapter.StringToInt(pageStr)
 		if err != nil {
-			response.RespondError(http.StatusBadRequest, err, w)
+			response.RespondError(http.StatusBadRequest, err)
 			return
 		}
 	}
-	h.service.ReadMany(limit, page, w, r)
+	h.service.ReadMany(limit, page, ctx)
 }
 
 func (h *Handler) ReadOne(ctx *gin.Context) {
-	id := router.GetURLParam(r, constant.KeyId)
-	h.service.ReadOne(id, w, r)
+	id := router.GetURLParam(ctx, constant.KeyId)
+	h.service.ReadOne(id, ctx)
 }
 
 func (h *Handler) Update(ctx *gin.Context) {
-	id := router.GetURLParam(r, constant.KeyId)
-	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](r.Body)
+	id := router.GetURLParam(ctx, constant.KeyId)
+	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](ctx.Request.Body)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err)
 		return
 	}
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err)
 		return
 	}
-	h.service.Update(id, d, w, r)
+	h.service.Update(id, d, ctx)
 }
 
 func (h *Handler) Delete(ctx *gin.Context) {
-	id := router.GetURLParam(r, constant.KeyId)
-	h.service.Delete(id, w, r)
+	id := router.GetURLParam(ctx, constant.KeyId)
+	h.service.Delete(id, ctx)
 }

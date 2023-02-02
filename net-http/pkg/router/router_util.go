@@ -6,10 +6,10 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func GetURLParam(r *http.Request, k string) string {
-	return chi.URLParam(r, k)
+func GetURLParam(req *http.Request, key string) string {
+	return chi.URLParam(req, key)
 }
 
-func GetQueryParam(r *http.Request, k string) string {
-	return r.URL.Query().Get(k)
+func GetQueryParam(req *http.Request, key string) string {
+	return req.URL.Query().Get(key)
 }

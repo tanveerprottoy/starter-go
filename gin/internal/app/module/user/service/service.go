@@ -1,10 +1,11 @@
 package service
 
 import (
-	sql "database/sql"
+	"database/sql"
 	"errors"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/dto"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/entity"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/constant"
@@ -24,28 +25,28 @@ func NewService(r sqlPkg.Repository[entity.User]) *Service {
 	return s
 }
 
-func (s *Service) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
+func (s *Service) Create(d *dto.CreateUpdateUserDto, ctx *gin.Context) {
 	v, err := adapter.AnyToType[entity.User](d)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err)
 		return
 	}
 	v.CreatedAt = time.Now()
 	v.UpdatedAt = time.Now()
 	err = s.repository.Create(v)
 	if err != nil {
-		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
+		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), ctx)
 		return
 	}
-	response.Respond(http.StatusCreated, response.BuildData(d), w)
+	response.Respond(http.StatusCreated, response.BuildData(d), ctx)
 }
 
-func (s *Service) ReadMany(limit, page int, w http.ResponseWriter, r *http.Request) {
+func (s *Service) ReadMany(limit, page int, ctx *gin.Context) {
 	offset := limit * (page - 1)
 	rows, err := s.repository.ReadMany(limit, offset)
 	if err != nil {
 		// log err
-		response.Respond(http.StatusOK, make([]any, 0), w)
+		response.Respond(http.StatusOK, make([]any, 0), ctx)
 		return
 	}
 	var e entity.User
@@ -59,24 +60,24 @@ func (s *Service) ReadMany(limit, page int, w http.ResponseWriter, r *http.Reque
 	)
 	if err != nil {
 		// log err
-		response.Respond(http.StatusOK, make([]any, 0), w)
+		response.Respond(http.StatusOK, make([]any, 0), ctx)
 		return
 	}
 	m := make(map[string]any)
 	m["items"] = d
 	m["limit"] = limit
 	m["page"] = page
-	response.Respond(http.StatusOK, response.BuildData(m), w)
+	response.Respond(http.StatusOK, response.BuildData(m), ctx)
 }
 
 func (s *Service) ReadOneInternal(id string) *sql.Row {
 	return s.repository.ReadOne(id)
 }
 
-func (s *Service) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
+func (s *Service) ReadOne(id string, ctx *gin.Context) {
 	row := s.ReadOneInternal(id)
 	if row == nil {
-		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
+		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), ctx)
 		return
 	}
 	e := new(entity.User)
@@ -89,35 +90,32 @@ func (s *Service) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
 		&e.UpdatedAt,
 	)
 	if err != nil {
-		response.RespondError(http.StatusInternalServerError, err, w)
+		response.RespondError(http.StatusInternalServerError, err, ctx)
 		return
 	}
-	response.Respond(http.StatusOK, response.BuildData(d), w)
+	response.Respond(http.StatusOK, response.BuildData(d), ctx)
 }
 
-func (s *Service) Update(id string, d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
+func (s *Service) Update(id string, d *dto.CreateUpdateUserDto, ctx *gin.Context) {
 	v, err := adapter.AnyToType[entity.User](d)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err)
 		return
 	}
 	v.UpdatedAt = time.Now()
-	rowsAffected, err := s.repository.Update(
-		id,
-		v,
-	)
+	rowsAffected, err := s.repository.Update(id, v)
 	if err != nil || rowsAffected <= 0 {
-		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
+		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), ctx)
 		return
 	}
-	response.Respond(http.StatusOK, response.BuildData(d), w)
+	response.Respond(http.StatusOK, response.BuildData(d), ctx)
 }
 
-func (s *Service) Delete(id string, w http.ResponseWriter, r *http.Request) {
+func (s *Service) Delete(id string, ctx *gin.Context) {
 	rowsAffected, err := s.repository.Delete(id)
 	if err != nil || rowsAffected <= 0 {
-		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
+		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), ctx)
 		return
 	}
-	response.Respond(http.StatusOK, response.BuildData(map[string]bool{"success": true}), w)
+	response.Respond(http.StatusOK, response.BuildData(map[string]bool{"success": true}), ctx)
 }

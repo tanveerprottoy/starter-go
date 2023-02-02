@@ -5,43 +5,41 @@ import (
 	"net/http"
 )
 
-func writeResponse(w http.ResponseWriter, b []byte) {
-	_, _ = w.Write(b)
+func writeResponse(writer http.ResponseWriter, bytes []byte) {
+	_, _ = writer.Write(bytes)
 }
 
-func BuildData[T any](p T) *Response[T] {
-	return &Response[T]{
-		Data: p,
-	}
+func BuildData[T any](payload T) *Response[T] {
+	return &Response[T]{Data: payload}
 }
 
-func Respond(c int, p any, w http.ResponseWriter) {
-	response, err := json.Marshal(p)
+func Respond(code int, payload any, writer http.ResponseWriter) {
+	res, err := json.Marshal(payload)
 	if err != nil {
-		RespondError(http.StatusInternalServerError, err, w)
+		RespondError(http.StatusInternalServerError, err, writer)
 		return
 	}
-	w.WriteHeader(c)
-	writeResponse(w, response)
+	writer.WriteHeader(code)
+	writeResponse(writer, res)
 }
 
-func RespondError(c int, err error, w http.ResponseWriter) {
-	response, err := json.Marshal(map[string]string{"error": err.Error()})
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(c)
+func RespondError(code int, err error, writer http.ResponseWriter) {
+	res, err := json.Marshal(map[string]string{"error": err.Error()})
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	writer.WriteHeader(code)
 	if err != nil {
-		writeResponse(w, []byte(err.Error()))
+		writeResponse(writer, []byte(err.Error()))
 		return
 	}
-	writeResponse(w, response)
+	writeResponse(writer, res)
 }
 
-func RespondErrorMessage(c int, msg string, w http.ResponseWriter) {
-	response, err := json.Marshal(map[string]string{"error": msg})
-	w.WriteHeader(c)
+func RespondErrorMessage(code int, msg string, writer http.ResponseWriter) {
+	res, err := json.Marshal(map[string]string{"error": msg})
+	writer.WriteHeader(code)
 	if err != nil {
-		writeResponse(w, []byte(err.Error()))
+		writeResponse(writer, []byte(err.Error()))
 		return
 	}
-	writeResponse(w, response)
+	writeResponse(writer, res)
 }

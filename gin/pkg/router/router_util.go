@@ -1,15 +1,11 @@
 package router
 
-import (
-	"net/http"
+import "github.com/gin-gonic/gin"
 
-	"github.com/go-chi/chi"
-)
-
-func GetURLParam(r *http.Request, k string) string {
-	return chi.URLParam(r, k)
+func GetURLParam(ctx *gin.Context, key string) string {
+	return ctx.Param(key)
 }
 
-func GetQueryParam(r *http.Request, k string) string {
-	return r.URL.Query().Get(k)
+func GetQueryParam(ctx *gin.Context, key string) string {
+	return ctx.Request.URL.GetQuery(key)
 }

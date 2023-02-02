@@ -17,7 +17,7 @@ func NewHandler(
 func (h *Handler) UploadOne(ctx *gin.Context) {
 	/* p, err := adapter.IOReaderToBytes(r.Body)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err)
 		return
 	}
 	h.service.Create(p, w, r) */
@@ -26,7 +26,7 @@ func (h *Handler) UploadOne(ctx *gin.Context) {
 func (h *Handler) UploadMany(ctx *gin.Context) {
 	/* p, err := adapter.IOReaderToBytes(r.Body)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err)
 		return
 	}
 	h.service.Create(p, w, r) */

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/content/entity"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/constant"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/adapter"
@@ -26,10 +27,10 @@ func NewService(
 	return s
 }
 
-func (s *Service) Create(p []byte, w http.ResponseWriter, r *http.Request) {
+func (s *Service) Create(p []byte, ctx *gin.Context) {
 	d, err := adapter.BytesToType[entity.Content](p)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err)
 		return
 	}
 	d.CreatedAt = time.Now()
@@ -46,7 +47,7 @@ func (s *Service) Create(p []byte, w http.ResponseWriter, r *http.Request) {
 	response.Respond(http.StatusCreated, d, w)
 }
 
-func (s *Service) ReadMany(limit, page int, w http.ResponseWriter, r *http.Request) {
+func (s *Service) ReadMany(limit, page int, ctx *gin.Context) {
 	rows, err := s.repository.ReadMany()
 	if err != nil {
 		response.RespondError(
@@ -76,7 +77,7 @@ func (s *Service) ReadMany(limit, page int, w http.ResponseWriter, r *http.Reque
 	response.Respond(http.StatusOK, d, w)
 }
 
-func (s *Service) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
+func (s *Service) ReadOne(id string, ctx *gin.Context) {
 	row := s.repository.ReadOne(id)
 	if row == nil {
 		response.RespondError(
@@ -106,11 +107,11 @@ func (s *Service) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
 	response.Respond(http.StatusOK, d, w)
 }
 
-func (s *Service) Update(id string, p []byte, w http.ResponseWriter, r *http.Request) {
+func (s *Service) Update(id string, p []byte, ctx *gin.Context) {
 	userId := chi.URLParam(r, constant.KeyId)
 	d, err := adapter.BytesToType[entity.Content](p)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err)
 		return
 	}
 	d.CreatedAt = time.Now()
@@ -127,7 +128,7 @@ func (s *Service) Update(id string, p []byte, w http.ResponseWriter, r *http.Req
 	response.Respond(http.StatusOK, d, w)
 }
 
-func (s *Service) Delete(id string, w http.ResponseWriter, r *http.Request) {
+func (s *Service) Delete(id string, ctx *gin.Context) {
 	rowsAffected, err := s.repository.Delete(id)
 	if err != nil || rowsAffected <= 0 {
 		response.RespondError(

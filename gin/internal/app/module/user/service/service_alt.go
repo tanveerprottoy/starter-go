@@ -3,6 +3,7 @@ package service
 import (
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/dto"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/entity"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/repository"
@@ -26,50 +27,46 @@ func NewServiceAlt(r *repository.RepositoryAlt) *ServiceAlt {
 	return s
 }
 
-func (s *ServiceAlt) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
+func (s *ServiceAlt) Create(d *dto.CreateUpdateUserDto, ctx *gin.Context) {
 	v, err := adapter.AnyToType[entity.User](d)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err)
 		return
 	}
 	v.CreatedAt = time.Now()
 	v.UpdatedAt = time.Now()
-	res, err := s.repository.Create(
-		r.Context(),
-		&v,
-		nil,
-	)
+	res, err := s.repository.Create(ctx, &v, nil)
 	if err != nil {
-		response.RespondError(http.StatusInternalServerError, err, w)
+		response.RespondError(http.StatusInternalServerError, err)
 		return
 	}
-	response.Respond(http.StatusOK, response.BuildData(res), w)
+	response.Respond(http.StatusOK, response.BuildData(res))
 }
 
-func (s *ServiceAlt) ReadMany(limit, skip int, w http.ResponseWriter, r *http.Request) {
+func (s *ServiceAlt) ReadMany(limit, skip int, ctx *gin.Context) {
 	opts := mongodb.BuildPaginatedOpts(limit, skip)
 	c, err := s.repository.ReadMany(
-		r.Context(),
+		ctx,
 		bson.D{},
 		&opts,
 	)
 	if err != nil {
-		response.RespondError(http.StatusInternalServerError, err, w)
+		response.RespondError(http.StatusInternalServerError, err, ctx)
 		return
 	}
 	var data []schema.User
-	data, err = mongodb.DecodeCursor[[]schema.User](c, r.Context())
+	data, err = mongodb.DecodeCursor[[]schema.User](c, ctx)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			// This error means your query did not match any documents.
-			response.Respond(http.StatusOK, make([]any, 0), w)
+			response.Respond(http.StatusOK, make([]any, 0))
 			return
 		} else if err == mongo.ErrNilCursor {
 			// This error means your query did not match any documents.
-			response.Respond(http.StatusOK, make([]any, 0), w)
+			response.Respond(http.StatusOK, make([]any, 0))
 			return
 		}
-		response.RespondError(http.StatusInternalServerError, err, w)
+		response.RespondError(http.StatusInternalServerError, err, ctx)
 		return
 	}
 	if data == nil {
@@ -79,10 +76,10 @@ func (s *ServiceAlt) ReadMany(limit, skip int, w http.ResponseWriter, r *http.Re
 	m["items"] = data
 	m["limit"] = limit
 	m["page"] = skip
-	response.Respond(http.StatusOK, response.BuildData(m), w)
+	response.Respond(http.StatusOK, response.BuildData(m), ctx)
 }
 
-func (s *ServiceAlt) ReadManyWithNestedDocQuery(limit, skip int, key0, key1 string, w http.ResponseWriter, r *http.Request) {
+func (s *ServiceAlt) ReadManyWithNestedDocQuery(limit, skip int, key0, key1 string, ctx *gin.Context) {
 	opts := mongodb.BuildPaginatedOpts(limit, skip)
 	filter := bson.D{}
 	if key0 != "" {
@@ -95,44 +92,44 @@ func (s *ServiceAlt) ReadManyWithNestedDocQuery(limit, skip int, key0, key1 stri
 		}
 	}
 	c, err := s.repository.ReadMany(
-		r.Context(),
+		ctx,
 		filter,
 		&opts,
 	)
 	if err != nil {
-		response.RespondError(http.StatusInternalServerError, err, w)
+		response.RespondError(http.StatusInternalServerError, err, ctx)
 		return
 	}
 	var data []schema.User
-	data, err = mongodb.DecodeCursor[[]schema.User](c, r.Context())
+	data, err = mongodb.DecodeCursor[[]schema.User](c, ctx)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			// This error means your query did not match any documents.
-			response.Respond(http.StatusOK, make([]any, 0), w)
+			response.Respond(http.StatusOK, make([]any, 0), ctx)
 			return
 		} else if err == mongo.ErrNilCursor {
 			// This error means your query did not match any documents.
-			response.Respond(http.StatusOK, make([]any, 0), w)
+			response.Respond(http.StatusOK, make([]any, 0), ctx)
 			return
 		}
-		response.RespondError(http.StatusInternalServerError, err, w)
+		response.RespondError(http.StatusInternalServerError, err, ctx)
 		return
 	}
 	if data == nil {
 		data = []schema.User{}
 	}
-	response.Respond(http.StatusOK, response.BuildData(data), w)
+	response.Respond(http.StatusOK, response.BuildData(data), ctx)
 }
 
-func (s *ServiceAlt) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
+func (s *ServiceAlt) ReadOne(id string, ctx *gin.Context) {
 	objId, err := mongodb.BuildObjectID(id)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err)
 		return
 	}
 	filter := bson.D{{Key: "_id", Value: bson.D{{Key: "$eq", Value: objId}}}}
 	res := s.repository.ReadOne(
-		r.Context(),
+		ctx,
 		filter,
 		nil,
 	)
@@ -143,48 +140,44 @@ func (s *ServiceAlt) ReadOne(id string, w http.ResponseWriter, r *http.Request) 
 			// This error means your query did not match any documents.
 
 		}
-		response.RespondError(http.StatusNotFound, err, w)
+		response.RespondError(http.StatusNotFound, err, ctx)
 		return
 	}
-	response.Respond(http.StatusOK, response.BuildData(data), w)
+	response.Respond(http.StatusOK, response.BuildData(data), ctx)
 }
 
-func (s *ServiceAlt) Update(id string, d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *http.Request) {
+func (s *ServiceAlt) Update(id string, d *dto.CreateUpdateUserDto, ctx *gin.Context) {
 	objId, err := mongodb.BuildObjectID(id)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err)
 		return
 	}
 	filter := bson.D{{Key: "_id", Value: bson.D{{Key: "$eq", Value: objId}}}}
 	doc := bson.D{{Key: "$set", Value: bson.D{{Key: "name", Value: d.Name}, {Key: "updatedAt", Value: time.Now()}}}}
 	res, err := s.repository.Update(
-		r.Context(),
+		ctx,
 		filter,
 		doc,
 		nil,
 	)
 	if err != nil {
-		response.RespondError(http.StatusInternalServerError, err, w)
+		response.RespondError(http.StatusInternalServerError, err, ctx)
 		return
 	}
-	response.Respond(http.StatusOK, response.BuildData(res), w)
+	response.Respond(http.StatusOK, response.BuildData(res), ctx)
 }
 
-func (s *ServiceAlt) Delete(id string, w http.ResponseWriter, r *http.Request) {
+func (s *ServiceAlt) Delete(id string, ctx *gin.Context) {
 	objId, err := mongodb.BuildObjectID(id)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err)
 		return
 	}
 	filter := bson.D{{Key: "_id", Value: bson.D{{Key: "$eq", Value: objId}}}}
-	res, err := s.repository.Delete(
-		r.Context(),
-		filter,
-		nil,
-	)
+	res, err := s.repository.Delete(ctx, filter, nil)
 	if err != nil {
-		response.RespondError(http.StatusInternalServerError, err, w)
+		response.RespondError(http.StatusInternalServerError, err, ctx)
 		return
 	}
-	response.Respond(http.StatusOK, response.BuildData(res), w)
+	response.Respond(http.StatusOK, response.BuildData(res), ctx)
 }
