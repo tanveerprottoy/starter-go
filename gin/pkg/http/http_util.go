@@ -12,16 +12,17 @@ func GetURLParam(ctx *gin.Context, key string) string {
 }
 
 func GetQueryParam(ctx *gin.Context, key string) string {
-	return ctx.Request.URL.GetQuery(key)
+	v, _ := ctx.GetQuery(key)
+	return v
 }
 
 func ParseAuthToken(ctx *gin.Context) ([]string, error) {
-	tokenHeader := ctx.Header.Get("Authorization")
-	if tokenHeader == "" {
+	tkHeader := ctx.Request.Header.Get("Authorization")
+	if tkHeader == "" {
 		// Token is missing
 		return nil, errors.New("auth token is missing")
 	}
-	splits := strings.Split(tokenHeader, " ")
+	splits := strings.Split(tkHeader, " ")
 	// token format is `Bearer {tokenBody}`
 	if len(splits) != 2 {
 		return nil, errors.New("token format is invalid")

@@ -16,7 +16,7 @@ func NewAuthMiddleware(s *auth.Service) *AuthMiddleware {
 	return m
 }
 
-// AuthUserMiddleWare auth user
+// AuthUserMiddleWare
 func (m *AuthMiddleware) AuthUser() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		payload := m.Service.Authorize(ctx)

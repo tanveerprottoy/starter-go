@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/constant"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/adapter"
+	httpPkg "github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/http"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/response"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/router"
 )
 
 type Handler struct {
@@ -33,7 +33,7 @@ func (h *Handler) ReadMany(ctx *gin.Context) {
 	limit := 10
 	page := 1
 	var err error
-	limitStr := router.GetQueryParam(ctx, constant.KeyLimit)
+	limitStr := httpPkg.GetQueryParam(ctx, constant.KeyLimit)
 	if limitStr != "" {
 		limit, err = adapter.StringToInt(limitStr)
 		if err != nil {
@@ -41,7 +41,7 @@ func (h *Handler) ReadMany(ctx *gin.Context) {
 			return
 		}
 	}
-	pageStr := router.GetQueryParam(ctx, constant.KeyPage)
+	pageStr := httpPkg.GetQueryParam(ctx, constant.KeyPage)
 	if pageStr != "" {
 		page, err = adapter.StringToInt(pageStr)
 		if err != nil {
@@ -53,12 +53,12 @@ func (h *Handler) ReadMany(ctx *gin.Context) {
 }
 
 func (h *Handler) ReadOne(ctx *gin.Context) {
-	id := router.GetURLParam(ctx, constant.KeyId)
+	id := httpPkg.GetURLParam(ctx, constant.KeyId)
 	h.service.ReadOne(id, ctx)
 }
 
 func (h *Handler) Update(ctx *gin.Context) {
-	id := router.GetURLParam(ctx, constant.KeyId)
+	id := httpPkg.GetURLParam(ctx, constant.KeyId)
 	p, err := adapter.IOReaderToBytes(ctx.Request.Body)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, ctx)
@@ -68,6 +68,6 @@ func (h *Handler) Update(ctx *gin.Context) {
 }
 
 func (h *Handler) Delete(ctx *gin.Context) {
-	id := router.GetURLParam(ctx, constant.KeyId)
+	id := httpPkg.GetURLParam(ctx, constant.KeyId)
 	h.service.Delete(id, ctx)
 }

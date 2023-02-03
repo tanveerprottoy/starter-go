@@ -23,26 +23,26 @@ func NewService(userService *service.Service) *Service {
 }
 
 func (s *Service) Authorize(ctx *gin.Context) *entity.User {
-	splits, err := _http.ParseAuthToken(r)
+	splits, err := _http.ParseAuthToken(ctx)
 	if err != nil {
-		response.RespondError(http.StatusForbidden, err, w)
+		response.RespondError(http.StatusForbidden, err, ctx)
 		return nil
 	}
 	tokenBody := splits[1]
 	claims, err := jwt.VerifyToken(tokenBody)
 	if err != nil {
-		response.RespondError(http.StatusForbidden, err, w)
+		response.RespondError(http.StatusForbidden, err, ctx)
 		return nil
 	}
 	// find user
 	row := s.userService.ReadOneInternal(claims.Payload.Id)
 	if row == nil {
-		response.RespondError(http.StatusForbidden, err, w)
+		response.RespondError(http.StatusForbidden, err, ctx)
 		return nil
 	}
 	d, err := adapter.RowToUserEntity(row)
 	if err != nil {
-		response.RespondError(http.StatusForbidden, err, w)
+		response.RespondError(http.StatusForbidden, err, ctx)
 		return nil
 	}
 	return d

@@ -8,9 +8,9 @@ import (
 
 func RegisterContentRoutes(router *router.Router, version string, module *content.Module) {
 	routes := router.Engine.Group(constant.ApiPattern + version + constant.ContentsPattern)
-	routes.Get(constant.RootPattern, module.Handler.ReadMany)
-	routes.Get(constant.RootPattern+"{id}", module.Handler.ReadOne)
-	routes.Post(constant.RootPattern, module.Handler.Create)
-	routes.Patch(constant.RootPattern+"{id}", module.Handler.Update)
-	routes.Delete(constant.RootPattern+"{id}", module.Handler.Delete)
+	routes.GET(constant.RootPattern, module.Handler.ReadMany)
+	routes.GET(constant.RootPattern+"{id}", module.Handler.ReadOne)
+	routes.POST(constant.RootPattern, module.Handler.Create)
+	routes.PATCH(constant.RootPattern+"{id}", module.Handler.Update)
+	routes.DELETE(constant.RootPattern+"{id}", module.Handler.Delete)
 }

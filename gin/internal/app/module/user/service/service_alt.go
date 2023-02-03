@@ -37,10 +37,10 @@ func (s *ServiceAlt) Create(d *dto.CreateUpdateUserDto, ctx *gin.Context) {
 	v.UpdatedAt = time.Now()
 	res, err := s.repository.Create(ctx, &v, nil)
 	if err != nil {
-		response.RespondError(http.StatusInternalServerError, err)
+		response.RespondError(http.StatusInternalServerError, err, ctx)
 		return
 	}
-	response.Respond(http.StatusOK, response.BuildData(res))
+	response.Respond(http.StatusOK, response.BuildData(res), ctx)
 }
 
 func (s *ServiceAlt) ReadMany(limit, skip int, ctx *gin.Context) {
@@ -59,11 +59,11 @@ func (s *ServiceAlt) ReadMany(limit, skip int, ctx *gin.Context) {
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			// This error means your query did not match any documents.
-			response.Respond(http.StatusOK, make([]any, 0))
+			response.Respond(http.StatusOK, make([]any, 0), ctx)
 			return
 		} else if err == mongo.ErrNilCursor {
 			// This error means your query did not match any documents.
-			response.Respond(http.StatusOK, make([]any, 0))
+			response.Respond(http.StatusOK, make([]any, 0), ctx)
 			return
 		}
 		response.RespondError(http.StatusInternalServerError, err, ctx)

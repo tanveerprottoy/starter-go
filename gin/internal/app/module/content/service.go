@@ -9,10 +9,9 @@ import (
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/constant"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/adapter"
 	sqlPkg "github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/data/sql"
+	httpPkg "github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/http"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/response"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/time"
-
-	"github.com/go-chi/chi"
 )
 
 type Service struct {
@@ -86,7 +85,7 @@ func (s *Service) ReadOne(id string, ctx *gin.Context) {
 }
 
 func (s *Service) Update(id string, p []byte, ctx *gin.Context) {
-	userId := chi.URLParam(r, constant.KeyId)
+	userId := httpPkg.GetURLParam(ctx, constant.KeyId)
 	d, err := adapter.BytesToType[entity.Content](p)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, ctx)

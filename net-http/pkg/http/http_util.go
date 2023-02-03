@@ -18,12 +18,12 @@ func GetQueryParam(req *http.Request, key string) string {
 }
 
 func ParseAuthToken(r *http.Request) ([]string, error) {
-	tokenHeader := r.Header.Get("Authorization")
-	if tokenHeader == "" {
+	tkHeader := r.Header.Get("Authorization")
+	if tkHeader == "" {
 		// Token is missing
 		return nil, errors.New("auth token is missing")
 	}
-	splits := strings.Split(tokenHeader, " ")
+	splits := strings.Split(tkHeader, " ")
 	// token format is `Bearer {tokenBody}`
 	if len(splits) != 2 {
 		return nil, errors.New("token format is invalid")
