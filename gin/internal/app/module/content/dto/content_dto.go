@@ -1,5 +1,5 @@
 package dto
 
 type CreateUpdateContentDto struct {
-	Name  string `json:"name" validate:"required"`
+	Name string `json:"name" binding:"required"`
 }

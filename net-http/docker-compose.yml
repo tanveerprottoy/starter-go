@@ -3,7 +3,7 @@ services:
   rest-api-starter-go:
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile.alpine
     image: rest-api-starter-go
     container_name: rest-api-starter-go
     env_file: .env

@@ -7,8 +7,8 @@ import (
 	"github.com/tanveerprottoy/rest-api-starter-go/net-http/internal/app/module/user/service"
 	"github.com/tanveerprottoy/rest-api-starter-go/net-http/internal/pkg/constant"
 	"github.com/tanveerprottoy/rest-api-starter-go/net-http/pkg/adapter"
+	httpPkg "github.com/tanveerprottoy/rest-api-starter-go/net-http/pkg/http"
 	"github.com/tanveerprottoy/rest-api-starter-go/net-http/pkg/response"
-	"github.com/tanveerprottoy/rest-api-starter-go/net-http/pkg/router"
 )
 
 type HandlerAlt struct {
@@ -34,7 +34,7 @@ func (h *HandlerAlt) ReadMany(w http.ResponseWriter, r *http.Request) {
 	limit := 10
 	page := 1
 	var err error
-	limitStr := router.GetQueryParam(r, constant.KeyLimit)
+	limitStr := httpPkg.GetQueryParam(r, constant.KeyLimit)
 	if limitStr != "" {
 		limit, err = adapter.StringToInt(limitStr)
 		if err != nil {
@@ -42,7 +42,7 @@ func (h *HandlerAlt) ReadMany(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	pageStr := router.GetQueryParam(r, constant.KeyPage)
+	pageStr := httpPkg.GetQueryParam(r, constant.KeyPage)
 	if pageStr != "" {
 		page, err = adapter.StringToInt(pageStr)
 		if err != nil {
@@ -57,7 +57,7 @@ func (h *HandlerAlt) ReadManyWithNestedDocQuery(w http.ResponseWriter, r *http.R
 	limit := 10
 	page := 1
 	var err error
-	limitStr := router.GetQueryParam(r, constant.KeyLimit)
+	limitStr := httpPkg.GetQueryParam(r, constant.KeyLimit)
 	if limitStr != "" {
 		limit, err = adapter.StringToInt(limitStr)
 		if err != nil {
@@ -65,7 +65,7 @@ func (h *HandlerAlt) ReadManyWithNestedDocQuery(w http.ResponseWriter, r *http.R
 			return
 		}
 	}
-	pageStr := router.GetQueryParam(r, constant.KeyPage)
+	pageStr := httpPkg.GetQueryParam(r, constant.KeyPage)
 	if pageStr != "" {
 		page, err = adapter.StringToInt(pageStr)
 		if err != nil {
@@ -73,18 +73,18 @@ func (h *HandlerAlt) ReadManyWithNestedDocQuery(w http.ResponseWriter, r *http.R
 			return
 		}
 	}
-	k0 := router.GetQueryParam(r, "key0")
-	k1 := router.GetQueryParam(r, "key1")
+	k0 := httpPkg.GetQueryParam(r, "key0")
+	k1 := httpPkg.GetQueryParam(r, "key1")
 	h.service.ReadManyWithNestedDocQuery(limit, page, k0, k1, w, r)
 }
 
 func (h *HandlerAlt) ReadOne(w http.ResponseWriter, r *http.Request) {
-	id := router.GetURLParam(r, constant.KeyId)
+	id := httpPkg.GetURLParam(r, constant.KeyId)
 	h.service.ReadOne(id, w, r)
 }
 
 func (h *HandlerAlt) Update(w http.ResponseWriter, r *http.Request) {
-	id := router.GetURLParam(r, constant.KeyId)
+	id := httpPkg.GetURLParam(r, constant.KeyId)
 	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](r.Body)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
@@ -98,6 +98,6 @@ func (h *HandlerAlt) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *HandlerAlt) Delete(w http.ResponseWriter, r *http.Request) {
-	id := router.GetURLParam(r, constant.KeyId)
+	id := httpPkg.GetURLParam(r, constant.KeyId)
 	h.service.Delete(id, w, r)
 }

@@ -5,7 +5,17 @@ import (
 	"mime/multipart"
 	"net/http"
 	"strings"
+
+	"github.com/go-chi/chi"
 )
+
+func GetURLParam(req *http.Request, key string) string {
+	return chi.URLParam(req, key)
+}
+
+func GetQueryParam(req *http.Request, key string) string {
+	return req.URL.Query().Get(key)
+}
 
 func ParseAuthToken(r *http.Request) ([]string, error) {
 	tokenHeader := r.Header.Get("Authorization")

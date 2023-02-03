@@ -30,7 +30,7 @@ func NewServiceAlt(r *repository.RepositoryAlt) *ServiceAlt {
 func (s *ServiceAlt) Create(d *dto.CreateUpdateUserDto, ctx *gin.Context) {
 	v, err := adapter.AnyToType[entity.User](d)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err)
+		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
 	v.CreatedAt = time.Now()
@@ -124,7 +124,7 @@ func (s *ServiceAlt) ReadManyWithNestedDocQuery(limit, skip int, key0, key1 stri
 func (s *ServiceAlt) ReadOne(id string, ctx *gin.Context) {
 	objId, err := mongodb.BuildObjectID(id)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err)
+		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
 	filter := bson.D{{Key: "_id", Value: bson.D{{Key: "$eq", Value: objId}}}}
@@ -149,7 +149,7 @@ func (s *ServiceAlt) ReadOne(id string, ctx *gin.Context) {
 func (s *ServiceAlt) Update(id string, d *dto.CreateUpdateUserDto, ctx *gin.Context) {
 	objId, err := mongodb.BuildObjectID(id)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err)
+		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
 	filter := bson.D{{Key: "_id", Value: bson.D{{Key: "$eq", Value: objId}}}}
@@ -170,7 +170,7 @@ func (s *ServiceAlt) Update(id string, d *dto.CreateUpdateUserDto, ctx *gin.Cont
 func (s *ServiceAlt) Delete(id string, ctx *gin.Context) {
 	objId, err := mongodb.BuildObjectID(id)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err)
+		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
 	filter := bson.D{{Key: "_id", Value: bson.D{{Key: "$eq", Value: objId}}}}

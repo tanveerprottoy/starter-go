@@ -29,7 +29,7 @@ func NewHandler(s *service.Service, v *validator.Validate) *Handler {
 func (h *Handler) Create(ctx *gin.Context) {
 	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](ctx.Request.Body)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err)
+		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
 	h.service.Create(d, ctx)
@@ -43,7 +43,7 @@ func (h *Handler) ReadMany(ctx *gin.Context) {
 	if limitStr != "" {
 		limit, err = adapter.StringToInt(limitStr)
 		if err != nil {
-			response.RespondError(http.StatusBadRequest, err)
+			response.RespondError(http.StatusBadRequest, err, ctx)
 			return
 		}
 	}
@@ -51,7 +51,7 @@ func (h *Handler) ReadMany(ctx *gin.Context) {
 	if pageStr != "" {
 		page, err = adapter.StringToInt(pageStr)
 		if err != nil {
-			response.RespondError(http.StatusBadRequest, err)
+			response.RespondError(http.StatusBadRequest, err, ctx)
 			return
 		}
 	}
@@ -67,11 +67,11 @@ func (h *Handler) Update(ctx *gin.Context) {
 	id := router.GetURLParam(ctx, constant.KeyId)
 	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](ctx.Request.Body)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err)
+		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err)
+		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
 	h.service.Update(id, d, ctx)

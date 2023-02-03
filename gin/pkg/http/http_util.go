@@ -2,12 +2,18 @@ package http
 
 import (
 	"errors"
-	"mime/multipart"
-	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 )
+
+func GetURLParam(ctx *gin.Context, key string) string {
+	return ctx.Param(key)
+}
+
+func GetQueryParam(ctx *gin.Context, key string) string {
+	return ctx.Request.URL.GetQuery(key)
+}
 
 func ParseAuthToken(ctx *gin.Context) ([]string, error) {
 	tokenHeader := ctx.Header.Get("Authorization")
@@ -23,6 +29,6 @@ func ParseAuthToken(ctx *gin.Context) ([]string, error) {
 	return splits, nil
 }
 
-func GetFile(r *http.Request, k string) (multipart.File, *multipart.FileHeader, error) {
-	return r.FormFile(k)
+func BindGin[T any](ctx *gin.Context, v T) error {
+	return ctx.ShouldBind(&v)
 }

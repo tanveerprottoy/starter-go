@@ -25,7 +25,7 @@ func NewHandlerAlt(s *service.ServiceAlt) *HandlerAlt {
 func (h *HandlerAlt) Create(ctx *gin.Context) {
 	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](ctx.Body)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err)
+		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
 	h.service.Create(d, ctx)
@@ -39,7 +39,7 @@ func (h *HandlerAlt) ReadMany(ctx *gin.Context) {
 	if limitStr != "" {
 		limit, err = adapter.StringToInt(limitStr)
 		if err != nil {
-			response.RespondError(http.StatusBadRequest, err)
+			response.RespondError(http.StatusBadRequest, err, ctx)
 			return
 		}
 	}
@@ -47,7 +47,7 @@ func (h *HandlerAlt) ReadMany(ctx *gin.Context) {
 	if pageStr != "" {
 		page, err = adapter.StringToInt(pageStr)
 		if err != nil {
-			response.RespondError(http.StatusBadRequest, err)
+			response.RespondError(http.StatusBadRequest, err, ctx)
 			return
 		}
 	}
@@ -62,7 +62,7 @@ func (h *HandlerAlt) ReadManyWithNestedDocQuery(ctx *gin.Context) {
 	if limitStr != "" {
 		limit, err = adapter.StringToInt(limitStr)
 		if err != nil {
-			response.RespondError(http.StatusBadRequest, err)
+			response.RespondError(http.StatusBadRequest, err, ctx)
 			return
 		}
 	}
@@ -70,7 +70,7 @@ func (h *HandlerAlt) ReadManyWithNestedDocQuery(ctx *gin.Context) {
 	if pageStr != "" {
 		page, err = adapter.StringToInt(pageStr)
 		if err != nil {
-			response.RespondError(http.StatusBadRequest, err)
+			response.RespondError(http.StatusBadRequest, err, ctx)
 			return
 		}
 	}
@@ -88,11 +88,11 @@ func (h *HandlerAlt) Update(ctx *gin.Context) {
 	id := router.GetURLParam(ctx, constant.KeyId)
 	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](ctx.Request.Body)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err)
+		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err)
+		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
 	h.service.Update(id, d, ctx)

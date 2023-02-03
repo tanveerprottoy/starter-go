@@ -19,9 +19,7 @@ type Service struct {
 	repository *Repository
 }
 
-func NewService(
-	repository *Repository,
-) *Service {
+func NewService(repository *Repository) *Service {
 	s := new(Service)
 	s.repository = repository
 	return s
@@ -30,31 +28,23 @@ func NewService(
 func (s *Service) Create(p []byte, ctx *gin.Context) {
 	d, err := adapter.BytesToType[entity.Content](p)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err)
+		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
 	d.CreatedAt = time.Now()
 	d.UpdatedAt = time.Now()
 	err = s.repository.Create(d)
 	if err != nil {
-		response.RespondError(
-			http.StatusInternalServerError,
-			errors.New(constant.InternalServerError),
-			w,
-		)
+		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), ctx)
 		return
 	}
-	response.Respond(http.StatusCreated, d, w)
+	response.Respond(http.StatusCreated, d, ctx)
 }
 
 func (s *Service) ReadMany(limit, page int, ctx *gin.Context) {
 	rows, err := s.repository.ReadMany()
 	if err != nil {
-		response.RespondError(
-			http.StatusInternalServerError,
-			err,
-			w,
-		)
+		response.RespondError(http.StatusInternalServerError, err, ctx)
 		return
 	}
 	var e entity.Content
@@ -67,24 +57,16 @@ func (s *Service) ReadMany(limit, page int, ctx *gin.Context) {
 		&e.UpdatedAt,
 	)
 	if err != nil {
-		response.RespondError(
-			http.StatusInternalServerError,
-			err,
-			w,
-		)
+		response.RespondError(http.StatusInternalServerError, err, ctx)
 		return
 	}
-	response.Respond(http.StatusOK, d, w)
+	response.Respond(http.StatusOK, d, ctx)
 }
 
 func (s *Service) ReadOne(id string, ctx *gin.Context) {
 	row := s.repository.ReadOne(id)
 	if row == nil {
-		response.RespondError(
-			http.StatusInternalServerError,
-			errors.New(constant.InternalServerError),
-			w,
-		)
+		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), ctx)
 		return
 	}
 	e := new(entity.Content)
@@ -97,50 +79,34 @@ func (s *Service) ReadOne(id string, ctx *gin.Context) {
 		&e.UpdatedAt,
 	)
 	if err != nil {
-		response.RespondError(
-			http.StatusInternalServerError,
-			err,
-			w,
-		)
+		response.RespondError(http.StatusInternalServerError, err, ctx)
 		return
 	}
-	response.Respond(http.StatusOK, d, w)
+	response.Respond(http.StatusOK, d, ctx)
 }
 
 func (s *Service) Update(id string, p []byte, ctx *gin.Context) {
 	userId := chi.URLParam(r, constant.KeyId)
 	d, err := adapter.BytesToType[entity.Content](p)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err)
+		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
 	d.CreatedAt = time.Now()
 	d.UpdatedAt = time.Now()
 	rowsAffected, err := s.repository.Update(userId, d)
 	if err != nil || rowsAffected <= 0 {
-		response.RespondError(
-			http.StatusInternalServerError,
-			errors.New(constant.InternalServerError),
-			w,
-		)
+		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), ctx)
 		return
 	}
-	response.Respond(http.StatusOK, d, w)
+	response.Respond(http.StatusOK, d, ctx)
 }
 
 func (s *Service) Delete(id string, ctx *gin.Context) {
 	rowsAffected, err := s.repository.Delete(id)
 	if err != nil || rowsAffected <= 0 {
-		response.RespondError(
-			http.StatusInternalServerError,
-			errors.New(constant.InternalServerError),
-			w,
-		)
+		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), ctx)
 		return
 	}
-	response.Respond(
-		http.StatusOK,
-		map[string]bool{"success": true},
-		w,
-	)
+	response.Respond(http.StatusOK, map[string]bool{"success": true}, ctx)
 }

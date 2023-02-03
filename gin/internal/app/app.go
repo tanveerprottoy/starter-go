@@ -1,23 +1,15 @@
 package app
 
 import (
-	"crypto/tls"
-	"log"
-	"net/http"
-
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/auth"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/content"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/constant"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/middleware"
 	routerPkg "github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/router"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/crypto"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/data/nosql/mongodb"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/data/sql/postgres"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/file"
 	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/router"
-
-	validatorPkg "github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/validator"
 
 	"github.com/go-playground/validator/v10"
 	// "go.uber.org/zap"
@@ -63,11 +55,6 @@ func (a *App) initModuleRouters() {
 	routerPkg.RegisterContentRoutes(a.router, constant.V1, a.ContentModule)
 }
 
-func (a *App) initValidators() {
-	a.Validate = validator.New()
-	_ = a.Validate.RegisterValidation("notempty", validatorPkg.NotEmpty)
-}
-
 /* func (a *App) initLogger() {
 	cfg := zap.NewProductionConfig()
 	cfg.OutputPaths = []string{
@@ -92,7 +79,6 @@ func (a *App) initComponents() {
 	a.initModules()
 	a.initMiddlewares()
 	a.initModuleRouters()
-	a.initValidators()
 	// a.initLogger()
 }
 
