@@ -4,8 +4,14 @@
 # Exclude git history and configuration.
 .gitignore
 
+# git
+.git
+
 # vscode
 .vscode
 
 # bin
 .bin
+
+# makefile
+Makefile
