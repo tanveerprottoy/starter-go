@@ -3,8 +3,8 @@ package config
 import (
 	"log"
 
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/file"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/json"
+	"github.com/tanveerprottoy/starter-go/pkg/file"
+	"github.com/tanveerprottoy/starter-go/pkg/json"
 )
 
 var (

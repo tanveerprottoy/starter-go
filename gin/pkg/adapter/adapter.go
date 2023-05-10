@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/json"
+	"github.com/tanveerprottoy/starter-go/pkg/json"
 )
 
 func IOReaderToBytes(r io.Reader) ([]byte, error) {

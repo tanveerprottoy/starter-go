@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/tanveerprottoy/starter-go/pkg/file"
-	httpPkg "github.com/tanveerprottoy/starter-go/pkg/http"
+	httpPkg "github.com/tanveerprottoy/starter-go/pkg/httppkg"
 )
 
 func ParseMultipartForm(r *http.Request) (*http.Request, error) {

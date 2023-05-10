@@ -6,7 +6,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/config"
+	"github.com/tanveerprottoy/starter-go/pkg/config"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

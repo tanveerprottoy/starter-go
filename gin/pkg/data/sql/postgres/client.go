@@ -7,7 +7,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/config"
+	"github.com/tanveerprottoy/starter-go/pkg/config"
 
 	_ "github.com/lib/pq"
 )

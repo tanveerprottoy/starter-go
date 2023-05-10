@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package contentPackage;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "./app/module/content/proto";
+
+message Content {
+    string id = 1;
+    string name = 2;
+    google.protobuf.Timestamp created_at = 3;
+    google.protobuf.Timestamp updated_at = 4;
+}
+
+message Contents {
+    repeated Content contents = 1;
+}
+
+message voidParam {}
+
+message updateContentParam {
+    string id = 1;
+    Content content = 2;
+}
+
+service ContentService {
+    rpc createContent(Content) returns (Content);
+    rpc readContents(voidParam) returns (Contents);
+    rpc readContentStream(voidParam) returns (stream Content);
+    rpc readContent(google.protobuf.StringValue) returns (Content);
+    rpc updateContent(updateContentParam) returns (Content);
+    rpc deleteContent(google.protobuf.StringValue) returns (google.protobuf.BoolValue);
+}

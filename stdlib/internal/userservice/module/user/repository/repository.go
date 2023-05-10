@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/tanveerprottoy/starter-go/internal/app/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/internal/userservice/module/user/entity"
 	sqlUtil "github.com/tanveerprottoy/starter-go/pkg/data/sql"
 )
 
