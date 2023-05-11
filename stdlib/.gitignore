@@ -43,3 +43,6 @@ bin/
 # log
 log/
 *.log
+
+# temp
+tmp/
