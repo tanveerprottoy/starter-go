@@ -58,7 +58,7 @@ func GetInstanceAtomic() *Client {
 	return instance
 }
 
-func (d *Client) connect() {
+func (c *Client) connect() {
 	// uri := config.GetEnvValue("DB_URI")
 	uri := config.GetJsonValue("dbUri").(string)
 	/* credential := options.Credential{
@@ -69,26 +69,26 @@ func (d *Client) connect() {
 	ctx := context.TODO()
 	// opts := options.Client().ApplyURI("mongodb+srv://<host>").SetAuth(credential)
 	opts := options.Client().ApplyURI(uri)
-	d.DBClient, err = mongo.Connect(ctx, opts)
+	c.DBClient, err = mongo.Connect(ctx, opts)
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = d.DBClient.Ping(ctx, nil)
+	err = c.DBClient.Ping(ctx, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Println("Successfully connected!")
-	d.DB = d.DBClient.Database(config.GetEnvValue("DB_NAME"))
+	c.DB = c.DBClient.Database(config.GetEnvValue("DB_NAME"))
 	// Establish and verify connection
-	err = d.DB.Client().Ping(context.TODO(), nil)
+	err = c.DB.Client().Ping(context.TODO(), nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Println("Connected successfully to DB")
 }
 
-func (d *Client) Disconnect() {
-	if err := d.DBClient.Disconnect(context.TODO()); err != nil {
+func (c *Client) Disconnect() {
+	if err := c.DBClient.Disconnect(context.TODO()); err != nil {
 		panic(err)
 	}
 }
