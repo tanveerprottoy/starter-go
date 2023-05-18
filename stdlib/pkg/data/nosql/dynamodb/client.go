@@ -8,6 +8,7 @@ import (
 
 	configPkg "github.com/tanveerprottoy/starter-go/pkg/config"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
@@ -15,7 +16,7 @@ import (
 var (
 	instanceClient    *Client
 	onceClient        sync.Once
-	muClient          sync.Mutex
+	mutClient         sync.Mutex
 	initializedClient uint32
 )
 
@@ -24,7 +25,7 @@ type Client struct {
 }
 
 func NewClient() *Client {
-	once.Do(func() {
+	onceClient.Do(func() {
 		instanceClient = new(Client)
 		instanceClient.init()
 	})
@@ -33,9 +34,9 @@ func NewClient() *Client {
 
 func NewClientMutex() *Client {
 	if instanceClient == nil {
-		mu.Lock()
-		defer mu.Unlock()
-		if instance == nil {
+		mutClient.Lock()
+		defer mutClient.Unlock()
+		if instanceClient == nil {
 			instanceClient = new(Client)
 			instanceClient.init()
 		}
@@ -44,15 +45,15 @@ func NewClientMutex() *Client {
 }
 
 func NewClientAtomic() *Client {
-	if atomic.LoadUint32(&initialized) == 1 {
+	if atomic.LoadUint32(&initializedClient) == 1 {
 		return instanceClient
 	}
-	mu.Lock()
-	defer mu.Unlock()
-	if initialized == 0 {
+	mutClient.Lock()
+	defer mutClient.Unlock()
+	if initializedClient == 0 {
 		instanceClient = new(Client)
 		instanceClient.init()
-		atomic.StoreUint32(&initialized, 1)
+		atomic.StoreUint32(&initializedClient, 1)
 	}
 	return instanceClient
 }
@@ -60,7 +61,21 @@ func NewClientAtomic() *Client {
 func (c *Client) init() {
 	// uri := config.GetEnvValue("DB_URI")
 	reg := configPkg.GetJsonValue("region").(string)
-	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(reg))
+	cfg, err := config.LoadDefaultConfig(context.Background(), config.WithRegion(reg))
+	/* cfg, err := config.LoadDefaultConfig(context.TODO(), 
+		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider("AKID", "SECRET_KEY", "TOKEN")),
+	)
+	cfg, err := config.LoadDefaultConfig(context.Background(), func(o *config.LoadOptions) error {
+        o.Region = reg
+        return nil
+    })
+	/* cfg , err := config.LoadDefaultConfig(context.TODO(), 
+    config.WithSharedCredentialsFiles(
+	[]string{"test/credentials", "data/credentials"},
+    ), 
+    config.WithSharedConfigFiles(
+        []string{"test/config", "data/config"},
+	) */
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
 	}
