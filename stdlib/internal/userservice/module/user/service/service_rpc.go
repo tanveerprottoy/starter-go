@@ -6,8 +6,9 @@ import (
 	"log"
 	"time"
 
-	"github.com/tanveerprottoy/starter-go/internal/pkg/constant"
-	"github.com/tanveerprottoy/starter-go/internal/userservice/module/user/proto"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/userservice/module/user/proto"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/grpcpkg"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/protobuf/types/known/timestamppb"

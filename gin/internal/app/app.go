@@ -1,15 +1,16 @@
 package app
 
 import (
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/auth"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/content"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/constant"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/middleware"
-	routerPkg "github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/router"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/data/nosql/mongodb"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/data/sql/postgres"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/router"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/auth"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/content"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user"
+	"github.com/tanveerprottoy/starter-go/gin/internal/pkg"
+	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/constant"
+	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/middleware"
+	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/router"
+	routerPkg "github.com/tanveerprottoy/starter-go/gin/internal/pkg/router"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/data/nosql/mongodb"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/data/sql/postgres"
 
 	"github.com/go-playground/validator/v10"
 	// "go.uber.org/zap"
@@ -19,7 +20,7 @@ import (
 type App struct {
 	MongoDBClient    *mongodb.Client
 	PostgresDBClient *postgres.Client
-	router           *router.Router
+	gin           *pkg.Gin
 	Middlewares      []any
 	AuthModule       *auth.Module
 	UserModule       *user.Module
@@ -51,8 +52,8 @@ func (a *App) initModules() {
 
 func (a *App) initModuleRouters() {
 	m := a.Middlewares[0].(*middleware.AuthMiddleware)
-	routerPkg.RegisterUserRoutes(a.router, constant.V1, a.UserModule, m)
-	routerPkg.RegisterContentRoutes(a.router, constant.V1, a.ContentModule)
+	routerPkg.RegisterUserRoutes(a.gin.Engine, constant.V1, a.UserModule, m)
+	routerPkg.RegisterContentRoutes(a.gin.Engine, constant.V1, a.ContentModule)
 }
 
 /* func (a *App) initLogger() {
@@ -75,19 +76,21 @@ func (a *App) initModuleRouters() {
 // Init app
 func (a *App) initComponents() {
 	a.initDB()
-	a.router = router.NewRouter()
+	a.gin = pkg.NewGin()
 	a.initModules()
 	a.initMiddlewares()
 	a.initModuleRouters()
 	// a.initLogger()
+	// setup global middlewares
+	router.RegisterGlobalMiddlewares(a.gin.Engine)
 }
 
 // Run app
 func (a *App) Run() {
-	a.router.Engine.Run(":8080")
+	a.gin.Engine.Run(":8080")
 }
 
 // Run app
 func (a *App) RunTLS() {
-	a.router.Engine.Run(":443", "cert.crt", "key.key")
+	a.gin.Engine.Run(":443", "cert.crt", "key.key")
 }

@@ -4,26 +4,26 @@ import (
 	"errors"
 	"mime/multipart"
 	"net/http"
-	"strings"
 
-	"github.com/go-chi/chi"
+	"github.com/gin-gonic/gin"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/stringspkg"
 )
 
-func GetURLParam(req *http.Request, key string) string {
-	return chi.URLParam(req, key)
+func GetURLParam(ctx *gin.Context, key string) string {
+	return ctx.Param(key)
 }
 
-func GetQueryParam(req *http.Request, key string) string {
-	return req.URL.Query().Get(key)
+func GetQueryParam(ctx *gin.Context, key string) string {
+	return ctx.Query(key) // shortcut for c.Request.URL.Query().Get("lastname")
 }
 
-func ParseAuthToken(r *http.Request) ([]string, error) {
-	tkHeader := r.Header.Get("Authorization")
+func ParseAuthToken(ctx *gin.Context) ([]string, error) {
+	tkHeader := ctx.Request.Header["Authorization"][0]
 	if tkHeader == "" {
 		// Token is missing
 		return nil, errors.New("auth token is missing")
 	}
-	splits := strings.Split(tkHeader, " ")
+	splits := stringspkg.Split(tkHeader, " ")
 	// token format is `Bearer {tokenBody}`
 	if len(splits) != 2 {
 		return nil, errors.New("token format is invalid")

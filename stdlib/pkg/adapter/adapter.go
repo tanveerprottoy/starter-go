@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tanveerprottoy/starter-go/pkg/json"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/jsonpkg"
 )
 
 func IOReaderToBytes(r io.Reader) ([]byte, error) {
@@ -18,13 +18,13 @@ func IOReaderToBytes(r io.Reader) ([]byte, error) {
 
 func BytesToType[T any](b []byte) (*T, error) {
 	var out T
-	err := json.Unmarshal(b, &out)
+	err := jsonpkg.Unmarshal(b, &out)
 	return &out, err
 }
 
 func BodyToType[T any](b io.ReadCloser) (*T, error) {
 	var out T
-	err := json.Decode(b, &out)
+	err := jsonpkg.Decode(b, &out)
 	if err != nil {
 		return nil, err
 	}
@@ -33,11 +33,11 @@ func BodyToType[T any](b io.ReadCloser) (*T, error) {
 
 func AnyToType[T any](v any) (*T, error) {
 	var out T
-	b, err := json.Marshal(v)
+	b, err := jsonpkg.Marshal(v)
 	if err != nil {
 		return nil, err
 	}
-	err = json.Unmarshal(b, &out)
+	err = jsonpkg.Unmarshal(b, &out)
 	if err != nil {
 		return nil, err
 	}

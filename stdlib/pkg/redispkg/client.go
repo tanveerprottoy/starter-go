@@ -2,7 +2,7 @@ package redispkg
 
 import (
 	"github.com/redis/go-redis/v9"
-	"github.com/tanveerprottoy/starter-go/pkg/config"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/config"
 )
 
 type Client struct {

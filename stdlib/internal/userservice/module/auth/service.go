@@ -3,12 +3,12 @@ package auth
 import (
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/internal/app/module/user/entity"
-	"github.com/tanveerprottoy/starter-go/internal/app/module/user/service"
-	"github.com/tanveerprottoy/starter-go/internal/pkg/adapter"
-	_http "github.com/tanveerprottoy/starter-go/pkg/http"
-	"github.com/tanveerprottoy/starter-go/pkg/jwt"
-	"github.com/tanveerprottoy/starter-go/pkg/response"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/service"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/adapter"
+	_http "github.com/tanveerprottoy/starter-go/stdlib/pkg/http"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/jwt"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/response"
 )
 
 type Service struct {

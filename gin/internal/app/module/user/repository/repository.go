@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/entity"
-	sqlUtil "github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/data/sql"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/entity"
+	sqlUtil "github.com/tanveerprottoy/starter-go/gin/pkg/data/sql"
 )
 
 type Repository[T entity.User] struct {

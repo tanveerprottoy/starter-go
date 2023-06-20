@@ -3,8 +3,8 @@ package config
 import (
 	"log"
 
-	"github.com/tanveerprottoy/starter-go/pkg/file"
-	"github.com/tanveerprottoy/starter-go/pkg/json"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/file"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/jsonpkg"
 )
 
 var (
@@ -16,7 +16,7 @@ func init() {
 	pwd, _ := file.GetPWD()
 	log.Println(pwd)
 	b, _ := file.ReadFile(pwd + "/config/dev.json")
-	_ = json.Unmarshal(b, &Configs)
+	_ = jsonpkg.Unmarshal(b, &Configs)
 	log.Print(Configs)
 }
 

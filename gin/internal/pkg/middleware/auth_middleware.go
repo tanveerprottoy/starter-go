@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/auth"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/constant"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/auth"
+	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/constant"
 )
 
 type AuthMiddleware struct {

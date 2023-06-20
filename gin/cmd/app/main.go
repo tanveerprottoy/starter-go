@@ -1,6 +1,6 @@
 package main
 
-import "github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app"
+import "github.com/tanveerprottoy/starter-go/gin/internal/app"
 
 func main() {
 	a := app.NewApp()

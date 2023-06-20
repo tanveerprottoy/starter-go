@@ -3,11 +3,11 @@ package user
 import (
 	"database/sql"
 
-	"github.com/tanveerprottoy/starter-go/internal/app/module/user/entity"
-	"github.com/tanveerprottoy/starter-go/internal/app/module/user/handler"
-	"github.com/tanveerprottoy/starter-go/internal/app/module/user/repository"
-	"github.com/tanveerprottoy/starter-go/internal/app/module/user/service"
-	sqlPkg "github.com/tanveerprottoy/starter-go/pkg/data/sql"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/handler"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/repository"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/service"
+	sqlPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
 
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/mongo"

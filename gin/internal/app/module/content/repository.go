@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/content/entity"
-	sqlPkg "github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/data/sql"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/content/entity"
+	sqlPkg "github.com/tanveerprottoy/starter-go/gin/pkg/data/sql"
 )
 
 type Repository struct {

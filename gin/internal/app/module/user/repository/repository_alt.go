@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/constant"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/data/nosql/mongodb"
+	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/constant"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/data/nosql/mongodb"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

@@ -6,13 +6,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/dto"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/entity"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/constant"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/adapter"
-	sqlPkg "github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/data/sql"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/response"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/time"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/dto"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/constant"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/adapter"
+	sqlPkg "github.com/tanveerprottoy/starter-go/gin/pkg/data/sql"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/response"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/timepkg"
 )
 
 type Service struct {
@@ -31,8 +31,8 @@ func (s *Service) Create(d *dto.CreateUpdateUserDto, ctx *gin.Context) {
 		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
-	v.CreatedAt = time.Now()
-	v.UpdatedAt = time.Now()
+	v.CreatedAt = timepkg.Now()
+	v.UpdatedAt = timepkg.Now()
 	err = s.repository.Create(v)
 	if err != nil {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), ctx)
@@ -102,7 +102,7 @@ func (s *Service) Update(id string, d *dto.CreateUpdateUserDto, ctx *gin.Context
 		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
-	v.UpdatedAt = time.Now()
+	v.UpdatedAt = timepkg.Now()
 	rowsAffected, err := s.repository.Update(id, v)
 	if err != nil || rowsAffected <= 0 {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), ctx)

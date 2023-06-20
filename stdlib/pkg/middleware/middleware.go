@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/tanveerprottoy/starter-go/pkg/constant"
-	"github.com/tanveerprottoy/starter-go/pkg/jwt"
-	"github.com/tanveerprottoy/starter-go/pkg/response"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/constant"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/jwt"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/response"
 )
 
 // JSONContentTypeMiddleWare content type json setter middleware

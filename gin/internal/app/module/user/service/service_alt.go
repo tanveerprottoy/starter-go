@@ -4,14 +4,14 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/dto"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/entity"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/repository"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/schema"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/adapter"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/data/nosql/mongodb"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/response"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/time"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/dto"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/repository"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/schema"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/adapter"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/data/nosql/mongodb"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/response"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/timepkg"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -33,8 +33,8 @@ func (s *ServiceAlt) Create(d *dto.CreateUpdateUserDto, ctx *gin.Context) {
 		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
-	v.CreatedAt = time.Now()
-	v.UpdatedAt = time.Now()
+	v.CreatedAt = timepkg.Now()
+	v.UpdatedAt = timepkg.Now()
 	res, err := s.repository.Create(ctx, &v, nil)
 	if err != nil {
 		response.RespondError(http.StatusInternalServerError, err, ctx)
@@ -153,7 +153,7 @@ func (s *ServiceAlt) Update(id string, d *dto.CreateUpdateUserDto, ctx *gin.Cont
 		return
 	}
 	filter := bson.D{{Key: "_id", Value: bson.D{{Key: "$eq", Value: objId}}}}
-	doc := bson.D{{Key: "$set", Value: bson.D{{Key: "name", Value: d.Name}, {Key: "updatedAt", Value: time.Now()}}}}
+	doc := bson.D{{Key: "$set", Value: bson.D{{Key: "name", Value: d.Name}, {Key: "updatedAt", Value: timepkg.Now()}}}}
 	res, err := s.repository.Update(
 		ctx,
 		filter,

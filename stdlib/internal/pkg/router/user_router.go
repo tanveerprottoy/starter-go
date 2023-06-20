@@ -1,10 +1,10 @@
 package router
 
 import (
-	"github.com/tanveerprottoy/starter-go/internal/app/module/user"
-	"github.com/tanveerprottoy/starter-go/internal/pkg/constant"
-	"github.com/tanveerprottoy/starter-go/internal/pkg/middleware"
-	"github.com/tanveerprottoy/starter-go/pkg/router"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/middleware"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/router"
 
 	"github.com/go-chi/chi"
 )

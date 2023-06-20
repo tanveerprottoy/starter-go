@@ -1,4 +1,4 @@
-module github.com/tanveerprottoy/starter-go
+module github.com/tanveerprottoy/starter-go/stdlib
 
 go 1.19
 

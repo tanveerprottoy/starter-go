@@ -3,8 +3,8 @@ package adapter
 import (
 	"database/sql"
 
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/entity"
-	_sql "github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/data/sql"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/entity"
+	_sql "github.com/tanveerprottoy/starter-go/gin/pkg/data/sql"
 )
 
 func RowToUserEntity(row *sql.Row) (*entity.User, error) {

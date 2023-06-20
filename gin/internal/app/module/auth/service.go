@@ -4,12 +4,12 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/entity"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/user/service"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/adapter"
-	_http "github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/http"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/jwt"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/response"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/service"
+	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/adapter"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/httppkg"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/jwtpkg"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/response"
 )
 
 type Service struct {
@@ -23,13 +23,13 @@ func NewService(userService *service.Service) *Service {
 }
 
 func (s *Service) Authorize(ctx *gin.Context) *entity.User {
-	splits, err := _http.ParseAuthToken(ctx)
+	splits, err := httppkg.ParseAuthToken(ctx)
 	if err != nil {
 		response.RespondError(http.StatusForbidden, err, ctx)
 		return nil
 	}
 	tokenBody := splits[1]
-	claims, err := jwt.VerifyToken(tokenBody)
+	claims, err := jwtpkg.VerifyToken(tokenBody)
 	if err != nil {
 		response.RespondError(http.StatusForbidden, err, ctx)
 		return nil

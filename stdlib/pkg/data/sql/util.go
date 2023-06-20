@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/tanveerprottoy/starter-go/pkg/adapter"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/adapter"
 )
 
 func GetRowsAffected(result sql.Result) int64 {

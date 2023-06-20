@@ -3,7 +3,7 @@ package jwtpkg
 import (
 	"errors"
 
-	"github.com/tanveerprottoy/starter-go/pkg/config"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/config"
 
 	"github.com/golang-jwt/jwt/v4"
 )

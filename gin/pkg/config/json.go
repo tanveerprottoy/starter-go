@@ -1,10 +1,10 @@
 package config
 
 import (
+	"encoding/json"
 	"log"
 
-	"github.com/tanveerprottoy/starter-go/pkg/file"
-	"github.com/tanveerprottoy/starter-go/pkg/json"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/file"
 )
 
 var (

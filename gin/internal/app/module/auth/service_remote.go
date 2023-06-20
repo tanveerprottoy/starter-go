@@ -5,30 +5,30 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/app/module/auth/dto"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/internal/pkg/constant"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/config"
-	httpPkg "github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/http"
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/response"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/auth/dto"
+	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/constant"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/config"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/httppkg"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/response"
 )
 
 type ServiceRemote struct {
-	HTTPClient *httpPkg.HTTPClient
+	HTTPClient *httppkg.HTTPClient
 }
 
-func NewServiceRemote(c *httpPkg.HTTPClient) *ServiceRemote {
+func NewServiceRemote(c *httppkg.HTTPClient) *ServiceRemote {
 	s := new(ServiceRemote)
 	s.HTTPClient = c
 	return s
 }
 
 func (s *ServiceRemote) Authorize(ctx *gin.Context) any {
-	_, err := httpPkg.ParseAuthToken(ctx)
+	_, err := httppkg.ParseAuthToken(ctx)
 	if err != nil {
 		response.RespondError(http.StatusForbidden, err, ctx)
 		return nil
 	}
-	u, err := httpPkg.Request[dto.AuthUserDto](
+	u, err := httppkg.Request[dto.AuthUserDto](
 		http.MethodPost,
 		fmt.Sprintf("%s%s", config.GetEnvValue("USER_SERVICE_BASE_URL"), constant.UserServiceAuthEndpoint),
 		ctx.Request.Header,

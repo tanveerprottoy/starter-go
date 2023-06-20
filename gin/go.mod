@@ -1,4 +1,4 @@
-module github.com/tanveerprottoy/rest-api-starter-go/gin
+module github.com/tanveerprottoy/starter-go/gin
 
 go 1.19
 

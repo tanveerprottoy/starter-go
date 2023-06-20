@@ -5,13 +5,13 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/internal/app/module/user/dto"
-	"github.com/tanveerprottoy/starter-go/internal/app/module/user/entity"
-	"github.com/tanveerprottoy/starter-go/internal/pkg/constant"
-	"github.com/tanveerprottoy/starter-go/pkg/adapter"
-	sqlPkg "github.com/tanveerprottoy/starter-go/pkg/data/sql"
-	"github.com/tanveerprottoy/starter-go/pkg/response"
-	"github.com/tanveerprottoy/starter-go/pkg/time"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/dto"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/adapter"
+	sqlPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/response"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/time"
 )
 
 type Service struct {

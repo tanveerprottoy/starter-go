@@ -3,8 +3,7 @@ package grpcpkg
 import (
 	"log"
 
-	"github.com/tanveerprottoy/starter-go/internal/apigateway/module/user/proto"
-	contentProto "github.com/tanveerprottoy/starter-go/internal/apigateway/module/content/proto"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/apigateway/module/user/proto"
 	grpc "google.golang.org/grpc"
 )
 

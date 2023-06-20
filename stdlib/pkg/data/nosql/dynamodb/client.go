@@ -6,7 +6,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	configPkg "github.com/tanveerprottoy/starter-go/pkg/config"
+	configPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/config"
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
@@ -61,20 +61,20 @@ func (c *Client) init() {
 	// uri := config.GetEnvValue("DB_URI")
 	reg := configPkg.GetJsonValue("region").(string)
 	cfg, err := config.LoadDefaultConfig(context.Background(), config.WithRegion(reg))
-	/* cfg, err := config.LoadDefaultConfig(context.TODO(), 
-		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider("AKID", "SECRET_KEY", "TOKEN")),
-	)
-	cfg, err := config.LoadDefaultConfig(context.Background(), func(o *config.LoadOptions) error {
-        o.Region = reg
-        return nil
-    })
-	/* cfg , err := config.LoadDefaultConfig(context.TODO(), 
-    config.WithSharedCredentialsFiles(
-	[]string{"test/credentials", "data/credentials"},
-    ), 
-    config.WithSharedConfigFiles(
-        []string{"test/config", "data/config"},
-	) */
+	/* cfg, err := config.LoadDefaultConfig(context.TODO(),
+			config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider("AKID", "SECRET_KEY", "TOKEN")),
+		)
+		cfg, err := config.LoadDefaultConfig(context.Background(), func(o *config.LoadOptions) error {
+	        o.Region = reg
+	        return nil
+	    })
+		/* cfg , err := config.LoadDefaultConfig(context.TODO(),
+	    config.WithSharedCredentialsFiles(
+		[]string{"test/credentials", "data/credentials"},
+	    ),
+	    config.WithSharedConfigFiles(
+	        []string{"test/config", "data/config"},
+		) */
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
 	}
