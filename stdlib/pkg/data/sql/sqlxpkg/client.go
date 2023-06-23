@@ -1,12 +1,12 @@
-package sqlx
+package sqlxpkg
 
 import (
 	"log"
-	"os"
 	"sync"
 	"sync/atomic"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/config"
 
 	"github.com/go-sql-driver/mysql"
 )
@@ -63,11 +63,11 @@ func GetInstanceAtomic() *Client {
 func (d *Client) init() {
 	// Capture connection properties.
 	cfg := mysql.Config{
-		User:   os.Getenv("DB_USER"),
-		Passwd: os.Getenv("DB_PASS"),
+		User:   config.GetEnvValue("DB_USER"),
+		Passwd: config.GetEnvValue("DB_PASS"),
 		Net:    netType,
-		Addr:   os.Getenv("DB_HOST") + ":" + os.Getenv("DB_PORT"),
-		DBName: os.Getenv("DB_NAME"),
+		Addr:   config.GetEnvValue("DB_HOST") + ":" + config.GetEnvValue("DB_PORT"),
+		DBName: config.GetEnvValue("DB_NAME"),
 	}
 	var err error
 	d.DB, err = sqlx.Open("mysql", cfg.FormatDSN())

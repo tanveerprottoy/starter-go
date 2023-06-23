@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/tanveerprottoy/starter-go/gin/pkg/config"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/config"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
