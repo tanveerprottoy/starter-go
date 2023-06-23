@@ -2,8 +2,11 @@ package app
 
 import (
 	"crypto/tls"
+	"fmt"
 	"log"
 	"net/http"
+	"os/exec"
+	"sync"
 
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/auth"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/content"
@@ -37,8 +40,31 @@ type App struct {
 
 func NewApp() *App {
 	a := new(App)
+	// run db script
+	// will run in a goroutine, channel is be used
+	// to get the output, waitgroup is used to make
+	// sure it completes execution
+	var wg sync.WaitGroup
+	ch := make(chan string)
+	wg.Add(1)
+	go a.runScript(ch, &wg)
+	wg.Wait()
+	o := <-ch
+	fmt.Println(o)
 	a.initComponents()
 	return a
+}
+
+func (a *App) runScript(ch chan string, wg *sync.WaitGroup) {
+	defer wg.Done()
+	// cmd, err := exec.Command("/bin/sh", "../../scripts/init_db.sh").Output()
+	// cmd, err := exec.Command("chmod +x ./scripts/init_db.sh").Output()
+	cmd, err := exec.Command("./scripts/init_db.sql").Output()
+	if err != nil {
+		fmt.Printf("error %s", err)
+	}
+	output := string(cmd)
+	ch <- output
 }
 
 func (a *App) initDB() {
