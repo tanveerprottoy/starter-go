@@ -5,17 +5,17 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/auth"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/content"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/apigateway/module/auth"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/apigateway/module/content"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/apigateway/module/user"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/middleware"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/router"
 	routerPkg "github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/router"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/crypto"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/data/nosql/mongodb"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql/postgres"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/file"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/router"
 
 	validatorPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/validator"
 

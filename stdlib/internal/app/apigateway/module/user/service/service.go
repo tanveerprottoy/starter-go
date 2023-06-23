@@ -11,7 +11,7 @@ import (
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/adapter"
 	sqlPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/response"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/time"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/timepkg"
 )
 
 type Service struct {
@@ -30,8 +30,9 @@ func (s *Service) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *h
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	v.CreatedAt = time.Now()
-	v.UpdatedAt = time.Now()
+	n := timepkg.Now()
+	v.CreatedAt = n
+	v.UpdatedAt = n
 	err = s.repository.Create(v)
 	if err != nil {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)

@@ -3,12 +3,11 @@ package router
 import (
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/content"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/router"
 
 	"github.com/go-chi/chi"
 )
 
-func RegisterContentRoutes(router *router.Router, version string, module *content.Module) {
+func RegisterContentRoutes(router *Router, version string, module *content.Module) {
 	router.Mux.Route(
 		constant.ApiPattern+version+constant.ContentsPattern,
 		func(r chi.Router) {

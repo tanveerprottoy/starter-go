@@ -3,7 +3,7 @@ package user
 import (
 	"database/sql"
 
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/ginapp/module/user/entity"
 	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/handler"
 	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/repository"
 	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/service"

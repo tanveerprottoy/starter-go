@@ -1,9 +1,6 @@
-package app
+package ginapp
 
 import (
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/auth"
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/content"
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/middleware"

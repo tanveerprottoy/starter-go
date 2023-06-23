@@ -4,12 +4,11 @@ import (
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/middleware"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/router"
 
 	"github.com/go-chi/chi"
 )
 
-func RegisterUserRoutes(router *router.Router, version string, module *user.Module, authMiddleWare *middleware.AuthMiddleware) {
+func RegisterUserRoutes(router *Router, version string, module *user.Module, authMiddleWare *middleware.AuthMiddleware) {
 	router.Mux.Group(
 		func(r chi.Router) {
 			r.Use(authMiddleWare.AuthUser)
