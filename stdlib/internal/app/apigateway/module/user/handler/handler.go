@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/dto"
@@ -8,6 +9,7 @@ import (
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/adapter"
 	httpPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/http"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/jsonpkg"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/response"
 
 	"github.com/go-playground/validator/v10"
@@ -25,8 +27,30 @@ func NewHandler(s *service.Service, v *validator.Validate) *Handler {
 	return h
 }
 
+func (h *Handler) parseValidateRequestBody(r *http.Request) (dto.CreateUpdateBookDto, error) {
+	var d dto.CreateUpdateBookDto
+	err := jsonpkg.Decode(r.Body, &d)
+	if err != nil {
+		return d, err
+	}
+	// validate request body
+	err = h.validate.Struct(d)
+	if err != nil {
+		// Struct is invalid
+		for _, err := range err.(validator.ValidationErrors) {
+			fmt.Println(err.Field(), err.Tag())
+		}
+	}
+	return d, err
+}
+
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
-	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](r.Body)
+	d, err := h.parseValidateRequestBody(r)
+	if err != nil {
+		response.RespondError(http.StatusBadRequest, err, w)
+		return
+	}
+	d, err = adapter.BodyToType[dto.CreateUpdateUserDto](r.Body)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
