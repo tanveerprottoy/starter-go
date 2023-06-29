@@ -5,19 +5,17 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/apigateway/module/auth"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/apigateway/module/content"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/apigateway/module/user"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/cryptopkg"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/validatorpkg"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/auth"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/content"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/middleware"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/router"
-	routerPkg "github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/router"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/crypto"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/data/nosql/mongodb"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql/postgres"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/file"
-
-	validatorPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/validator"
 
 	"github.com/go-playground/validator/v10"
 	// "go.uber.org/zap"
@@ -29,10 +27,10 @@ type App struct {
 	PostgresDBClient *postgres.Client
 	router           *router.Router
 	Middlewares      []any
+	Validate         *validator.Validate
 	AuthModule       *auth.Module
 	UserModule       *user.Module
 	ContentModule    *content.Module
-	Validate         *validator.Validate
 }
 
 func NewApp() *App {
@@ -59,13 +57,13 @@ func (a *App) initModules() {
 
 func (a *App) initModuleRouters() {
 	m := a.Middlewares[0].(*middleware.AuthMiddleware)
-	routerPkg.RegisterUserRoutes(a.router, constant.V1, a.UserModule, m)
-	routerPkg.RegisterContentRoutes(a.router, constant.V1, a.ContentModule)
+	router.RegisterUserRoutes(a.router, constant.V1, a.UserModule, m)
+	router.RegisterContentRoutes(a.router, constant.V1, a.ContentModule)
 }
 
 func (a *App) initValidators() {
 	a.Validate = validator.New()
-	_ = a.Validate.RegisterValidation("notempty", validatorPkg.NotEmpty)
+	_ = a.Validate.RegisterValidation("notempty", validatorpkg.NotEmpty)
 }
 
 /* func (a *App) initLogger() {
@@ -119,7 +117,7 @@ func (a *App) RunTLSSimpleConfig() {
 // we must instruct it to require client authentication to ensure clients present a certificate from our CA when they connect
 func (a *App) RunTLSMutual() {
 	caCert, _ := file.ReadFile("ca.crt")
-	cp, _ := crypto.AppendCertsFromPEM(caCert)
+	cp, _ := cryptopkg.AppendCertsFromPEM(caCert)
 	tlsConf := &tls.Config{
 		ClientCAs:  cp,
 		ClientAuth: tls.RequireAndVerifyClientCert,

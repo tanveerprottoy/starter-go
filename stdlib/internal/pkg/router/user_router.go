@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/middleware"
 

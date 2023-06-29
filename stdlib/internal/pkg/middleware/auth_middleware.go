@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/apigateway/module/auth"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/auth"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
 )
 

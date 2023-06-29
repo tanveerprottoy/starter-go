@@ -1,25 +1,18 @@
 package sqlxpkg
 
 import (
+	"fmt"
 	"log"
 	"sync"
-	"sync/atomic"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/config"
-
-	"github.com/go-sql-driver/mysql"
-)
-
-const (
-	netType = "tcp"
+	_ "github.com/lib/pq"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/config"
 )
 
 var (
-	instance    *Client
-	once        sync.Once
-	mu          sync.Mutex
-	initialized uint32
+	instance *Client
+	once     sync.Once
 )
 
 type Client struct {
@@ -34,43 +27,13 @@ func GetInstance() *Client {
 	return instance
 }
 
-func GetInstanceMutex() *Client {
-	if instance == nil {
-		mu.Lock()
-		defer mu.Unlock()
-		if instance == nil {
-			instance = new(Client)
-			instance.init()
-		}
-	}
-	return instance
-}
-
-func GetInstanceAtomic() *Client {
-	if atomic.LoadUint32(&initialized) == 1 {
-		return instance
-	}
-	mu.Lock()
-	defer mu.Unlock()
-	if initialized == 0 {
-		instance = new(Client)
-		instance.init()
-		atomic.StoreUint32(&initialized, 1)
-	}
-	return instance
-}
-
 func (d *Client) init() {
-	// Capture connection properties.
-	cfg := mysql.Config{
-		User:   config.GetEnvValue("DB_USER"),
-		Passwd: config.GetEnvValue("DB_PASS"),
-		Net:    netType,
-		Addr:   config.GetEnvValue("DB_HOST") + ":" + config.GetEnvValue("DB_PORT"),
-		DBName: config.GetEnvValue("DB_NAME"),
-	}
+	// connection properties.
+	info := fmt.Sprintf("host=%s port=%s user=%s "+
+		"password=%s dbname=%s sslmode=disable",
+		config.GetEnvValue("DB_HOST"), config.GetEnvValue("DB_PORT"), config.GetEnvValue("DB_USER"), config.GetEnvValue("DB_PASS"), config.GetEnvValue("DB_NAME"))
 	var err error
-	d.DB, err = sqlx.Open("mysql", cfg.FormatDSN())
+	d.DB, err = sqlx.Open("postgres", info)
 	if err != nil {
 		panic(err)
 	}
@@ -80,4 +43,10 @@ func (d *Client) init() {
 		panic(err)
 	}
 	log.Println("Successfully connected!")
+	// create table if not exists
+	_, err = d.DB.Exec("CREATE TABLE IF NOT EXISTS books (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), title VARCHAR NOT NULL, author VARCHAR NOT NULL, publication_year INT, created_at BIGINT, updated_at BIGINT)")
+	if err != nil {
+		panic(err)
+	}
+
 }

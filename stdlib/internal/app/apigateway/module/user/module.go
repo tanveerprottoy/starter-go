@@ -3,10 +3,10 @@ package user
 import (
 	"database/sql"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/entity"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/handler"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/repository"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/service"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/handler"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/repository"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/service"
 	sqlPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
 
 	"github.com/go-playground/validator/v10"

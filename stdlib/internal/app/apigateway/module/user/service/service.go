@@ -1,12 +1,12 @@
 package service
 
 import (
-	sql "database/sql"
+	"database/sql"
 	"errors"
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/dto"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/dto"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/entity"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/adapter"
 	sqlPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
@@ -102,7 +102,7 @@ func (s *Service) Update(id string, d *dto.CreateUpdateUserDto, w http.ResponseW
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	v.UpdatedAt = time.Now()
+	v.UpdatedAt = timepkg.Now()
 	rowsAffected, err := s.repository.Update(
 		id,
 		v,
