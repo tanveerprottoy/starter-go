@@ -1,4 +1,4 @@
-package app
+package apigateway
 
 import (
 	"crypto/tls"

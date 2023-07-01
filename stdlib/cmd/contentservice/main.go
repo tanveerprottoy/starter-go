@@ -3,7 +3,7 @@ package main
 import "github.com/tanveerprottoy/starter-go/stdlib/internal/app/contentservice"
 
 func main() {
-	a := app.NewApp()
+	a := contentservice.NewApp()
 	a.Run()
 }
 

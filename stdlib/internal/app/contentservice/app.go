@@ -1,13 +1,12 @@
-package app
+package contentservice
 
 import (
 	"crypto/tls"
 	"log"
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/auth"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/content"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/auth"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/contentservice/module/content"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/middleware"
 	routerPkg "github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/router"
