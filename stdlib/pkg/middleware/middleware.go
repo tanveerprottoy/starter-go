@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/constant"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/jwt"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/jwtpkg"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/response"
 )
 
@@ -45,7 +45,7 @@ func JWTMiddleWare(next http.Handler) http.Handler {
 			return
 		}
 		tokenBody := split[1]
-		claims, err := jwt.VerifyToken(tokenBody)
+		claims, err := jwtpkg.VerifyToken(tokenBody)
 		if err != nil {
 			response.RespondError(http.StatusForbidden, err, w)
 			return

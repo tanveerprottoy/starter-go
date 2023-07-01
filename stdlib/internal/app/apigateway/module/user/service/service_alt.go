@@ -3,15 +3,12 @@ package service
 import (
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/dto"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/entity"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/repository"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/schema"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/timepkg"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/dto"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/repository"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/adapter"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/data/nosql/mongodb"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/response"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/time"
-
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -32,8 +29,8 @@ func (s *ServiceAlt) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	v.CreatedAt = time.Now()
-	v.UpdatedAt = time.Now()
+	v.CreatedAt = timepkg.Now()
+	v.UpdatedAt = timepkg.Now()
 	res, err := s.repository.Create(
 		r.Context(),
 		&v,

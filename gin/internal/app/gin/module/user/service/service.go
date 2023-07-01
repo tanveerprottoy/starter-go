@@ -1,25 +1,16 @@
 package service
 
 import (
-	"database/sql"
-	"errors"
-	"net/http"
-
-	"github.com/gin-gonic/gin"
 	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/dto"
 	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/entity"
-	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/constant"
-	"github.com/tanveerprottoy/starter-go/gin/pkg/adapter"
-	sqlPkg "github.com/tanveerprottoy/starter-go/gin/pkg/data/sql"
-	"github.com/tanveerprottoy/starter-go/gin/pkg/response"
-	"github.com/tanveerprottoy/starter-go/gin/pkg/timepkg"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/data/sql/sqlxpkg"
 )
 
 type Service struct {
-	repository sqlPkg.Repository[entity.User]
+	repository sqlxpkg.Repository[entity.User]
 }
 
-func NewService(r sqlPkg.Repository[entity.User]) *Service {
+func NewService(r sqlxpkg.Repository[entity.User]) *Service {
 	s := new(Service)
 	s.repository = r
 	return s

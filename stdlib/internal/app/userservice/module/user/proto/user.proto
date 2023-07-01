@@ -5,7 +5,7 @@ package userPackage;
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/timestamp.proto";
 
-option go_package = "./internal/userservice/module/user/proto";
+option go_package = "github.com/tanveerprottoy/starter-go/stdlib;./internal/app/userservice/module/user/proto";
 
 message User {
     string id = 1;

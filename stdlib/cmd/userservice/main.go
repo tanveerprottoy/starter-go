@@ -1,6 +1,6 @@
 package main
 
-import "github.com/tanveerprottoy/starter-go/stdlib/internal/app"
+import "github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice"
 
 func main() {
 	a := app.NewApp()

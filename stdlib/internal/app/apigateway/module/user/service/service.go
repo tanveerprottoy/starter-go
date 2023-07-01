@@ -9,16 +9,16 @@ import (
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/entity"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/adapter"
-	sqlPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
+	sqlpkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/response"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/timepkg"
 )
 
 type Service struct {
-	repository sqlPkg.Repository[entity.User]
+	repository sqlpkg.Repository[entity.User]
 }
 
-func NewService(r sqlPkg.Repository[entity.User]) *Service {
+func NewService(r sqlpkg.Repository[entity.User]) *Service {
 	s := new(Service)
 	s.repository = r
 	return s
@@ -50,7 +50,7 @@ func (s *Service) ReadMany(limit, page int, w http.ResponseWriter, r *http.Reque
 		return
 	}
 	var e entity.User
-	d, err := sqlPkg.GetEntities(
+	d, err := sqlpkg.GetEntities(
 		rows,
 		&e,
 		&e.Id,
@@ -81,7 +81,7 @@ func (s *Service) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	e := new(entity.User)
-	d, err := sqlPkg.GetEntity(
+	d, err := sqlpkg.GetEntity(
 		row,
 		&e,
 		&e.Id,

@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/config"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/timepkg"
 
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -34,7 +35,7 @@ func GenerateToken(payload Payload) string {
 		Audience:  []string{"somebody_else"},
 	}, */
 	// Declare the expiration time of the token
-	expirationTime := time.AddDate(0, 0, 3)
+	expirationTime := timepkg.AddDate(0, 0, 3)
 	claims := &Claims{
 		Payload: payload,
 		RegisteredClaims: jwt.RegisteredClaims{

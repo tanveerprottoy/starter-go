@@ -3,20 +3,19 @@ package user
 import (
 	"database/sql"
 
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/ginapp/module/user/entity"
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/handler"
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/repository"
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/service"
-	sqlPkg "github.com/tanveerprottoy/starter-go/gin/pkg/data/sql"
-
 	"github.com/go-playground/validator/v10"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/handler"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/repository"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/service"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/sql/sqlxpkg"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Module struct {
 	Handler         *handler.Handler
 	Service         *service.Service
-	Repository      sqlPkg.Repository[entity.User]
+	Repository      sqlxpkg.Repository[entity.User]
 	MongoRepository *repository.RepositoryAlt
 }
 

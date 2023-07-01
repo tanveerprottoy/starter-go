@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/content/entity"
-	sqlPkg "github.com/tanveerprottoy/starter-go/gin/pkg/data/sql"
+	sqlpkg "github.com/tanveerprottoy/starter-go/gin/pkg/data/sql"
 )
 
 type Repository struct {
@@ -61,7 +61,7 @@ func (r *Repository) Update(id string, e *entity.Content) (int64, error) {
 		log.Println(err)
 		return -1, err
 	}
-	return sqlPkg.GetRowsAffected(res), nil
+	return sqlpkg.GetRowsAffected(res), nil
 }
 
 func (r *Repository) Delete(id string) (int64, error) {
@@ -74,5 +74,5 @@ func (r *Repository) Delete(id string) (int64, error) {
 		log.Println(err)
 		return -1, err
 	}
-	return sqlPkg.GetRowsAffected(res), nil
+	return sqlpkg.GetRowsAffected(res), nil
 }

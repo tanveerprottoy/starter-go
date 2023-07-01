@@ -5,7 +5,7 @@ import (
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/middleware"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/router"
-	routerPkg "github.com/tanveerprottoy/starter-go/gin/internal/pkg/router"
+	routerpkg "github.com/tanveerprottoy/starter-go/gin/internal/pkg/router"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/data/nosql/mongodb"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/data/sql/postgres"
 
@@ -49,8 +49,8 @@ func (a *App) initModules() {
 
 func (a *App) initModuleRouters() {
 	m := a.Middlewares[0].(*middleware.AuthMiddleware)
-	routerPkg.RegisterUserRoutes(a.gin.Engine, constant.V1, a.UserModule, m)
-	routerPkg.RegisterContentRoutes(a.gin.Engine, constant.V1, a.ContentModule)
+	routerpkg.RegisterUserRoutes(a.gin.Engine, constant.V1, a.UserModule, m)
+	routerpkg.RegisterContentRoutes(a.gin.Engine, constant.V1, a.ContentModule)
 }
 
 /* func (a *App) initLogger() {

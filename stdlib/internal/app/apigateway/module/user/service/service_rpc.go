@@ -3,12 +3,13 @@ package service
 import (
 	"net/http"
 
-	"github.com/tanveerprottoy/rest-api-starter-go/gin/pkg/timepkg"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/apigateway/module/user/proto"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/proto"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/dto"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/entity"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/adapter"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/response"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/timepkg"
+	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 

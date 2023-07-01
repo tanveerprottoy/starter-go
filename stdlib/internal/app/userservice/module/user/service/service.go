@@ -1,24 +1,24 @@
 package service
 
 import (
-	sql "database/sql"
+	"database/sql"
 	"errors"
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/dto"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/timepkg"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/dto"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/entity"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/adapter"
-	sqlPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
+	sqlpkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/response"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/time"
 )
 
 type Service struct {
-	repository sqlPkg.Repository[entity.User]
+	repository sqlpkg.Repository[entity.User]
 }
 
-func NewService(r sqlPkg.Repository[entity.User]) *Service {
+func NewService(r sqlpkg.Repository[entity.User]) *Service {
 	s := new(Service)
 	s.repository = r
 	return s
@@ -30,8 +30,8 @@ func (s *Service) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *h
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	v.CreatedAt = time.Now()
-	v.UpdatedAt = time.Now()
+	v.CreatedAt = timepkg.
+	v.UpdatedAt = timepkg.Now()
 	err = s.repository.Create(v)
 	if err != nil {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
@@ -49,7 +49,7 @@ func (s *Service) ReadMany(limit, page int, w http.ResponseWriter, r *http.Reque
 		return
 	}
 	var e entity.User
-	d, err := sqlPkg.GetEntities(
+	d, err := sqlpkg.GetEntities(
 		rows,
 		&e,
 		&e.Id,
@@ -80,7 +80,7 @@ func (s *Service) ReadOne(id string, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	e := new(entity.User)
-	d, err := sqlPkg.GetEntity(
+	d, err := sqlpkg.GetEntity(
 		row,
 		&e,
 		&e.Id,
@@ -101,7 +101,7 @@ func (s *Service) Update(id string, d *dto.CreateUpdateUserDto, w http.ResponseW
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	v.UpdatedAt = time.Now()
+	v.UpdatedAt = timepkg.Now()
 	rowsAffected, err := s.repository.Update(
 		id,
 		v,

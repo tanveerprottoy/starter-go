@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/apigateway/module/user/proto"
-	grpc "google.golang.org/grpc"
+	"google.golang.org/grpc"
 )
 
 var (
@@ -20,18 +20,18 @@ func init() {
 
 func initClientConns() {
 	var err error
-	Conns[0], err = _grpc.Dial(
+	Conns[0], err = grpc.Dial(
 		"0.0.0.0:5000",
-		_grpc.WithInsecure(),
-		_grpc.WithBlock(),
+		grpc.WithInsecure(),
+		grpc.WithBlock(),
 	)
 	if err != nil {
 		log.Printf("userservice did not connect: %v", err)
 	}
-	Conns[1], err = _grpc.Dial(
+	Conns[1], err = grpc.Dial(
 		"0.0.0.0:5001",
-		_grpc.WithInsecure(),
-		_grpc.WithBlock(),
+		grpc.WithInsecure(),
+		grpc.WithBlock(),
 	)
 	if err != nil {
 		log.Printf("contentservice did not connect: %v", err)

@@ -1,11 +1,13 @@
-package user
+package repository
 
 import (
 	"database/sql"
 	"fmt"
 	"log"
-	"txp/userservice/pkg/data"
-	"txp/userservice/app/module/user/proto"
+
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/proto"
+	sqlpkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql/mysqlpkg"
 )
 
 type RepositoryRPC struct {
@@ -13,7 +15,7 @@ type RepositoryRPC struct {
 
 func (r *RepositoryRPC) Create(e *proto.User) (string, error) {
 	var lastId string = ""
-	result, err := data.DB.Exec(
+	result, err := mysqlpkg.GetInstance().DB.Exec(
 		"INSERT INTO users (name)"+
 			"VALUES ($1) RETURNING id",
 		e.Name,
@@ -31,7 +33,7 @@ func (r *RepositoryRPC) Create(e *proto.User) (string, error) {
 }
 
 func (r *RepositoryRPC) ReadMany() (*sql.Rows, error) {
-	rows, err := data.DB.Query(
+	rows, err := mysqlpkg.GetInstance().DB.Query(
 		"SELECT * FROM users", // WHERE id IS NOT NULL
 	)
 	if err != nil {
@@ -41,7 +43,7 @@ func (r *RepositoryRPC) ReadMany() (*sql.Rows, error) {
 }
 
 func (r *RepositoryRPC) ReadOne(id string) *sql.Row {
-	row := data.DB.QueryRow(
+	row := mysqlpkg.GetInstance().DB.QueryRow(
 		"SELECT * FROM users WHERE id = $1 LIMIT 1",
 		id,
 	)
@@ -53,7 +55,7 @@ func (r *RepositoryRPC) Update(
 	e *proto.User,
 ) (int64, error) {
 	q := "UPDATE users SET name = $2 WHERE id = $1"
-	res, err := data.DB.Exec(
+	res, err := mysqlpkg.GetInstance().DB.Exec(
 		q,
 		id,
 		e.Name,
@@ -62,12 +64,12 @@ func (r *RepositoryRPC) Update(
 		log.Println(err)
 		return -1, err
 	}
-	return data.GetRowsAffected(res), nil
+	return sqlpkg.GetRowsAffected(res), nil
 }
 
 func (r *RepositoryRPC) Delete(id string) (int64, error) {
 	q := "DELETE FROM users WHERE id = $1"
-	res, err := data.DB.Exec(
+	res, err := mysqlpkg.GetInstance().DB.Exec(
 		q,
 		id,
 	)
@@ -75,5 +77,5 @@ func (r *RepositoryRPC) Delete(id string) (int64, error) {
 		log.Println(err)
 		return -1, err
 	}
-	return data.GetRowsAffected(res), nil
+	return sqlpkg.GetRowsAffected(res), nil
 }

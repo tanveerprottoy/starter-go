@@ -1,14 +1,16 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/dto"
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/service"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/dto"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/service"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/adapter"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/httppkg"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/jsonpkg"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/response"
 
 	"github.com/go-playground/validator/v10"
@@ -26,10 +28,28 @@ func NewHandler(s *service.Service, v *validator.Validate) *Handler {
 	return h
 }
 
-func (h *Handler) Create(ctx *gin.Context) {
-	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](ctx.Request.Body)
+func (h *Handler) parseValidateRequestBody(r *http.Request) (dto.CreateUpdateUserDto, error) {
+	var d dto.CreateUpdateUserDto
+	err := jsonpkg.Decode(r.Body, &d)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, ctx)
+		return d, err
+	}
+	// validate request body
+	err = h.validate.Struct(d)
+	if err != nil {
+		// Struct is invalid
+		// for checking only
+		for _, err := range err.(validator.ValidationErrors) {
+			fmt.Println(err.Field(), err.Tag())
+		}
+	}
+	return d, err
+}
+
+func (h *Handler) Create(ctx *gin.Context) {
+	d, err := h.parseValidateRequestBody(r)
+	if err != nil {
+		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
 	h.service.Create(d, ctx)

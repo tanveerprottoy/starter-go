@@ -6,8 +6,8 @@ import (
 	"log"
 	"time"
 
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/repository"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/userservice/module/user/proto"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/grpcpkg"
 
 	"google.golang.org/grpc/codes"
@@ -16,12 +16,12 @@ import (
 )
 
 type ServiceRPC struct {
-	repository *RepositoryRPC
+	repository *repository.RepositoryRPC
 }
 
-func NewServiceRPC(repository *RepositoryRPC) *ServiceRPC {
+func NewServiceRPC(r *repository.RepositoryRPC) *ServiceRPC {
 	s := new(ServiceRPC)
-	s.repository = repository
+	s.repository = r
 	return s
 }
 
