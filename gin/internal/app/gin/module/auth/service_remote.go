@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/auth/dto"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/auth/dto"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/config"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/httppkg"

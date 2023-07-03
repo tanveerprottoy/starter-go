@@ -8,14 +8,14 @@ import (
 	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/handler"
 	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/repository"
 	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/service"
-	"github.com/tanveerprottoy/starter-go/gin/pkg/sql/sqlxpkg"
+	sqlpkg "github.com/tanveerprottoy/starter-go/gin/pkg/data/sql"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Module struct {
 	Handler         *handler.Handler
 	Service         *service.Service
-	Repository      sqlxpkg.Repository[entity.User]
+	Repository      sqlpkg.Repository[entity.User]
 	MongoRepository *repository.RepositoryAlt
 }
 

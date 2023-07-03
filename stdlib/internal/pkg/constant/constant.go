@@ -8,11 +8,14 @@ const ContentsPattern = "/contents"
 
 // db
 const RowsAffected = "rowsAffected"
+const UsersCollection = "users"
+
+// misc
 const InternalServerError = "internal server error"
 const NotFound = "not found"
 const BadRequest = "bad request"
 const Error = "error"
-const UsersCollection = "users"
+const OperationNotSuccess = "operation was not successful"
 
 // keys
 const KeyAuthUser = "AuthUser"

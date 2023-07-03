@@ -28,9 +28,9 @@ func NewHandler(s *service.Service, v *validator.Validate) *Handler {
 	return h
 }
 
-func (h *Handler) parseValidateRequestBody(r *http.Request) (dto.CreateUpdateUserDto, error) {
+func (h *Handler) parseValidateRequestBody(ctx *gin.Context) (dto.CreateUpdateUserDto, error) {
 	var d dto.CreateUpdateUserDto
-	err := jsonpkg.Decode(r.Body, &d)
+	err := jsonpkg.Decode(ctx.Request.Body, &d)
 	if err != nil {
 		return d, err
 	}
@@ -47,12 +47,12 @@ func (h *Handler) parseValidateRequestBody(r *http.Request) (dto.CreateUpdateUse
 }
 
 func (h *Handler) Create(ctx *gin.Context) {
-	d, err := h.parseValidateRequestBody(r)
+	d, err := h.parseValidateRequestBody(ctx)
 	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, w)
+		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
-	h.service.Create(d, ctx)
+	h.service.Create(&d, ctx)
 }
 
 func (h *Handler) ReadMany(ctx *gin.Context) {

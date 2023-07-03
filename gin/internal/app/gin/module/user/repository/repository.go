@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/entity"
-	sqlUtil "github.com/tanveerprottoy/starter-go/gin/pkg/data/sql"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/entity"
+	sqlpkg "github.com/tanveerprottoy/starter-go/gin/pkg/data/sql"
 )
 
 type Repository[T entity.User] struct {
@@ -63,7 +63,7 @@ func (r *Repository[T]) Update(id string, e *entity.User) (int64, error) {
 		log.Println(err)
 		return -1, err
 	}
-	return sqlUtil.GetRowsAffected(res), nil
+	return sqlpkg.GetRowsAffected(res), nil
 }
 
 func (r *Repository[T]) Delete(id string) (int64, error) {
@@ -76,5 +76,5 @@ func (r *Repository[T]) Delete(id string) (int64, error) {
 		log.Println(err)
 		return -1, err
 	}
-	return sqlUtil.GetRowsAffected(res), nil
+	return sqlpkg.GetRowsAffected(res), nil
 }

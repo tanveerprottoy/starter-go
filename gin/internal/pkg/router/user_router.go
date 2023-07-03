@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/middleware"
 )

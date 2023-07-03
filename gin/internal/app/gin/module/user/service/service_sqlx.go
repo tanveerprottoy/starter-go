@@ -4,12 +4,12 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/dto"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/entity"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql/sqlxpkg"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/errorpkg"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/timepkg"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/dto"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/constant"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/data/sql/sqlxpkg"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/errorpkg"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/timepkg"
 )
 
 type ServiceSqlx struct {

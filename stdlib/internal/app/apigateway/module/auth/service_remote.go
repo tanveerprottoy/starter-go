@@ -4,30 +4,30 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/auth/dto"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/auth/dto"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/config"
-	httpPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/http"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/httppkg"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/response"
 )
 
 type ServiceRemote struct {
-	HTTPClient *httpPkg.HTTPClient
+	HTTPClient *httppkg.HTTPClient
 }
 
-func NewServiceRemote(c *httpPkg.HTTPClient) *ServiceRemote {
+func NewServiceRemote(c *httppkg.HTTPClient) *ServiceRemote {
 	s := new(ServiceRemote)
 	s.HTTPClient = c
 	return s
 }
 
 func (s *ServiceRemote) Authorize(w http.ResponseWriter, r *http.Request) any {
-	_, err := httpPkg.ParseAuthToken(r)
+	_, err := httppkg.ParseAuthToken(r)
 	if err != nil {
 		response.RespondError(http.StatusForbidden, err, w)
 		return nil
 	}
-	u, err := httpPkg.Request[dto.AuthUserDto](
+	u, err := httppkg.Request[dto.AuthUserDto](
 		http.MethodPost,
 		fmt.Sprintf("%s%s", config.GetEnvValue("USER_SERVICE_BASE_URL"), constant.UserServiceAuthEndpoint),
 		r.Header,

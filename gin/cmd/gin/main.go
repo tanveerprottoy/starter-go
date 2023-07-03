@@ -1,9 +1,9 @@
 package main
 
-import "github.com/tanveerprottoy/starter-go/gin/internal/app"
+import "github.com/tanveerprottoy/starter-go/gin/internal/app/gin"
 
 func main() {
-	a := app.NewApp()
+	a := gin.NewApp()
 	a.Run()
 }
 

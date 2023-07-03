@@ -1,11 +1,13 @@
-package ginapp
+package gin
 
 import (
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/auth"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/content"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/middleware"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/router"
-	routerpkg "github.com/tanveerprottoy/starter-go/gin/internal/pkg/router"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/data/nosql/mongodb"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/data/sql/postgres"
 
@@ -17,7 +19,7 @@ import (
 type App struct {
 	MongoDBClient    *mongodb.Client
 	PostgresDBClient *postgres.Client
-	gin           *pkg.Gin
+	gin              *pkg.Gin
 	Middlewares      []any
 	AuthModule       *auth.Module
 	UserModule       *user.Module
@@ -49,8 +51,8 @@ func (a *App) initModules() {
 
 func (a *App) initModuleRouters() {
 	m := a.Middlewares[0].(*middleware.AuthMiddleware)
-	routerpkg.RegisterUserRoutes(a.gin.Engine, constant.V1, a.UserModule, m)
-	routerpkg.RegisterContentRoutes(a.gin.Engine, constant.V1, a.ContentModule)
+	router.RegisterUserRoutes(a.gin.Engine, constant.V1, a.UserModule, m)
+	router.RegisterContentRoutes(a.gin.Engine, constant.V1, a.ContentModule)
 }
 
 /* func (a *App) initLogger() {

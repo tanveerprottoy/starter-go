@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/entity"
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/user/service"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/service"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/adapter"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/httppkg"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/jwtpkg"

@@ -5,10 +5,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tanveerprottoy/starter-go/gin/internal/app/module/content/entity"
+	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/content/entity"
 	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/adapter"
-	sqlPkg "github.com/tanveerprottoy/starter-go/gin/pkg/data/sql"
+	sqlpkg "github.com/tanveerprottoy/starter-go/gin/pkg/data/sql"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/httppkg"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/response"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/timepkg"
@@ -47,7 +47,7 @@ func (s *Service) ReadMany(limit, page int, ctx *gin.Context) {
 		return
 	}
 	var e entity.Content
-	d, err := sqlPkg.GetEntities(
+	d, err := sqlpkg.GetEntities(
 		rows,
 		&e,
 		&e.Id,
@@ -69,7 +69,7 @@ func (s *Service) ReadOne(id string, ctx *gin.Context) {
 		return
 	}
 	e := new(entity.Content)
-	d, err := sqlPkg.GetEntity(
+	d, err := sqlpkg.GetEntity(
 		row,
 		&e,
 		&e.Id,

@@ -15,19 +15,21 @@ import (
 	"github.com/tanveerprottoy/starter-go/gin/pkg/response"
 )
 
-type HandlerAlt struct {
-	service *service.ServiceAlt
+// Hanlder is responsible for extracting data
+// from request body and building and seding response
+type HandlerSqlx struct {
+	service  *service.ServiceSqlx
 	validate *validator.Validate
 }
 
-func NewHandlerAlt(s *service.ServiceAlt, v *validator.Validate) *HandlerAlt {
-	h := new(HandlerAlt)
+func NewHandlerSqlx(s *service.ServiceSqlx, v *validator.Validate) *HandlerSqlx {
+	h := new(HandlerSqlx)
 	h.service = s
 	h.validate = v
 	return h
 }
 
-func (h *HandlerAlt) parseValidateRequestBody(ctx *gin.Context) (dto.CreateUpdateUserDto, error) {
+func (h *HandlerSqlx) parseValidateRequestBody(ctx *gin.Context) (dto.CreateUpdateUserDto, error) {
 	var d dto.CreateUpdateUserDto
 	err := jsonpkg.Decode(ctx.Request.Body, &d)
 	if err != nil {
@@ -37,7 +39,6 @@ func (h *HandlerAlt) parseValidateRequestBody(ctx *gin.Context) (dto.CreateUpdat
 	err = h.validate.Struct(d)
 	if err != nil {
 		// Struct is invalid
-		// for checking only
 		for _, err := range err.(validator.ValidationErrors) {
 			fmt.Println(err.Field(), err.Tag())
 		}
@@ -45,16 +46,21 @@ func (h *HandlerAlt) parseValidateRequestBody(ctx *gin.Context) (dto.CreateUpdat
 	return d, err
 }
 
-func (h *HandlerAlt) Create(ctx *gin.Context) {
-	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](ctx.Request.Body)
+func (h *HandlerSqlx) Create(ctx *gin.Context) {
+	d, err := h.parseValidateRequestBody(ctx)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
-	h.service.Create(d, ctx)
+	e, httpErr := h.service.Create(&d, ctx)
+	if httpErr != nil {
+		response.RespondError(httpErr.Code, httpErr.Err, ctx)
+		return
+	}
+	response.Respond(http.StatusCreated, e, ctx)
 }
 
-func (h *HandlerAlt) ReadMany(ctx *gin.Context) {
+func (h *HandlerSqlx) ReadMany(ctx *gin.Context) {
 	limit := 10
 	page := 1
 	var err error
@@ -74,54 +80,41 @@ func (h *HandlerAlt) ReadMany(ctx *gin.Context) {
 			return
 		}
 	}
-	h.service.ReadMany(limit, page, ctx)
-}
-
-func (h *HandlerAlt) ReadManyWithNestedDocQuery(ctx *gin.Context) {
-	limit := 10
-	page := 1
-	var err error
-	limitStr := httppkg.GetQueryParam(ctx, constant.KeyLimit)
-	if limitStr != "" {
-		limit, err = adapter.StringToInt(limitStr)
-		if err != nil {
-			response.RespondError(http.StatusBadRequest, err, ctx)
-			return
-		}
+	e, httpErr := h.service.ReadMany(limit, page, nil)
+	if httpErr != nil {
+		response.RespondError(httpErr.Code, httpErr.Err, ctx)
 	}
-	pageStr := httppkg.GetQueryParam(ctx, constant.KeyPage)
-	if pageStr != "" {
-		page, err = adapter.StringToInt(pageStr)
-		if err != nil {
-			response.RespondError(http.StatusBadRequest, err, ctx)
-			return
-		}
+	response.Respond(http.StatusOK, e, ctx)
+}
+
+func (h *HandlerSqlx) ReadOne(ctx *gin.Context) {
+	id := httppkg.GetURLParam(ctx, constant.KeyId)
+	e, httpErr := h.service.ReadOne(id, nil)
+	if httpErr != nil {
+		response.RespondError(httpErr.Code, httpErr.Err, ctx)
 	}
-	k0 := httppkg.GetQueryParam(ctx, "key0")
-	k1 := httppkg.GetQueryParam(ctx, "key1")
-	h.service.ReadManyWithNestedDocQuery(limit, page, k0, k1, ctx)
+	response.Respond(http.StatusOK, e, ctx)
 }
 
-func (h *HandlerAlt) ReadOne(ctx *gin.Context) {
+func (h *HandlerSqlx) Update(ctx *gin.Context) {
 	id := httppkg.GetURLParam(ctx, constant.KeyId)
-	h.service.ReadOne(id, ctx)
-}
-
-func (h *HandlerAlt) Update(ctx *gin.Context) {
-	id := httppkg.GetURLParam(ctx, constant.KeyId)
-	d, err := adapter.BodyToType[dto.CreateUpdateUserDto](ctx.Request.Body)
+	d, err := h.parseValidateRequestBody(ctx)
 	if err != nil {
 		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
-	if err != nil {
-		response.RespondError(http.StatusBadRequest, err, ctx)
-		return
+	e, httpErr := h.service.Update(id, &d, nil)
+	if httpErr != nil {
+		response.RespondError(httpErr.Code, httpErr.Err, ctx)
 	}
-	h.service.Update(id, d, ctx)
+	response.Respond(http.StatusOK, e, ctx)
 }
 
-func (h *HandlerAlt) Delete(ctx *gin.Context) {
+func (h *HandlerSqlx) Delete(ctx *gin.Context) {
 	id := httppkg.GetURLParam(ctx, constant.KeyId)
-	h.service.Delete(id, ctx)
+	e, httpErr := h.service.Delete(id, nil)
+	if httpErr != nil {
+		response.RespondError(httpErr.Code, httpErr.Err, ctx)
+	}
+	response.Respond(http.StatusOK, e, ctx)
 }
