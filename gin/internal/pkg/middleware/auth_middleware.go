@@ -21,6 +21,8 @@ func (m *AuthMiddleware) AuthUser() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		payload := m.Service.Authorize(ctx)
 		if payload == nil {
+			// need to abort the middleware chain
+			ctx.Abort()
 			return
 		}
 		ctx.Set(constant.KeyAuthUser, payload)
