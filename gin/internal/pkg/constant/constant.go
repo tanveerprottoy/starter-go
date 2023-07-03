@@ -12,7 +12,6 @@ const UsersCollection = "users"
 
 // misc
 const InternalServerError = "internal server error"
-const NotFound = "not found"
 const BadRequest = "bad request"
 const Error = "error"
 const OperationNotSuccess = "operation was not successful"
