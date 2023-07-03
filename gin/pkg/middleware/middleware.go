@@ -14,13 +14,18 @@ import (
 // JWTMiddleWare checks auth of the request
 func JWTMiddleWare() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		tokenHeader := ctx.Request.Header["Authorization"][0]
-		if tokenHeader == "" {
+		h := ctx.Request.Header["Authorization"]
+		if h == nil && len(h) == 0 {
+			response.RespondError(http.StatusForbidden, errors.New("auth token is missing"), ctx)
+			return
+		}
+		tkHeader := h[0]
+		if tkHeader == "" {
 			// Token is missing
 			response.RespondError(http.StatusForbidden, errors.New("auth token is missing"), ctx)
 			return
 		}
-		split := strings.Split(tokenHeader, " ")
+		split := strings.Split(tkHeader, " ")
 		// token format is `Bearer {tokenBody}`
 		if len(split) != 2 {
 			response.RespondError(http.StatusForbidden, errors.New("token format is invalid"), ctx)
