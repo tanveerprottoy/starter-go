@@ -33,8 +33,9 @@ func (s *ServiceAlt) Create(d *dto.CreateUpdateUserDto, ctx *gin.Context) {
 		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
-	v.CreatedAt = timepkg.Now()
-	v.UpdatedAt = timepkg.Now()
+	n := timepkg.NowUnixMilli()
+	v.CreatedAt = n
+	v.UpdatedAt = n
 	res, err := s.repository.Create(ctx, &v, nil)
 	if err != nil {
 		response.RespondError(http.StatusInternalServerError, err, ctx)

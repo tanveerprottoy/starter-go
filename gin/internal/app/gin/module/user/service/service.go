@@ -31,8 +31,9 @@ func (s *Service) Create(d *dto.CreateUpdateUserDto, ctx *gin.Context) {
 		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
-	v.CreatedAt = timepkg.Now()
-	v.UpdatedAt = timepkg.Now()
+	n := timepkg.NowUnixMilli()
+	v.CreatedAt = n
+	v.UpdatedAt = n
 	err = s.repository.Create(v)
 	if err != nil {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), ctx)
@@ -102,7 +103,7 @@ func (s *Service) Update(id string, d *dto.CreateUpdateUserDto, ctx *gin.Context
 		response.RespondError(http.StatusBadRequest, err, ctx)
 		return
 	}
-	v.UpdatedAt = timepkg.Now()
+	v.UpdatedAt = timepkg.NowUnixMilli()
 	rowsAffected, err := s.repository.Update(id, v)
 	if err != nil || rowsAffected <= 0 {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), ctx)
