@@ -1,6 +1,9 @@
 package pkg
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/tanveerprottoy/starter-go/gin/internal/pkg/router"
+)
 
 // Gin Engine container struct
 // Engine is the framework's instance, it contains the muxer, middleware and configuration settings.
@@ -12,5 +15,6 @@ type Gin struct {
 func NewGin() *Gin {
 	g := &Gin{}
 	g.Engine = gin.Default()
+	router.RegisterGlobalMiddlewares(g.Engine)
 	return g
 }

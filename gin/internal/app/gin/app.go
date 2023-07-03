@@ -55,23 +55,6 @@ func (a *App) initModuleRouters() {
 	router.RegisterContentRoutes(a.gin.Engine, constant.V1, a.ContentModule)
 }
 
-/* func (a *App) initLogger() {
-	cfg := zap.NewProductionConfig()
-	cfg.OutputPaths = []string{
-		"proxy.log",
-	}
-	cfg.Build()
-	logger, _ := zap.NewProduction()
-	defer logger.Sync()
-	task := "taskName"
-	logger.Info("failed to do task",
-		// Structured context as strongly typed Field values.
-		zap.String("url", task),
-		zap.Int("attempt", 3),
-		zap.Duration("backoff", time.Second),
-	)
-} */
-
 // Init app
 func (a *App) initComponents() {
 	a.initDB()
@@ -79,9 +62,6 @@ func (a *App) initComponents() {
 	a.initModules()
 	a.initMiddlewares()
 	a.initModuleRouters()
-	// a.initLogger()
-	// setup global middlewares
-	router.RegisterGlobalMiddlewares(a.gin.Engine)
 }
 
 // Run app
