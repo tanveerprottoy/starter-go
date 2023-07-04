@@ -6,7 +6,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	configPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/config"
+	configpkg "github.com/tanveerprottoy/starter-go/gin/pkg/config"
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
@@ -59,7 +59,7 @@ func NewClientAtomic() *Client {
 
 func (c *Client) init() {
 	// uri := config.GetEnvValue("DB_URI")
-	reg := configPkg.GetJsonValue("region").(string)
+	reg := configpkg.GetJsonValue("region").(string)
 	cfg, err := config.LoadDefaultConfig(context.Background(), config.WithRegion(reg))
 	/* cfg, err := config.LoadDefaultConfig(context.TODO(),
 			config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider("AKID", "SECRET_KEY", "TOKEN")),

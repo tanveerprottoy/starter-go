@@ -15,6 +15,7 @@ const InternalServerError = "internal server error"
 const BadRequest = "bad request"
 const Error = "error"
 const OperationNotSuccess = "operation was not successful"
+const UnknownError = "unknown error"
 
 // keys
 const KeyAuthUser = "AuthUser"

@@ -7,7 +7,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/config"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/config"
 )
 
 var (

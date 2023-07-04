@@ -8,21 +8,18 @@ import (
 	"os/exec"
 	"sync"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/auth"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/content"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user"
+	"github.com/go-playground/validator/v10"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/contentservice/module/content"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/auth"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/middleware"
-	routerPkg "github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/router"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/crypto"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/router"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/cryptopkg"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/data/nosql/mongodb"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql/postgres"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/file"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/router"
-
-	validatorPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/validator"
-
-	"github.com/go-playground/validator/v10"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/validatorpkg"
 	// "go.uber.org/zap"
 )
 
@@ -85,13 +82,13 @@ func (a *App) initModules() {
 
 func (a *App) initModuleRouters() {
 	m := a.Middlewares[0].(*middleware.AuthMiddleware)
-	routerPkg.RegisterUserRoutes(a.router, constant.V1, a.UserModule, m)
-	routerPkg.RegisterContentRoutes(a.router, constant.V1, a.ContentModule)
+	router.RegisterUserRoutes(a.router, constant.V1, a.UserModule, m)
+	router.RegisterContentRoutes(a.router, constant.V1, a.ContentModule)
 }
 
 func (a *App) initValidators() {
 	a.Validate = validator.New()
-	_ = a.Validate.RegisterValidation("notempty", validatorPkg.NotEmpty)
+	_ = a.Validate.RegisterValidation("notempty", validatorpkg.NotEmpty)
 }
 
 /* func (a *App) initLogger() {
@@ -145,7 +142,7 @@ func (a *App) RunTLSSimpleConfig() {
 // we must instruct it to require client authentication to ensure clients present a certificate from our CA when they connect
 func (a *App) RunTLSMutual() {
 	caCert, _ := file.ReadFile("ca.crt")
-	cp, _ := crypto.AppendCertsFromPEM(caCert)
+	cp, _ := cryptopkg.AppendCertsFromPEM(caCert)
 	tlsConf := &tls.Config{
 		ClientCAs:  cp,
 		ClientAuth: tls.RequireAndVerifyClientCert,

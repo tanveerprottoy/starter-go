@@ -3,7 +3,7 @@ package repository
 import (
 	"github.com/jmoiron/sqlx"
 	"github.com/tanveerprottoy/starter-go/gin/internal/app/gin/module/user/entity"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql/sqlxpkg"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/data/sql/sqlxpkg"
 )
 
 const TableName = "users"

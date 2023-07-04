@@ -32,8 +32,9 @@ func (s *ServiceAlt) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	v.CreatedAt = timepkg.Now()
-	v.UpdatedAt = timepkg.Now()
+	n := timepkg.NowUnixMilli()
+	v.CreatedAt = n
+	v.UpdatedAt = n
 	res, err := s.repository.Create(
 		r.Context(),
 		&v,
@@ -156,7 +157,7 @@ func (s *ServiceAlt) Update(id string, d *dto.CreateUpdateUserDto, w http.Respon
 		return
 	}
 	filter := bson.D{{Key: "_id", Value: bson.D{{Key: "$eq", Value: objId}}}}
-	doc := bson.D{{Key: "$set", Value: bson.D{{Key: "name", Value: d.Name}, {Key: "updatedAt", Value: timepkg.Now()}}}}
+	doc := bson.D{{Key: "$set", Value: bson.D{{Key: "name", Value: d.Name}, {Key: "updatedAt", Value: timepkg.NowUnixMilli()}}}}
 	res, err := s.repository.Update(
 		r.Context(),
 		filter,

@@ -7,7 +7,7 @@ import (
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/handler"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/repository"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/service"
-	sqlPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
+	sqlpkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
 
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -16,7 +16,7 @@ import (
 type Module struct {
 	Handler         *handler.Handler
 	Service         *service.Service
-	Repository      sqlPkg.Repository[entity.User]
+	Repository      sqlpkg.Repository[entity.User]
 	MongoRepository *repository.RepositoryAlt
 }
 

@@ -5,13 +5,13 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/gin/pkg/timepkg"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/dto"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/entity"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/adapter"
 	sqlpkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/response"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/timepkg"
 )
 
 type Service struct {
@@ -30,8 +30,9 @@ func (s *Service) Create(d *dto.CreateUpdateUserDto, w http.ResponseWriter, r *h
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	v.CreatedAt = timepkg.
-	v.UpdatedAt = timepkg.Now()
+	n := timepkg.NowUnixMilli()
+	v.CreatedAt = n
+	v.UpdatedAt = n
 	err = s.repository.Create(v)
 	if err != nil {
 		response.RespondError(http.StatusInternalServerError, errors.New(constant.InternalServerError), w)
@@ -101,7 +102,7 @@ func (s *Service) Update(id string, d *dto.CreateUpdateUserDto, w http.ResponseW
 		response.RespondError(http.StatusBadRequest, err, w)
 		return
 	}
-	v.UpdatedAt = timepkg.Now()
+	v.UpdatedAt = timepkg.NowUnixMilli()
 	rowsAffected, err := s.repository.Update(
 		id,
 		v,

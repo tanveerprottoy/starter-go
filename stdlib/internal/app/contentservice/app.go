@@ -5,18 +5,16 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/auth"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/contentservice/module/content"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/auth"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/middleware"
-	routerPkg "github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/router"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/crypto"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/router"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/data/nosql/mongodb"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql/postgres"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/file"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/router"
-
-	validatorPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/validator"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/validatorpkg"
 
 	"github.com/go-playground/validator/v10"
 	// "go.uber.org/zap"
@@ -46,7 +44,7 @@ func (a *App) initDB() {
 }
 
 func (a *App) initMiddlewares() {
-	authMiddleWare := middleware.NewAuthMiddleware(a.AuthModule.Service)
+	authMiddleWare := middleware.NewAuthMiddleware(a.UserModule.Service)
 	a.Middlewares = append(a.Middlewares, authMiddleWare)
 }
 
@@ -58,13 +56,13 @@ func (a *App) initModules() {
 
 func (a *App) initModuleRouters() {
 	m := a.Middlewares[0].(*middleware.AuthMiddleware)
-	routerPkg.RegisterUserRoutes(a.router, constant.V1, a.UserModule, m)
-	routerPkg.RegisterContentRoutes(a.router, constant.V1, a.ContentModule)
+	router.RegisterUserRoutes(a.router, constant.V1, a.UserModule, m)
+	router.RegisterContentRoutes(a.router, constant.V1, a.ContentModule)
 }
 
 func (a *App) initValidators() {
 	a.Validate = validator.New()
-	_ = a.Validate.RegisterValidation("notempty", validatorPkg.NotEmpty)
+	_ = a.Validate.RegisterValidation("notempty", validatorpkg.NotEmpty)
 }
 
 /* func (a *App) initLogger() {

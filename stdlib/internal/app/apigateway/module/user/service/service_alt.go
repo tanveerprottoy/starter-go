@@ -3,12 +3,14 @@ package service
 import (
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/gin/pkg/timepkg"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/dto"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/entity"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/repository"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/schema"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/adapter"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/data/nosql/mongodb"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/response"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/timepkg"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -153,7 +155,7 @@ func (s *ServiceAlt) Update(id string, d *dto.CreateUpdateUserDto, w http.Respon
 		return
 	}
 	filter := bson.D{{Key: "_id", Value: bson.D{{Key: "$eq", Value: objId}}}}
-	doc := bson.D{{Key: "$set", Value: bson.D{{Key: "name", Value: d.Name}, {Key: "updatedAt", Value: time.Now()}}}}
+	doc := bson.D{{Key: "$set", Value: bson.D{{Key: "name", Value: d.Name}, {Key: "updatedAt", Value: timepkg.Now()}}}}
 	res, err := s.repository.Update(
 		r.Context(),
 		filter,
