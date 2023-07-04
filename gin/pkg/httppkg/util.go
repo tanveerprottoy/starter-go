@@ -2,8 +2,6 @@ package httppkg
 
 import (
 	"errors"
-	"mime/multipart"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/stringspkg"
@@ -33,8 +31,4 @@ func ParseAuthToken(ctx *gin.Context) ([]string, error) {
 		return nil, errors.New("token format is invalid")
 	}
 	return splits, nil
-}
-
-func GetFile(r *http.Request, k string) (multipart.File, *multipart.FileHeader, error) {
-	return r.FormFile(k)
 }

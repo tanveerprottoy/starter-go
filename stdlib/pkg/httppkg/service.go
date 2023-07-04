@@ -5,16 +5,10 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/gin/pkg/adapter"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/adapter"
 )
 
-func Request[T any](
-	method string,
-	url string,
-	header http.Header,
-	body io.Reader,
-	httpClient *HTTPClient,
-) (*T, error) {
+func Request[T any](method string, url string, header http.Header, body io.Reader, httpClient *HTTPClient) (*T, error) {
 	code, resBody, err := httpClient.Request(method, url, header, body)
 	if err != nil {
 		return nil, err

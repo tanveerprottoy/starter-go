@@ -3,7 +3,7 @@ package auth
 import (
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/entity"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/service"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/adapter"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/httppkg"

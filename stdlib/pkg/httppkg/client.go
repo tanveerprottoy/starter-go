@@ -11,11 +11,7 @@ type HTTPClient struct {
 	Client *http.Client
 }
 
-func NewHTTPClient(
-	timeout time.Duration,
-	transport *http.Transport,
-	checkRedirectFunc func(req *http.Request, via []*http.Request) error,
-) *HTTPClient {
+func NewHTTPClient(timeout time.Duration, transport *http.Transport, checkRedirectFunc func(req *http.Request, via []*http.Request) error) *HTTPClient {
 	c := new(HTTPClient)
 	c.Client = &http.Client{
 		Timeout: timeout,
@@ -29,12 +25,7 @@ func NewHTTPClient(
 	return c
 }
 
-func (c *HTTPClient) Request(
-	method string,
-	url string,
-	header http.Header,
-	body io.Reader,
-) (int, []byte, error) {
+func (c *HTTPClient) Request(method string, url string, header http.Header, body io.Reader) (int, []byte, error) {
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
 		return -1, nil, err
@@ -57,11 +48,7 @@ func (c *HTTPClient) Request(
 // ex:
 // resp, err := http.PostForm("http://example.com/form",
 // url.Values{"key": {"Value"}, "id": {"123"}})
-func (c *HTTPClient) PostForm(
-	url string,
-	header http.Header,
-	values url.Values,
-) (int, []byte, error) {
+func (c *HTTPClient) PostForm(url string, header http.Header, values url.Values) (int, []byte, error) {
 	res, err := http.PostForm(url, values)
 	if err != nil {
 		return -1, nil, err

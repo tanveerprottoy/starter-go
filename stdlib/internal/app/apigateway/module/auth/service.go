@@ -3,11 +3,11 @@ package auth
 import (
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/entity"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/service"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/service"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/adapter"
-	_http "github.com/tanveerprottoy/starter-go/stdlib/pkg/http"
-	"github.com/tanveerprottoy/starter-go/stdlib/pkg/jwt"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/httppkg"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/jwtpkg"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/response"
 )
 
@@ -22,13 +22,13 @@ func NewService(userService *service.Service) *Service {
 }
 
 func (s *Service) Authorize(w http.ResponseWriter, r *http.Request) *entity.User {
-	splits, err := _http.ParseAuthToken(r)
+	splits, err := httppkg.ParseAuthToken(r)
 	if err != nil {
 		response.RespondError(http.StatusForbidden, err, w)
 		return nil
 	}
 	tokenBody := splits[1]
-	claims, err := jwt.VerifyToken(tokenBody)
+	claims, err := jwtpkg.VerifyToken(tokenBody)
 	if err != nil {
 		response.RespondError(http.StatusForbidden, err, w)
 		return nil

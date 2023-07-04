@@ -3,7 +3,7 @@ package adapter
 import (
 	"database/sql"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/entity"
 	sqlpkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
 )
 

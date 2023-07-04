@@ -3,20 +3,19 @@ package user
 import (
 	"database/sql"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/entity"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/handler"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/repository"
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/module/user/service"
-	sqlPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/data/sql"
-
 	"github.com/go-playground/validator/v10"
+	"github.com/tanveerprottoy/starter-go/gin/pkg/data/sql/sqlxpkg"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/entity"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/handler"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/repository"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/service"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Module struct {
 	Handler         *handler.Handler
 	Service         *service.Service
-	Repository      sqlPkg.Repository[entity.User]
+	Repository      sqlxpkg.Repository[entity.User]
 	MongoRepository *repository.RepositoryAlt
 }
 
