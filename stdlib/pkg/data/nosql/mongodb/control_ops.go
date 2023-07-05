@@ -15,10 +15,6 @@ func ListDatabaseNames(c *mongo.Client) ([]string, error) {
 	return c.ListDatabaseNames(context.Background(), nil)
 }
 
-func GetCollection(
-	db *mongo.Database,
-	name string,
-	opts ...*options.CollectionOptions,
-) *mongo.Collection {
+func GetCollection(db *mongo.Database, name string, opts ...*options.CollectionOptions) *mongo.Collection {
 	return db.Collection(name, opts...)
 }

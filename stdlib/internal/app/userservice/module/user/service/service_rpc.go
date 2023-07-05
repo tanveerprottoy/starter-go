@@ -8,6 +8,7 @@ import (
 
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/user/repository"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
+	constantglobal "github.com/tanveerprottoy/starter-go/stdlib/pkg/constant"
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/grpcpkg"
 
 	"google.golang.org/grpc/codes"
@@ -30,10 +31,7 @@ func (s *ServiceRPC) Create(ctx context.Context, u *proto.User) (*proto.User, er
 		u,
 	)
 	if err != nil || lastId != "" {
-		return nil, grpcpkg.RespondError(
-			codes.Unknown,
-			constant.UnknownError,
-		)
+		return nil, grpcpkg.RespondError(codes.Unknown, constant.UnknownError)
 	}
 	return u, nil
 }
@@ -43,10 +41,7 @@ func (s *ServiceRPC) ReadMany(ctx context.Context, v *proto.VoidParam) (*proto.U
 	d := &proto.Users{}
 	rows, err := s.repository.ReadMany()
 	if err != nil {
-		return nil, grpcpkg.RespondError(
-			codes.Unknown,
-			constant.UnknownError,
-		)
+		return nil, grpcpkg.RespondError(codes.Unknown, constant.UnknownError)
 	}
 	var (
 		users      []*proto.User
@@ -87,10 +82,7 @@ func (s *ServiceRPC) ReadOne(ctx context.Context, strVal *wrapperspb.StringValue
 		strVal.Value,
 	)
 	if row == nil {
-		return nil, grpcpkg.RespondError(
-			codes.NotFound,
-			constant.NotFound,
-		)
+		return nil, grpcpkg.RespondError(codes.NotFound, constantglobal.NotFound)
 	}
 	var (
 		id         string
@@ -120,10 +112,7 @@ func (s *ServiceRPC) Update(ctx context.Context, p *proto.UpdateUserParam) (*pro
 		p.User,
 	)
 	if err != nil || r <= 0 {
-		return nil, grpcpkg.RespondError(
-			codes.Unknown,
-			constant.UnknownError,
-		)
+		return nil, grpcpkg.RespondError(codes.Unknown, constant.UnknownError)
 	}
 	return p.User, nil
 }
@@ -133,10 +122,7 @@ func (s *ServiceRPC) Delete(ctx context.Context, strVal *wrapperspb.StringValue)
 		strVal.Value,
 	)
 	if err != nil || r <= 0 {
-		return nil, grpcpkg.RespondError(
-			codes.Unknown,
-			constant.UnknownError,
-		)
+		return nil, grpcpkg.RespondError(codes.Unknown, constant.UnknownError)
 	}
 	return &wrapperspb.BoolValue{Value: true}, nil
 }
