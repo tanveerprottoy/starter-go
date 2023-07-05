@@ -2,6 +2,7 @@ package httppkg
 
 import (
 	"errors"
+	"net/url"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tanveerprottoy/starter-go/gin/pkg/stringspkg"
@@ -31,4 +32,24 @@ func ParseAuthToken(ctx *gin.Context) ([]string, error) {
 		return nil, errors.New("token format is invalid")
 	}
 	return splits, nil
+}
+
+func BuildURL(base, path string, queriesMap map[string]string) (string, error) {
+	u, err := url.Parse(base)
+	if err != nil {
+		return "", err
+	}
+	if path != "" {
+		// Path param
+		u.Path += path
+	}
+	if queriesMap != nil {
+		// Query params
+		p := url.Values{}
+		for k, v := range queriesMap {
+			p.Add(k, v)
+		}
+		u.RawQuery = p.Encode()
+	}
+	return u.String(), nil
 }

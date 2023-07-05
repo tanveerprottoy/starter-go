@@ -4,6 +4,7 @@ import (
 	"errors"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/go-chi/chi"
@@ -33,4 +34,24 @@ func ParseAuthToken(r *http.Request) ([]string, error) {
 
 func GetFile(r *http.Request, k string) (multipart.File, *multipart.FileHeader, error) {
 	return r.FormFile(k)
+}
+
+func BuildURL(base, path string, queriesMap map[string]string) (string, error) {
+	u, err := url.Parse(base)
+	if err != nil {
+		return "", err
+	}
+	if path != "" {
+		// Path param
+		u.Path += path
+	}
+	if queriesMap != nil {
+		// Query params
+		p := url.Values{}
+		for k, v := range queriesMap {
+			p.Add(k, v)
+		}
+		u.RawQuery = p.Encode()
+	}
+	return u.String(), nil
 }
