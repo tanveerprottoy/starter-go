@@ -60,6 +60,10 @@ func StringToFloat(s string, bitSize int) (float64, error) {
 	return strconv.ParseFloat(s, bitSize)
 }
 
+func IntToString(i int) string {
+	return strconv.Itoa(i)
+}
+
 func ValuesToStruct[T any](params []any, t *T) {
 	value := reflect.Indirect(
 		reflect.ValueOf(t).Elem(),
