@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/tanveerprottoy/starter-go/stdlib/pkg/file"
-	httpPkg "github.com/tanveerprottoy/starter-go/stdlib/pkg/httppkg"
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/httppkg"
 )
 
 func ParseMultipartForm(r *http.Request) (*http.Request, error) {
@@ -25,7 +25,7 @@ func HandleFiles(r *http.Request, keys []string, rootDir string) ([]string, erro
 	}
 	for _, k := range keys {
 		// Retrieve the file from form data
-		f, header, err := httpPkg.GetFile(r, k)
+		f, header, err := httppkg.GetFile(r, k)
 		if err != nil {
 			return paths, err
 		}
