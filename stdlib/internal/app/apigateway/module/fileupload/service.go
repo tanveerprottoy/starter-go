@@ -1,12 +1,18 @@
-package content
+package fileupload
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/tanveerprottoy/starter-go/stdlib/pkg/s3pkg"
+)
 
 type Service struct {
+	s3client *s3pkg.Client
 }
 
-func NewService() *Service {
+func NewService(s3client *s3pkg.Client) *Service {
 	s := new(Service)
+	s.s3client = s3client
 	return s
 }
 

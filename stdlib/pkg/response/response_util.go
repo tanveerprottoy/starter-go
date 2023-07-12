@@ -43,3 +43,7 @@ func RespondErrorMessage(code int, msg string, writer http.ResponseWriter) {
 	}
 	writeResponse(writer, res)
 }
+
+func RespondErrorAlt(code int, err error, writer http.ResponseWriter) {
+	http.Error(writer, err.Error(), code)
+}
