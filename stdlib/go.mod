@@ -3,6 +3,8 @@ module github.com/tanveerprottoy/starter-go/stdlib
 go 1.19
 
 require (
+	github.com/aws/aws-sdk-go-v2 v1.18.1
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.36.0
 	github.com/go-chi/chi v1.5.4
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/jmoiron/sqlx v1.3.5
