@@ -1,6 +1,6 @@
 package main
 
-import "github.com/tanveerprottoy/starter-go/stdlib/internal/app/contentservice"
+import "github.com/tanveerprottoy/starter-go/stdlib/internal/contentservice"
 
 func main() {
 	a := contentservice.NewApp()

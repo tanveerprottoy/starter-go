@@ -1,6 +1,6 @@
 package main
 
-import "github.com/tanveerprottoy/starter-go/stdlib/internal/app/apigateway"
+import "github.com/tanveerprottoy/starter-go/stdlib/internal/apigateway"
 
 func main() {
 	a := apigateway.NewApp()

@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/tanveerprottoy/starter-go/stdlib/internal/app/userservice/module/auth"
 	"github.com/tanveerprottoy/starter-go/stdlib/internal/pkg/constant"
+	"github.com/tanveerprottoy/starter-go/stdlib/internal/userservice/module/auth"
 )
 
 type AuthMiddleware struct {
