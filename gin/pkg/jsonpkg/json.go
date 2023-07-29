@@ -5,18 +5,24 @@ import (
 	"io"
 )
 
+// Marshal returns the JSON encoding of v
 func Marshal(v any) ([]byte, error) {
 	return json.Marshal(v)
 }
 
+// Unmarshal parses the JSON-encoded data and stores the result in the value pointed to by v
+// The caller must pass the address for the v any param, ex: &v
 func Unmarshal(d []byte, v any) error {
-	return json.Unmarshal(d, &v)
+	return json.Unmarshal(d, v)
 }
 
-func Encode(w io.Writer, v any) error {
-	return json.NewEncoder(w).Encode(&v)
+// Encode Encode writes the JSON encoding of v to the stream which is provided by the encoder created from the passed io.writer
+func Encode(v any, w io.Writer) error {
+	return json.NewEncoder(w).Encode(v)
 }
 
-func Decode(r io.Reader, v any) error {
-	return json.NewDecoder(r).Decode(&v)
+// Decode reads the JSON value from decoder created from the passed io.reader
+// The caller must pass the address for the v any param, ex: &v
+func Decode(v any, r io.Reader) error {
+	return json.NewDecoder(r).Decode(v)
 }
